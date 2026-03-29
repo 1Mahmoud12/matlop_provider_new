@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "254320271002",
+    "project_id": "matlop-user-c0acc",
+    "storage_bucket": "matlop-user-c0acc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:254320271002:android:540943c916d9b40244c923",
+        "android_client_info": {
+          "package_name": "com.matlo.matlop_provider"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAduA4L3YaFXEKvt1jyavDQDhwsjvjpQCE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:254320271002:android:460f6a582c37138244c923",
+        "android_client_info": {
+          "package_name": "com.matlop.user"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAduA4L3YaFXEKvt1jyavDQDhwsjvjpQCE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

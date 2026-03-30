@@ -7,9 +7,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:matlop_provider/core/component/buttons/arrow_back_button.dart';
 import 'package:matlop_provider/core/component/buttons/custom_text_button.dart';
 import 'package:matlop_provider/core/component/custom_text_form_field.dart';
+import 'package:matlop_provider/core/component/custom_drop_down_model_button.dart';
 import 'package:matlop_provider/core/themes/colors.dart';
 import 'package:matlop_provider/core/utils/app_icons.dart';
 import 'package:matlop_provider/core/utils/constants.dart';
+import 'package:matlop_provider/core/utils/constants_enum.dart';
 import 'package:matlop_provider/core/utils/navigate.dart';
 import 'package:matlop_provider/core/utils/utils.dart';
 import 'package:matlop_provider/feature/addNewAddress/presentation/manager/addNewAddress/cubit/add_new_address_cubit.dart';
@@ -180,9 +182,31 @@ class _SignUpViewState extends State<SignUpView> {
                 //   hintText: 'National ID'.tr(),
                 //   outPadding: EdgeInsets.zero,
                 // ),
-                const SizedBox(
-                  height: 10,
+                const SizedBox(height: 10),
+                BlocBuilder<RegisterCubit, RegisterState>(
+                  buildWhen: (_, current) => current is AddTechnicalState,
+                  builder: (context, _) {
+                    final cubit = RegisterCubit.of(context);
+                    return CustomDropdownWithModel(
+                      nameFiled: 'Gender'.tr(),
+                      text: cubit.selectedGender.label,
+                      itemList: const [
+                        DropDownModel('male', 1),
+                        DropDownModel('female', 2),
+                      ],
+                      textStyle: Theme.of(context).textTheme.bodyMedium!,
+                      onItemSelected: (item) {
+                        cubit.selectedGender =
+                            item.value == 1 ? GenderEnum.male : GenderEnum.female;
+                        cubit.emit(AddTechnicalState());
+                      },
+                    );
+                  },
                 ),
+                const SizedBox(
+                  height: 20,
+                ),
+
                 AddAdditionalItems(registerCubit: RegisterCubit.of(context)),
                 const SizedBox(
                   height: 10,

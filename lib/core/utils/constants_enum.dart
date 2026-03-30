@@ -49,3 +49,12 @@ enum ApplicationTypeEnum {
   Technical,
   Client,
 }
+
+enum GenderEnum {
+  male,
+  female;
+
+  int get id => index + 1; // male → 1, female → 2
+
+  String get label => name; // 'male' / 'female'
+}

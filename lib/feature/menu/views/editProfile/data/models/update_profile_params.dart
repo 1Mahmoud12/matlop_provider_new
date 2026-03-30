@@ -4,61 +4,59 @@ import 'dart:io';
 
 import 'package:matlop_provider/core/network/local/cache.dart';
 
-
 class UpdateProfileParams {
-  final int userId;
   final String firstName;
   final String lastName;
-  final String username;
-  final String mobileNumber;
-  final String dateOfBirth;
-  final File? imgSrc;
-  final int gender;
-  final int technicalSpecialistId;
   final String email;
+  final String mobileNumber;
+  final File? imgSrc;
+  final int genderId;
 
   UpdateProfileParams({
-    required this.userId,
     required this.firstName,
     required this.lastName,
-    required this.username,
-    required this.mobileNumber,
-    required this.dateOfBirth,
-    required this.imgSrc,
-    required this.gender,
     required this.email,
-    required this.technicalSpecialistId,
+    required this.mobileNumber,
+    required this.genderId,
+    this.imgSrc,
   });
 
   Future<Map<String, Object>> toJson() async {
     try {
-      final Map<String, Object> jsonData = {
-        'userId': userId,
-        'userTypeId': profileCacheValue?.data?.userTypeId ?? 0,
-        'firstName': firstName,
-        'lastName': lastName,
-        'username': username,
-        'mobileNumber': mobileNumber,
-        'dateOfBirth': dateOfBirth,
-        'gender': gender,
-        'email': email,
-        "isActive": true,
-        'technicalSpecialistId': technicalSpecialistId,
-      };
+      // Always include imgSrc — fall back to the cached profile image URL
+      // so the field is never missing from the request body.
+      String imgSrcValue = profileCacheValue?.data?.imgSrc ?? '';
 
-      // Check if imgSrc is not null and convert to base64 if present
+      // If a new image was picked, encode it as base64 and override the URL.
       if (imgSrc != null) {
         try {
           final imgBytes = await imgSrc!.readAsBytes();
-          jsonData['imgSrc'] = 'data:image/${imgSrc?.path.split('/').last.split('.').last};base64,${base64Encode(
-            imgBytes,
-          )}';
+          final ext = imgSrc!.path.split('.').last.toLowerCase();
+          const mimeMap = {
+            'jpg': 'jpeg',
+            'jpeg': 'jpeg',
+            'png': 'png',
+            'gif': 'gif',
+            'webp': 'webp',
+            'bmp': 'bmp',
+            'heic': 'heic',
+          };
+          final mimeType = mimeMap[ext] ?? 'jpeg';
+          imgSrcValue = 'data:image/$mimeType;base64,${base64Encode(imgBytes)}';
         } catch (e) {
           log('Error encoding image: $e');
         }
       }
 
-      return jsonData;
+      return {
+        'userId': profileCacheValue?.data?.userId ?? 0,
+        'firstName': firstName,
+        'lastName': 'lastName',
+        'email': email,
+        'mobileNumber': mobileNumber,
+        'genderId': genderId,
+        'imgSrc': imgSrcValue, // always present
+      };
     } catch (e) {
       log('Error in toJson method: $e');
       rethrow;

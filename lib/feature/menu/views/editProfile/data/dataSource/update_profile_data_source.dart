@@ -23,9 +23,8 @@ class UpdateProfileDataSource extends UpdateProfileDataSourceInterface {
     required UpdateProfileParams params,
   }) async {
     try {
-      const endpoint = EndPoints.updateProfile;
       final response = await DioHelper.putData(
-        endPoint: endpoint,
+        endPoint: EndPoints.technicalProfile,
         data: await params.toJson(),
         formDataIsEnabled: true,
       );

@@ -160,43 +160,43 @@ class _EditProfileViewState extends State<EditProfileView> {
                 const SizedBox(
                   height: 20,
                 ),
-                InkWell(
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return Center(
-                          child: Material(
-                            color: AppColors.transparent,
-                            child: CustomCalendarWidget(
-                              initialDate: DateTime.parse(
-                                cubit.dateOfBirthController.text,
-                              ),
-                              onDateSelected: (date) {
-                                setState(() {
-                                  cubit.dateOfBirthController.text = DateFormat('yyyy-MM-dd', 'en').format(date);
-                                });
-                              },
-                            ),
-                          ),
-                        );
-                      },
-                    );
-                  },
-                  child: BlocProvider.value(
-                    value: cubit,
-                    child: BlocBuilder<UpdateProfileCubit, UpdateProfileState>(
-                      buildWhen: (previous, current) => current is UpdateProfileSuccess,
-                      builder: (context, state) => CustomTextFormField(
-                        labelStringText: 'Select Date'.tr(),
-                        controller: cubit.dateOfBirthController,
-                        hintText: 'Select Date'.tr(),
-                        outPadding: EdgeInsets.zero,
-                        enable: false,
-                      ),
-                    ),
-                  ),
-                ),
+                // InkWell(
+                //   onTap: () {
+                //     showDialog(
+                //       context: context,
+                //       builder: (BuildContext context) {
+                //         return Center(
+                //           child: Material(
+                //             color: AppColors.transparent,
+                //             child: CustomCalendarWidget(
+                //               initialDate: DateTime.parse(
+                //                 cubit.dateOfBirthController.text,
+                //               ),
+                //               onDateSelected: (date) {
+                //                 setState(() {
+                //                   cubit.dateOfBirthController.text = DateFormat('yyyy-MM-dd', 'en').format(date);
+                //                 });
+                //               },
+                //             ),
+                //           ),
+                //         );
+                //       },
+                //     );
+                //   },
+                //   child: BlocProvider.value(
+                //     value: cubit,
+                //     child: BlocBuilder<UpdateProfileCubit, UpdateProfileState>(
+                //       buildWhen: (previous, current) => current is UpdateProfileSuccess,
+                //       builder: (context, state) => CustomTextFormField(
+                //         labelStringText: 'Select Date'.tr(),
+                //         controller: cubit.dateOfBirthController,
+                //         hintText: 'Select Date'.tr(),
+                //         outPadding: EdgeInsets.zero,
+                //         enable: false,
+                //       ),
+                //     ),
+                //   ),
+                // ),
 
                 const SizedBox(
                   height: 20,

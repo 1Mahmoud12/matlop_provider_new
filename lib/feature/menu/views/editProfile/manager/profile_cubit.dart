@@ -37,14 +37,14 @@ class UpdateProfileCubit extends Cubit<UpdateProfileState> {
     emit(UpdateProfileLoading());
     if (reset) animationDialogLoading(context);
     loginDataSource.getProfile(userId: userCacheValue?.data?.userId ?? -1).then(
-      (value) async {
+          (value) async {
         if (reset && context.mounted) closeDialog(context);
         value.fold(
-          (l) {
+              (l) {
             Utils.showToast(title: l.errMessage, state: UtilState.error);
             emit(UpdateProfileError(e: l.errMessage));
           },
-          (r) async {
+              (r) async {
             ConstantModel.profileModel = r;
             profileCacheValue = r;
             await userCache?.put(profileCacheKey, jsonEncode(r.toJson()));
@@ -88,28 +88,28 @@ class UpdateProfileCubit extends Cubit<UpdateProfileState> {
     loginDataSource
         .updateProfile(
       params: UpdateProfileParams(
-        userId: userCacheValue!.data!.userId!,
         firstName: firstNameController.text,
-        lastName: lastNameController.text,
-        username: usernameController.text,
+        // Last name has no input field in the UI — fall back to cached value
+        // to avoid sending an empty string that the API rejects.
+        lastName: lastNameController.text.isNotEmpty
+            ? lastNameController.text
+            : profileCacheValue?.data?.lastName ?? '',
         mobileNumber: mobileNumberController.text,
-        dateOfBirth: dateOfBirthController.text,
-        imgSrc: imageFile,
-        gender: gender,
         email: emailController.text,
-        technicalSpecialistId: (profileCacheValue?.data?.technicalSpecialistId ?? 0).toInt(),
+        genderId: gender,
+        imgSrc: imageFile,
       ),
     )
         .then(
-      (value) async {
+          (value) async {
         await getProfile(context: context, reset: false);
         closeDialog(context);
         value.fold(
-          (l) {
+              (l) {
             //   Utils.showToast(title: l.errMessage, state: UtilState.error);
             emit(UpdateProfileError(e: l.errMessage));
           },
-          (r) async {
+              (r) async {
             Utils.showToast(title: r.message ?? Constants.unKnownValue, state: UtilState.success);
 
             profileCacheValue = r;
@@ -120,7 +120,7 @@ class UpdateProfileCubit extends Cubit<UpdateProfileState> {
             profileCacheValue?.data?.username = usernameController.text;
             profileCacheValue?.data?.gender = gender;
             profileCacheValue?.data?.dateOfBirth = dateOfBirthController.text;
-           // userCacheValue?.data?.name = firstNameController.text;
+            // userCacheValue?.data?.name = firstNameController.text;
 
             userCache?.put(profileCacheKey, jsonEncode(profileCacheValue?.toJson()));
 

@@ -33,6 +33,7 @@ class RegisterCubit extends Cubit<RegisterState> {
   TextEditingController countryName = TextEditingController();
   int countryId = -1;
   final RegisterDataSource registerDataSource = RegisterDataSourceImpl();
+  GenderEnum selectedGender = GenderEnum.male;
 
   void register({required BuildContext context}) {
     emit(RegisterLoading());
@@ -52,6 +53,7 @@ class RegisterCubit extends Cubit<RegisterState> {
         userTypeId: technicalTypeEnum == TechType.technical ? 3 : 4,
         technicalCategoryId: 1, // Sending 0 as per instructions, or maybe keep 1? The curl says 0.
         technicalServiceIds: selectedTechnicals.map((e) => e.technicalSpecialistId ?? 0).toList(),
+        genderId: selectedGender.id,
       ),
     )
         .then(

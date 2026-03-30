@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:matlop_provider/core/utils/constant_model.dart';
@@ -35,6 +36,7 @@ class RegisterCubit extends Cubit<RegisterState> {
 
   void register({required BuildContext context}) {
     emit(RegisterLoading());
+
     registerDataSource
         .register(
       params: SingUpParameters(
@@ -48,7 +50,8 @@ class RegisterCubit extends Cubit<RegisterState> {
         nationalNo: nationalNo.text,
         technicalTypeEnum: technicalTypeEnum == TechType.technical ? 1 : 3,
         userTypeId: technicalTypeEnum == TechType.technical ? 3 : 4,
-        technicalSpecialistId: nameTechnical!.technicalSpecialistId!,
+        technicalCategoryId: 1, // Sending 0 as per instructions, or maybe keep 1? The curl says 0.
+        technicalServiceIds: selectedTechnicals.map((e) => e.technicalSpecialistId ?? 0).toList(),
       ),
     )
         .then(
@@ -66,7 +69,7 @@ class RegisterCubit extends Cubit<RegisterState> {
             //Constants.user = true;
             // home.getDistricts();
             // home.getProjectsWithNoPagination();
-            Utils.showToast(title: r, state: UtilState.success);
+            Utils.showToast(title: 'Register success, you can log in now'.tr(), state: UtilState.success);
             context.navigateToPage(BlocProvider(
               create: (context) => LoginCubit(),
               child: const LoginView(),
@@ -99,11 +102,16 @@ class RegisterCubit extends Cubit<RegisterState> {
     );
   }
 
-  ItemTechnicalSpecialListModel? nameTechnical;
+  List<ItemTechnicalSpecialListModel> selectedTechnicals = [];
   TextEditingController nameController = TextEditingController();
 
-  addTechnicalSpecial({required ItemTechnicalSpecialListModel nameTechnical}) {
-    this.nameTechnical = nameTechnical;
+  toggleTechnicalSpecial({required ItemTechnicalSpecialListModel technical}) {
+    if (selectedTechnicals.any((e) => e.technicalSpecialistId == technical.technicalSpecialistId)) {
+      selectedTechnicals.removeWhere((e) => e.technicalSpecialistId == technical.technicalSpecialistId);
+    } else {
+      selectedTechnicals.add(technical);
+    }
+    nameController.text = selectedTechnicals.map((e) => e.enName ?? "").join(', ');
     emit(AddTechnicalState());
   }
 }

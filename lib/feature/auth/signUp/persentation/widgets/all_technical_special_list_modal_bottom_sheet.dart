@@ -5,7 +5,7 @@ import 'package:matlop_provider/core/component/loading_widget.dart';
 import 'package:matlop_provider/core/utils/constant_model.dart';
 import 'package:matlop_provider/core/utils/constants.dart';
 import 'package:matlop_provider/core/utils/server_error_widget.dart';
-import 'package:matlop_provider/feature/addNewAddress/presentation/widgets/city_widget.dart';
+import 'package:matlop_provider/core/component/buttons/custom_text_button.dart';
 import 'package:matlop_provider/feature/auth/signUp/persentation/manager/register_cubit.dart';
 
 class SelectTechnicalSpecialListBottomSheet extends StatefulWidget {
@@ -50,7 +50,7 @@ class _SelectTechnicalSpecialListBottomSheetState extends State<SelectTechnicalS
               builder: (context, state) {
                 return state is GetAllTechnicalSpecialListLoading
                     ? const LoadingWidget()
-                    : state is GetAllTechnicalSpecialListSuccess
+                    : state is GetAllTechnicalSpecialListSuccess || state is AddTechnicalState
                         ? SingleChildScrollView(
                             controller: scrollController,
                             child: Column(
@@ -84,37 +84,38 @@ class _SelectTechnicalSpecialListBottomSheetState extends State<SelectTechnicalS
                                 else
                                   Column(
                                     children: List.generate(ConstantModel.technicalSpecialListModel?.data?.length ?? 0, (index) {
-                                      return CityWidget(
-                                        onTap: () {
-                                          final selectedLocation = ConstantModel.technicalSpecialListModel?.data?[index];
-                                          if (selectedLocation != null) {
-                                            setState(() {
-                                              widget.registerCubit.nameTechnical = selectedLocation;
-                                              widget.registerCubit.nameController.text = selectedLocation.enName ?? Constants.unKnownValue;
-                                            });
-                                            Navigator.pop(context);
-                                            widget.registerCubit.addTechnicalSpecial(nameTechnical: selectedLocation);
-                                          }
+                                      final item = ConstantModel.technicalSpecialListModel?.data?[index];
+                                      if (item == null) return const SizedBox.shrink();
+                                      final isSelected = widget.registerCubit.selectedTechnicals
+                                          .any((e) => e.technicalSpecialistId == item.technicalSpecialistId);
+                                      return CheckboxListTile(
+                                        value: isSelected,
+                                        title: Text(item.enName ?? Constants.unKnownValue),
+                                        onChanged: (value) {
+                                          widget.registerCubit.toggleTechnicalSpecial(technical: item);
                                         },
-                                        text: ConstantModel.technicalSpecialListModel?.data?[index].enName ?? Constants.unKnownValue,
+                                        controlAffinity: ListTileControlAffinity.leading,
+                                        activeColor: Theme.of(context).primaryColor,
+                                        contentPadding: EdgeInsets.zero,
                                       );
                                     }),
                                   ),
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                // Center(
-                                //   child: CustomTextButton(
-                                //     borderRadius: 16,
-                                //     onPress: () {
-                                //       context.navigateToPage(const AddNewAddressView());
-                                //     },
-                                //     child: Text(
-                                //       'Add Location'.tr(),
-                                //       style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white),
-                                //     ),
-                                //   ),
-                                // ),
+                                Center(
+                                  child: CustomTextButton(
+                                    gradientColors: true,
+                                    stops: const [0.5, 1],
+                                    onPress: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text(
+                                      'Done'.tr(),
+                                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white),
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                           )

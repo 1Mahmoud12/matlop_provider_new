@@ -1,8 +1,13 @@
 {
   "Sign Up": "Sign Up",
+  "Register success, you can log in now": "Register success, you can log in now",
   "Please enter your phone number to log in": "Please enter your phone number to log in",
   "Name": "Name",
   "Please enter your name": "Please enter your name",
+  "First Name": "First Name",
+  "Last Name": "Last Name",
+  "Please enter your first name": "Please enter your first name",
+  "Please enter your last name": "Please enter your last name",
   "Phone Number": "Phone Number",
   "ID Number": "ID Number",
   "Please enter your ID number": "Please enter your ID number",

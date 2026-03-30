@@ -75,23 +75,23 @@ class _SignUpViewState extends State<SignUpView> {
                 Column(
                   children: [
                     CustomTextFormField(
-                      labelStringText: 'Name'.tr(),
+                      labelStringText: 'First Name'.tr(),
                       controller: RegisterCubit.of(context).firstNameController,
-                      hintText: 'Please enter your name'.tr(),
+                      hintText: 'Please enter your first name'.tr(),
                       outPadding: EdgeInsets.zero,
                     ),
                     const SizedBox(
                       height: 20,
                     ),
-                    // CustomTextFormField(
-                    //   labelStringText: 'Last Name'.tr(),
-                    //   controller: RegisterCubit.of(context).lastNameController,
-                    //   hintText: 'Please enter your last name'.tr(),
-                    //   outPadding: EdgeInsets.zero,
-                    // ),
-                    // const SizedBox(
-                    //   height: 20,
-                    // ),
+                    CustomTextFormField(
+                      labelStringText: 'Last Name'.tr(),
+                      controller: RegisterCubit.of(context).lastNameController,
+                      hintText: 'Please enter your last name'.tr(),
+                      outPadding: EdgeInsets.zero,
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
                     CustomTextFormField(
                       labelStringText: 'email'.tr(),
                       controller: RegisterCubit.of(context).emailController,
@@ -171,15 +171,15 @@ class _SignUpViewState extends State<SignUpView> {
                     // ),
                   ],
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
-                CustomTextFormField(
-                  labelStringText: 'National ID'.tr(),
-                  controller: RegisterCubit.of(context).nationalNo,
-                  hintText: 'National ID'.tr(),
-                  outPadding: EdgeInsets.zero,
-                ),
+                // const SizedBox(
+                //   height: 20,
+                // ),
+                // CustomTextFormField(
+                //   labelStringText: 'National ID'.tr(),
+                //   controller: RegisterCubit.of(context).nationalNo,
+                //   hintText: 'National ID'.tr(),
+                //   outPadding: EdgeInsets.zero,
+                // ),
                 const SizedBox(
                   height: 10,
                 ),
@@ -188,41 +188,41 @@ class _SignUpViewState extends State<SignUpView> {
                   height: 10,
                 ),
 
-                GestureDetector(
-                  onTap: () {
-                    _locationNameFocusNode.unfocus();
-                    showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      backgroundColor: Colors.transparent,
-                      builder: (context) {
-                        return MultiBlocProvider(
-                          providers: [
-                            BlocProvider(
-                              create: (context) => AddNewAddressCubit(),
-                            ),
-                          ],
-                          child: SelectCountryBottomSheet(
-                            onTap: (countryData) {
-                              cubit.countryName.text = countryData.enName.toString();
-                              cubit.countryId = countryData.countryId;
-                            },
-                          ),
-                        );
-                      },
-                    );
-                  },
-                  child: CustomTextFormField(
-                    labelStringText: 'Country'.tr(),
-                    controller: cubit.countryName,
-                    hintText: 'Country'.tr(),
-                    outPadding: EdgeInsets.zero,
-                    borderColor: Colors.grey.withOpacity(0.2),
-                    suffixIcon: const Icon(Icons.keyboard_arrow_down_sharp),
-                    focusNode: _locationNameFocusNode,
-                    enable: false,
-                  ),
-                ),
+                // GestureDetector(
+                //   onTap: () {
+                //     _locationNameFocusNode.unfocus();
+                //     showModalBottomSheet(
+                //       context: context,
+                //       isScrollControlled: true,
+                //       backgroundColor: Colors.transparent,
+                //       builder: (context) {
+                //         return MultiBlocProvider(
+                //           providers: [
+                //             BlocProvider(
+                //               create: (context) => AddNewAddressCubit(),
+                //             ),
+                //           ],
+                //           child: SelectCountryBottomSheet(
+                //             onTap: (countryData) {
+                //               cubit.countryName.text = countryData.enName.toString();
+                //               cubit.countryId = countryData.countryId;
+                //             },
+                //           ),
+                //         );
+                //       },
+                //     );
+                //   },
+                //   child: CustomTextFormField(
+                //     labelStringText: 'Country'.tr(),
+                //     controller: cubit.countryName,
+                //     hintText: 'Country'.tr(),
+                //     outPadding: EdgeInsets.zero,
+                //     borderColor: Colors.grey.withOpacity(0.2),
+                //     suffixIcon: const Icon(Icons.keyboard_arrow_down_sharp),
+                //     focusNode: _locationNameFocusNode,
+                //     enable: false,
+                //   ),
+                // ),
 
                 const SizedBox(
                   height: 20,

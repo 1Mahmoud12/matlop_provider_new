@@ -48,6 +48,7 @@
         "page_transition",
         "path_provider",
         "pin_code_fields",
+        "pretty_dio_logger",
         "share_plus",
         "shared_preferences",
         "shared_preferences_ios",
@@ -66,6 +67,13 @@
       "version": "6.0.0",
       "dependencies": [
         "lints"
+      ]
+    },
+    {
+      "name": "pretty_dio_logger",
+      "version": "1.4.0",
+      "dependencies": [
+        "dio"
       ]
     },
     {

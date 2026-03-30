@@ -7,6 +7,7 @@ import 'package:matlop_provider/core/network/end_points.dart';
 import 'package:matlop_provider/core/utils/constants.dart';
 import 'package:matlop_provider/core/utils/utils.dart';
 import 'package:matlop_provider/main.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 // ignore: avoid_classes_with_only_static_members
 class DioHelper {
@@ -20,6 +21,15 @@ class DioHelper {
         receiveDataWhenStatusError: true,
       ),
     );
+    dio!.interceptors.add(PrettyDioLogger(
+      requestHeader: true,
+      requestBody: true,
+      responseBody: true,
+      responseHeader: false,
+      error: true,
+      compact: true,
+      maxWidth: 90,
+    ));
   }
 
   // get data ====>>>
@@ -35,8 +45,6 @@ class DioHelper {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
     };
-    logger.i('url=====>${dio?.options.baseUrl}$url \n َQuery ====> $query \n Headers in get method ${dio!.options.headers}');
-
     return dio!
         .get(
       url,
@@ -47,7 +55,6 @@ class DioHelper {
         // if (value.data is Map && '${value.data['code']}' == '1') {
         //   throw value.data['message'];
         // }
-        logger.t('${value.realUri}');
         return value;
       },
     );
@@ -66,16 +73,12 @@ class DioHelper {
 
     debugPrint('token: $token');
     dio!.options.headers = {
-      if(token.isNotEmpty)'Authorization': 'Bearer $token',
+      'Authorization': 'Bearer $token',
       'Content-Type': 'application/json',
-      'Accept': '*/*',
+      'Accept': 'application/json',
     };
 
-    logger.i('=======================================================');
-    logger.i('Headers in post method ${dio!.options.baseUrl}/$endPoint');
-    logger.i('Headers in post method ${dio!.options.headers}');
-    logger.i('Data in post method $data');
-    logger.i('=======================================================');
+
     return dio!
         .post(
       '${EndPoints.baseUrl}$endPoint',
@@ -110,16 +113,12 @@ class DioHelper {
       'Authorization': 'Bearer $token',
 
     };
-    logger.i('BaseUrl in put method ${dio!.options.baseUrl}/$endPoint');
-    logger.i('Query in put method $query');
-    logger.i('Data in put method $data');
+
     return dio!.put(
       endPoint,
       queryParameters: query,
       data: formDataIsEnabled ? json.encode(data) : data,
     ).then((value) {
-      logger.i('BaseUrl in put method ${value.realUri}');
-      logger.i('Response in put method ${value.data}');
       return value;
     },);
   }
@@ -140,11 +139,7 @@ class DioHelper {
       'Accept': '*/*',
 
     };
-    logger.i('=======================================================');
-    logger.i('Headers in delete method ${dio!.options.baseUrl}/$endPoint');
-    logger.i('Headers in delete method ${dio!.options.headers}');
-    logger.i('Data in delete method $data');
-    logger.i('=======================================================');
+
     return dio!.delete(
       endPoint,
       queryParameters: query,

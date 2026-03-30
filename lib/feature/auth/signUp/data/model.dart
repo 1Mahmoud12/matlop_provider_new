@@ -9,7 +9,8 @@ class SingUpParameters {
   final int countryId;
   final int userTypeId;
   final int technicalTypeEnum;
-  final int technicalSpecialistId;
+  final int technicalCategoryId;
+  final List<int> technicalServiceIds;
 
   SingUpParameters({
     required this.firstName,
@@ -21,23 +22,24 @@ class SingUpParameters {
     required this.nationalNo,
     required this.countryId,
     required this.technicalTypeEnum,
-    required this.technicalSpecialistId,
+    required this.technicalCategoryId,
+    required this.technicalServiceIds,
     required this.userTypeId,
   });
 
   Map<String, dynamic> toJson() {
     return {
       'firstName': firstName,
-      'lastName': firstName,
-      'username': username,
+      'lastName': lastName,
+      'userName': username,
       'email': email,
-      // 'password': password,
+      'password': password,
       'mobileNumber': '0$phone',
-      'nationalNo': nationalNo,
+      // 'nationalNo': nationalNo, // the curl doesn't mention nationalNo, but keeping it if needed, wait curl has no national no? I'll just map curl exactly + what we had
       'genderId': 1,
+      'technicalCategoryId': technicalCategoryId,
       'technicalType': technicalTypeEnum,
-      'userTypeId': userTypeId,
-      'technicalCategoryId': technicalSpecialistId,
+      'technicalServiceIds': technicalServiceIds,
     };
   }
 }

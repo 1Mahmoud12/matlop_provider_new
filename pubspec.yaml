@@ -81,6 +81,7 @@ dependencies:
   tap_to_expand: ^0.7.2
   url_launcher: ^6.3.2
   url_launcher_ios: any
+  pretty_dio_logger: ^1.4.0
 
 
 dev_dependencies:

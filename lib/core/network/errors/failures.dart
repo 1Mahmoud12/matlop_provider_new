@@ -36,21 +36,23 @@ class ServerFailure extends Failure {
   }
 
   factory ServerFailure.fromResponse(int? statusCode, dynamic response) {
-    if (statusCode == 401 || statusCode == 422 || statusCode == 400) {
-      // return ServerFailure(response['error']['message']);
+    if (statusCode == 401 || statusCode == 422 || statusCode == 400 || statusCode == 404 || statusCode == 409) {
       logger.e('message $response');
-      // logger.e('====== Token error ===== ${Constants.token}');
-      //logger.e('Token error ${response['message'].contains('Token') ?? false}');
-      // if (response['message'].toString().toLowerCase().contains('token')) {
-      //   Constants.token = '';
-      //   Constants.user = true;
-      //   userCache?.put(userCacheKey, '{}');
-      //   userCacheValue = null;
-      //   navigatorKey.currentState?.context.navigateToPageWithClearStack(const SplashScreenOne());
-      // }
-      return ServerFailure(response['message'] ?? response['error'] ?? 'Something went wrong, Please try again');
-    } else if (statusCode == 404) {
-      return ServerFailure('Your request not found, Please try later!');
+
+      if (response is Map<String, dynamic>) {
+        final error = response['error'];
+        final message = response['message'];
+        if (error != null && error is String && error.isNotEmpty) {
+          return ServerFailure(error);
+        } else if (message != null && message is String && message.isNotEmpty) {
+          return ServerFailure(message);
+        }
+      }
+
+      if (statusCode == 404) {
+        return ServerFailure('Your request not found, Please try later!');
+      }
+      return ServerFailure('Something went wrong, Please try again');
     } else if (statusCode == 500) {
       //  logger.e('object::>> $response');
       return ServerFailure('Internal Server error, Please try later');

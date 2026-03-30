@@ -22,9 +22,7 @@ class NotificationDataSourceImpl extends NotificationDataSource {
       return right(FireNotificationModel.fromJson(response.data));
     } catch (e) {
       if (e is DioException) {
-        if ('${e.response?.data['code']}' == '1') {
-          return right(FireNotificationModel.fromJson({}));
-        }
+
         return left(ServerFailure.fromDioException(e));
       }
       return left(ServerFailure(e.toString()));

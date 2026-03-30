@@ -8,7 +8,7 @@ class EndPoints {
   //Auth
   static const login = '/auth/technical-login';
   static const verifyOtp = '/Authentication/VerfiyOtp';
-  static const setFirebaseToken = '/Authentication/setfirebasetoken';
+  static const setFirebaseToken = '/auth/firebase-token';
 
   // Forget   Password
   static const forgetPassword = '/auth/forgot-password';
@@ -49,7 +49,7 @@ class EndPoints {
   static const projects = '/client/projects';
   static const projectsNoAuth = '/client/get-all-projects';
   static const oneProjectData = '/client/projects';
-  static const allNotification = '/client/get-all-notifications';
+  static const allNotification = '/notifications';
   static const allUnReaddNotification = '/client/get-all-unread-notifications';
   static const markAllReaddNotification = '/client/mark-all-notifications';
 
@@ -112,7 +112,7 @@ class EndPoints {
   static const cancelReason = '/CancelReason/GetAll';
 
   // orders
-  static const getOrdersByStatus = '/Order/GetByTechnicalId';
+  static const getOrdersByStatus = '/orders/by-technical';
   static const getOrderDetails = '/Order/Get/';
   static const changeStatus = '/Order/ChangeStatus';
 
@@ -133,7 +133,7 @@ class EndPoints {
   static const getTransaction = '/Wallet/GetClientTransactions';
 
   // Notification
-  static const getNotification = '/Notification/GetNotifications';
+  static const getNotification = '/notifications';
 
   static const markNotification = '/Notification/seenNotification';
 }

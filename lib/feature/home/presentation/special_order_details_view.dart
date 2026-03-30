@@ -59,7 +59,7 @@ class _OrderDetailsViewState extends State<SpecialOrderDetailsView> {
       color: AppColors.primaryColor,
       child: Scaffold(
         persistentFooterButtons: [
-          if (widget.offersOrderCubit != null && userCacheValue?.data?.userTypeId == 4)
+          if (widget.offersOrderCubit != null && userCacheValue?.data?.profile?.technicalType == 4)
             CustomTextButton(
               width: MediaQuery.sizeOf(context).width,
               borderRadius: 16,

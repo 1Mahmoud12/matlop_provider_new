@@ -61,8 +61,8 @@ class UpdateProfileCubit extends Cubit<UpdateProfileState> {
             gender = profileCacheValue?.data?.gender ?? 0;
             emailController.text = profileCacheValue?.data?.email ?? '';
             mobileNumberController.text = profileCacheValue?.data?.mobileNumber ?? '';
-            userCacheValue?.data?.name = profileCacheValue?.data?.firstName;
-            userCacheValue?.data?.imgSrc = r.data?.imgSrc ?? '';
+            // userCacheValue?.data?.profile?.fullName = profileCacheValue?.data?.firstName;
+            // userCacheValue?.data?.profile.imgSrc = r.data?.imgSrc ?? '';
             if (!reset) {
               userCache?.put(userCacheKey, jsonEncode(userCacheValue?.toJson()));
               if (context.mounted) {
@@ -120,7 +120,7 @@ class UpdateProfileCubit extends Cubit<UpdateProfileState> {
             profileCacheValue?.data?.username = usernameController.text;
             profileCacheValue?.data?.gender = gender;
             profileCacheValue?.data?.dateOfBirth = dateOfBirthController.text;
-            userCacheValue?.data?.name = firstNameController.text;
+           // userCacheValue?.data?.name = firstNameController.text;
 
             userCache?.put(profileCacheKey, jsonEncode(profileCacheValue?.toJson()));
 

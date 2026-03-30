@@ -11,7 +11,7 @@ import 'package:matlop_provider/feature/auth/login/data/models/login_model.dart'
 abstract class LoginDataSourceInterface {
   Future<Either<Failure, LoginModel>> postLogin({
     required BuildContext context,
-    required String email,
+    required String phoneNumber,
     required String password,
   });
 
@@ -25,7 +25,7 @@ class LoginDataSource extends LoginDataSourceInterface {
   @override
   Future<Either<Failure, LoginModel>> postLogin({
     required BuildContext context,
-    required String email,
+    required String phoneNumber,
     required String password,
   }) async {
     try {
@@ -33,12 +33,8 @@ class LoginDataSource extends LoginDataSourceInterface {
       final response = await DioHelper.postData(
         endPoint: endpoint,
         context: context,
-        data: {'mobileNumber': '0$email', 'password': password},
+        data: {'mobileNumber': '0$phoneNumber', 'password': password},
       );
-      log('object response.data ${response.data.runtimeType}');
-      if (response.data['status'] == false) {
-        return left(ServerFailure(response.data['message']));
-      }
       return right(LoginModel.fromJson(response.data));
     } catch (error) {
       log(error.toString());

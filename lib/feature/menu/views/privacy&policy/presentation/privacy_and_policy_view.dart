@@ -46,7 +46,7 @@ class _PrivacyAndPolicyViewState extends State<PrivacyAndPolicyView> {
                         ...List.generate(
                           ConstantModel.privacyAndPolicyModel?.data?.length ?? 0,
                           (index) {
-                            return ConstantModel.privacyAndPolicyModel!.data![index].userType == userCacheValue?.data?.userTypeId
+                            return ConstantModel.privacyAndPolicyModel!.data![index].userType == userCacheValue?.data?.profile?.technicalType
                                 ? MyCustomExpandablePanel(
                                     questionData: (context.locale.languageCode == 'en'
                                             ? ConstantModel.privacyAndPolicyModel!.data![index].enTitle

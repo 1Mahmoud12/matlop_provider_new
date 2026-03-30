@@ -341,6 +341,7 @@ Future<void> selectTokens() async {
       params: FirebaseParams(
         userId: userCacheValue!.data!.userId!,
         fcmToken: Constants.fcmToken,
+        lang: arabicLanguage ? 'ar' : 'en',
       ),
     );
   }

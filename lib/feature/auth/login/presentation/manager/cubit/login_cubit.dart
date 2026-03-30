@@ -24,7 +24,7 @@ class LoginCubit extends Cubit<LoginState> {
 
   void login({required BuildContext context}) {
     emit(LoginLoading());
-    loginDataSource.postLogin(context: context, email: phoneController.text, password: passwordController.text).then(
+    loginDataSource.postLogin(context: context, phoneNumber: phoneController.text, password: passwordController.text).then(
       (value) async {
         value.fold(
           (l) {
@@ -34,17 +34,21 @@ class LoginCubit extends Cubit<LoginState> {
           (r) async {
             //Utils.showToast(title: 'Login Successfully', state: UtilState.success);
 
+            // context.navigateToPage(
+            //   OtpView(
+            //     onCompleted: (p0) {
+            //       verifyOtp(context: context, otp: p0);
+            //     },
+            //   ),
+            // );
+            userCacheValue = r;
+            Constants.token = r.data?.accessToken ?? '';
+            selectTokens();
             context.navigateToPage(
-              OtpView(
-                onCompleted: (p0) {
-                  verifyOtp(context: context, otp: p0);
-                },
-              ),
+              const BottomNavBarView(),
             );
-            // userCacheValue = r;
-            // Constants.token = r.data?.accessToken ?? '';
-            // await userCache?.put(userCacheKey, jsonEncode(r.toJson()));
-            // await userCache?.put(rememberMeKey, rememberMe);
+            await userCache?.put(userCacheKey, jsonEncode(r.toJson()));
+            await userCache?.put(rememberMeKey, rememberMe);
             emit(LoginSuccess());
           },
         );

@@ -66,9 +66,9 @@ class DioHelper {
 
     debugPrint('token: $token');
     dio!.options.headers = {
-      'Authorization': 'Bearer $token',
+      if(token.isNotEmpty)'Authorization': 'Bearer $token',
       'Content-Type': 'application/json',
-      'Accept': 'application/json',
+      'Accept': '*/*',
     };
 
     logger.i('=======================================================');

@@ -323,7 +323,12 @@ Future<Map> loadJsonFile() async {
 //   }
 // }
 
+bool _isSelectingTokens = false;
+
 Future<void> selectTokens() async {
+  if (_isSelectingTokens) return;
+  _isSelectingTokens = true;
+  try {
   Constants.messaging.requestPermission(
     provisional: true,
     announcement: true,
@@ -336,7 +341,18 @@ Future<void> selectTokens() async {
     await Constants.messaging.getAPNSToken();
   }
   final String newToken = await Constants.messaging.getToken() ?? '';
-  if (userCacheValue?.data != null) {
+  Constants.deviceId = await DeviceUUid().getUniqueDeviceId();
+
+  if (newToken != Constants.fcmToken || Constants.fcmToken.isEmpty) {
+    log('Need Get Token');
+    Constants.fcmToken = newToken;
+
+    userCache?.put(fcmTokenKey, Constants.fcmToken);
+    userCache?.put(deviceIdKey, Constants.deviceId);
+  }
+
+  // Send after token and deviceId are ready
+  if (userCacheValue?.data != null && Constants.fcmToken.isNotEmpty) {
     MainDataSourceImpl().setFirebase(
       params: FirebaseParams(
         userId: userCacheValue!.data!.userId!,
@@ -345,14 +361,10 @@ Future<void> selectTokens() async {
       ),
     );
   }
-  if (newToken != Constants.fcmToken) {
-    log('Need Get Token');
-    Constants.fcmToken = newToken;
-    Constants.deviceId = await DeviceUUid().getUniqueDeviceId();
 
-    userCache?.put(fcmTokenKey, Constants.fcmToken);
-    userCache?.put(deviceIdKey, Constants.deviceId);
-  }
   debugPrint('Device Id ===> ${Constants.deviceId}');
   debugPrint('FCM ===> ${Constants.fcmToken}');
+  } finally {
+    _isSelectingTokens = false;
+  }
 }

@@ -11,11 +11,10 @@ class FirebaseParams {
   FirebaseParams({required this.userId, required this.fcmToken, required this.lang});
 
   Map<String, Object> toJson() => {
-        'userId': userId,
-    'deviceId':Constants.deviceId,
+        'deviceId': Constants.deviceId,
         'deviceType': Platform.isIOS ? DeviceTypeEnum.IOS.index : DeviceTypeEnum.Android.index,
         'token': fcmToken,
-    "lang": lang,
-        'applicationType': ApplicationTypeEnum.Client.index,
+        "lang": lang,
+        'applicationType': ApplicationTypeEnum.Technical.index,
       };
 }

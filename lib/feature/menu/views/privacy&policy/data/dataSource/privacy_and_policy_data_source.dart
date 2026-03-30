@@ -16,8 +16,8 @@ class PrivacyAndPolicyDataSource {
       return right(PrivacyAndPolicyModel.fromJson(response.data));
     } catch (e) {
       if (e is DioException) {
-        if('${e.response?.data['code']}'=='1'){
-        return   right(PrivacyAndPolicyModel.fromJson({}));
+        if (e.response?.data is Map && '${e.response?.data['code']}' == '1') {
+          return right(PrivacyAndPolicyModel.fromJson({}));
         }
         return left(ServerFailure.fromDioException(e));
       }

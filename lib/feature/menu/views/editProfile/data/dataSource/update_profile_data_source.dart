@@ -32,6 +32,7 @@ class UpdateProfileDataSource extends UpdateProfileDataSourceInterface {
 
       return right(ProfileModel.fromJson(response.data));
     } catch (error) {
+      logger.e(error);
       if (error is DioException) {
         return left(ServerFailure.fromDioException(error));
       }
@@ -44,16 +45,16 @@ class UpdateProfileDataSource extends UpdateProfileDataSourceInterface {
     required int userId,
   }) async {
     try {
-      final String endpoint = '${EndPoints.getProfileById}/$userId';
-      final response = await DioHelper.getData(
-        url: endpoint,
-      );
+      // Backend route uses the authenticated user (no id in url).
+      final String endpoint = EndPoints.technicalProfile;
+      final response = await DioHelper.getData(url: endpoint);
      logger.i(response.data);
       if (response.data['code'] == 1) {
         return left(ServerFailure(response.data['message']));
       }
       return right(ProfileModel.fromJson(response.data));
     } catch (error) {
+      logger.e(error);
       if (error is DioException) {
         return left(ServerFailure.fromDioException(error));
       }

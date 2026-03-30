@@ -9,6 +9,7 @@ class EndPoints {
   static const login = '/auth/technical-login';
   static const verifyOtp = '/Authentication/VerfiyOtp';
   static const setFirebaseToken = '/auth/firebase-token';
+  static const logout = '/auth/logout';
 
   // Forget   Password
   static const forgetPassword = '/auth/forgot-password';
@@ -17,6 +18,8 @@ class EndPoints {
 
   static const updateProfile = '/Technical/Update';
   static const getProfileById = '/Technical/GetById';
+  // New endpoint returns the currently authenticated technical profile.
+  static const technicalProfile = '/technicals/profile';
 
   static const register = '/technicals/mobile-register';
   static const getAllTechnicalSpecialist = '/technical-specialists';
@@ -99,12 +102,12 @@ class EndPoints {
   static const postTaskDone = '/developer/task';
   static const getMeeting = '/developer/events-type';
   static const getPaymentMethods = '/developer/payment-method';
-  static const getFAQ = '/FAQs/GetAll';
+  static const getFAQ = '/faqs';
   static const workTime = '/WorkingTime/GetAll';
   static const getSlider = '/Slider/GetAll';
   static const createOrder = '/Order/Create';
-  static const getTermAndConditions = '/TermsAndConditions/GetAllByUserType';
-  static const privacyAndPolicy = '/PrivacyPolicy/GetAllByUserType';
+  static const getTermAndConditions = '/terms-and-conditions';
+  static const privacyAndPolicy = '/privacy-policies';
   static const Orders = '/Order/GetAllWitPagination';
   static const GetOrderSchedule = '/Order/GetOrderSchedule/';
   static const OrderDetails = '/Order/Get/';
@@ -117,7 +120,7 @@ class EndPoints {
   static const changeStatus = '/Order/ChangeStatus';
 
   // SpecialOrder
-  static const getSpecialOrdersByStatus = '/SpecialOrder/GetByTechnicalId';
+  static const getSpecialOrdersByStatus = '/special-orders/by-technical';
   static const getSpecialOrderDetails = '/SpecialOrder/Get';
   static const getSpecialOrder = '/SpecialOrder/GetAllWitPagination';
   static const getAllSpecialOrder = '/SpecialOrder/GetAll';

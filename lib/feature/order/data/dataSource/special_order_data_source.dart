@@ -15,7 +15,7 @@ class SpecialOrderDataSource {
       final response =
           //${userCacheValue?.data?.userId}
           await DioHelper.getData(url: '${EndPoints.getSpecialOrdersByStatus}/${userCacheValue?.data?.userId}',query: {
-            if(status!=null)'OrderStatus':status, if(type!=null)'SpecialOrderEnum':type
+            if(status!=null)'orderStatus':status, if(type!=null)'specialOrderEnum':type
           }, context: context);
       return right(SpecialOrdersModel.fromJson(response.data));
     } catch (e) {

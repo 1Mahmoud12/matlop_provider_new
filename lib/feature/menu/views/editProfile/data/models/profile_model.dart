@@ -1,4 +1,3 @@
-
 import 'package:matlop_provider/core/network/end_points.dart';
 import 'package:matlop_provider/core/utils/constants.dart';
 
@@ -51,20 +50,25 @@ class Data {
 
   Data.fromJson(dynamic json) {
     userId = json['userId'] ?? -1; // Default to -1 if null
-    userTypeId = json['userTypeId'] ?? -1; // Default to -1 if null
-    firstName = json['firstName'] ?? 'Unknown'; // Default to 'Unknown' if null
-    lastName = json['lastName'] ?? 'Unknown'; // Default to 'Unknown' if null
-    username = json['username'] ?? 'Unknown'; // Default to 'Unknown' if null
-    email = json['email'] ?? 'Unknown'; // Default to 'Unknown' if null
+    userTypeId = json['userTypeId'] ?? json['roleId'] ?? -1; // Fallback to roleId if needed
+    firstName = json['firstName']?.toString() ?? ''; // Default to empty string
+    lastName = json['lastName']?.toString() ?? ''; // This endpoint may not return lastName
+    username = json['username']?.toString() ?? json['userName']?.toString() ?? ''; // Support both keys
+    email = json['email']?.toString() ?? ''; // Default to empty string
     isActive = json['isActive'] ?? false; // Default to false if null
-    gender = json['gender'] ?? -1; // Default to -1 if null (assuming gender is represented by an integer)
-    dateOfBirth = json['dateOfBirth'] ?? DateTime(2000).toString(); // Ensure dateOfBirth is never null
-    mobileNumber = json['mobileNumber'] ?? 'Unknown'; // Default to 'Unknown' if null
-    imgSrc = json['imgSrc'] != null ? '${EndPoints.domain}${json['imgSrc']}' : Constants.unKnownValue; // Default to 'Unknown' if null
+    gender = (json['gender'] ?? json['genderId']) ?? -1; // Support genderId from backend
+    dateOfBirth = json['dateOfBirth']?.toString(); // Keep null if not provided
+    mobileNumber = json['mobileNumber']?.toString() ?? ''; // Default to empty string
+    final rawImg = json['imgSrc'];
+    imgSrc = (rawImg == null || (rawImg is String && rawImg.isEmpty))
+        ? ''
+        : '${EndPoints.domain}$rawImg'; // Avoid returning domain when backend sends empty imgSrc
     pinCode = json['pinCode'] ?? ''; // Default to empty string if null
     password = json['password'] ?? ''; // Default to empty string if null
     notes = json['notes'] ?? ''; // Default to empty string if null
-    technicalSpecialistId = json['technicalSpecialistId'] ?? ''; // Default to empty string if null
+    technicalSpecialistId = json['technicalSpecialistId'] != null
+        ? num.tryParse(json['technicalSpecialistId'].toString())
+        : null; // Safely parse num from String, int, or null
   }
 
   int? userId; // Nullable integer
@@ -93,9 +97,9 @@ class Data {
     map['email'] = email ?? 'Unknown'; // Ensure email is never null
     map['isActive'] = isActive ?? false; // Ensure isActive is never null
     map['gender'] = gender ?? -1; // Ensure gender is never null
-    map['dateOfBirth'] = dateOfBirth ??  DateTime(2000).toString(); // Ensure dateOfBirth is never null
-    map['mobileNumber'] = mobileNumber ?? 'Unknown'; // Ensure mobileNumber is never null
-    map['imgSrc'] = imgSrc ?? 'Unknown'; // Ensure imgSrc is never null
+    map['dateOfBirth'] = dateOfBirth ?? ''; // Keep empty string if not provided
+    map['mobileNumber'] = mobileNumber ?? ''; // Ensure mobileNumber is never null
+    map['imgSrc'] = imgSrc ?? ''; // Ensure imgSrc is never null
     map['pinCode'] = pinCode ?? ''; // Ensure pinCode is never null
     map['password'] = password ?? ''; // Ensure password is never null
     map['notes'] = notes ?? ''; // Ensure notes is never null

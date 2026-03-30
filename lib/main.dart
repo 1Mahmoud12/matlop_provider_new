@@ -74,7 +74,7 @@ void main() async {
   } catch (error) {
     log('$error');
   }
-  selectTokens();
+  // selectTokens is called from LoginCubit after successful login
   // Constants.jsonServerKey = await loadJsonFile();
   runApp(
     DevicePreview(
@@ -108,7 +108,6 @@ class _MyAppState extends State<MyApp> {
   void didChangeDependencies() async {
     if (currentIndex == 0) {
       await initNotification();
-      await selectTokens();
       currentIndex++;
     }
     super.didChangeDependencies();

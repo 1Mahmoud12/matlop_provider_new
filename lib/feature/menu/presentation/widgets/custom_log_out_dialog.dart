@@ -1,7 +1,11 @@
+import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:matlop_provider/core/component/buttons/custom_text_button.dart';
+import 'package:matlop_provider/core/component/loading_widget.dart';
+import 'package:matlop_provider/core/network/dio_helper.dart';
+import 'package:matlop_provider/core/network/end_points.dart';
 import 'package:matlop_provider/core/network/local/cache.dart';
 import 'package:matlop_provider/core/themes/colors.dart';
 import 'package:matlop_provider/core/utils/constants.dart';
@@ -10,9 +14,41 @@ import 'package:matlop_provider/feature/auth/login/presentation/login_view.dart'
 import 'package:matlop_provider/feature/auth/login/presentation/manager/cubit/login_cubit.dart';
 
 class CustomLogoutDialog extends StatelessWidget {
-  const CustomLogoutDialog({
-    super.key,
-  });
+  const CustomLogoutDialog({super.key});
+
+  Future<void> _performLogout(BuildContext context) async {
+    // Show loading FIRST — context is still valid because the bottom sheet is alive
+    animationDialogLoading(context);
+
+    try {
+      await DioHelper.postData(
+        endPoint: EndPoints.logout,
+        data: {'token': Constants.fcmToken},
+      );
+    } catch (_) {
+      // Ignore errors — always log out locally
+    } finally {
+      // Clear local session data
+      userCacheValue = null;
+      userCache?.put(userCacheKey, '{}');
+      Constants.token = '';
+      Constants.fcmToken = '';
+
+      if (context.mounted) {
+        // pushAndRemoveUntil removes ALL routes (loading dialog + bottom sheet)
+        // and pushes LoginView cleanly
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (_) => BlocProvider(
+              create: (_) => LoginCubit(),
+              child: const LoginView(),
+            ),
+          ),
+          (route) => false,
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,51 +66,46 @@ class CustomLogoutDialog extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            'Do you want to logout?'.tr(), // Added .tr() here
+            'Do you want to logout?'.tr(),
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   color: AppColors.primaryColor,
                 ),
           ),
-          const SizedBox(
-            height: 20,
-          ),
+          const SizedBox(height: 20),
           Row(
             children: [
               Expanded(
                 child: CustomTextButton(
                   child: Text(
-                    'No'.tr(), // Added .tr() here
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white),
+                    'No'.tr(),
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyLarge
+                        ?.copyWith(color: Colors.white),
                   ),
                   onPress: () {
                     Navigator.pop(context);
                   },
                 ),
               ),
-              const SizedBox(
-                width: 10,
-              ),
+              const SizedBox(width: 10),
               Expanded(
                 child: CustomTextButton(
                   backgroundColor: Colors.white,
                   borderColor: AppColors.primaryColor,
                   child: Text(
-                    'Yes, Logout'.tr(), // Added .tr() here
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: AppColors.primaryColor),
+                    'Yes, Logout'.tr(),
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyLarge
+                        ?.copyWith(color: AppColors.primaryColor),
                   ),
-                  onPress: () {
-                    userCacheValue = null;
-                    userCache?.put(userCacheKey, '{}');
-                    Constants.token = '';
-                    context.navigateToPage(BlocProvider(create: (_) => LoginCubit(), child: const LoginView()));
-                  },
+                  onPress: () => _performLogout(context),
                 ),
               ),
             ],
           ),
-          const SizedBox(
-            height: 20,
-          ),
+          const SizedBox(height: 20),
         ],
       ),
     );

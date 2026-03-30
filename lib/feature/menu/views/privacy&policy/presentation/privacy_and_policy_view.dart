@@ -45,19 +45,19 @@ class _PrivacyAndPolicyViewState extends State<PrivacyAndPolicyView> {
                         ),
                         ...List.generate(
                           ConstantModel.privacyAndPolicyModel?.data?.length ?? 0,
-                          (index) {
-                            return ConstantModel.privacyAndPolicyModel!.data![index].userType == userCacheValue?.data?.profile?.technicalType
-                                ? MyCustomExpandablePanel(
-                                    questionData: (context.locale.languageCode == 'en'
-                                            ? ConstantModel.privacyAndPolicyModel!.data![index].enTitle
-                                            : ConstantModel.privacyAndPolicyModel!.data![index].arTitle) ??
-                                        Constants.unKnownValue,
-                                    answerData: (context.locale.languageCode == 'en'
-                                            ? ConstantModel.privacyAndPolicyModel!.data![index].enDescription
-                                            : ConstantModel.privacyAndPolicyModel!.data![index].arDescription) ??
-                                        Constants.unKnownValue)
-                                : const SizedBox();
-                          },
+                          (index) => Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: MyCustomExpandablePanel(
+                              questionData: (context.locale.languageCode == 'en'
+                                      ? ConstantModel.privacyAndPolicyModel!.data![index].enTitle
+                                      : ConstantModel.privacyAndPolicyModel!.data![index].arTitle) ??
+                                  Constants.unKnownValue,
+                              answerData: (context.locale.languageCode == 'en'
+                                      ? ConstantModel.privacyAndPolicyModel!.data![index].enDescription
+                                      : ConstantModel.privacyAndPolicyModel!.data![index].arDescription) ??
+                                  Constants.unKnownValue,
+                            ),
+                          ),
                         ),
                       ],
                     ),

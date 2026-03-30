@@ -25,7 +25,6 @@ class _BottomNavBarViewState extends State<BottomNavBarView> {
   @override
   void initState() {
     OrderCubit.of(context).getOrderByStatus(context, status: 7);
-
     _selectedIconIndex = widget.selectedIndex;
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) {
@@ -37,7 +36,6 @@ class _BottomNavBarViewState extends State<BottomNavBarView> {
 
   @override
   Widget build(BuildContext context) {
-    selectTokens();
     return WillPopScope(
       onWillPop: () async {
         // Check if the user presses the back button twice within 2 seconds

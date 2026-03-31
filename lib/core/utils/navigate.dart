@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 
 extension NavigationExtension on BuildContext {
-  void navigateToPage(
+  Future<dynamic> navigateToPage(
       Widget widget, {
         PageTransitionType? pageTransitionType,
       }) {
-    Navigator.of(this).push(
+    return Navigator.of(this).push(
       PageTransition(
         child: widget,
         type: pageTransitionType ?? PageTransitionType.fade,

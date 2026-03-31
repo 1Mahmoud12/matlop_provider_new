@@ -59,7 +59,7 @@ class _OrderDetailsViewState extends State<SpecialOrderDetailsView> {
       color: AppColors.primaryColor,
       child: Scaffold(
         persistentFooterButtons: [
-          if (widget.offersOrderCubit != null && userCacheValue?.data?.profile?.technicalType == 4)
+          if (widget.offersOrderCubit != null && userCacheValue?.data?.profile?.technicalType == 3)
             CustomTextButton(
               width: MediaQuery.sizeOf(context).width,
               borderRadius: 16,
@@ -216,9 +216,11 @@ class _OrderDetailsViewState extends State<SpecialOrderDetailsView> {
               child: BlocBuilder<DetailsSpecialOrderCubit, DetailsSpecialOrderState>(
                 builder: (context, state) => ConstantModel.detailsSpecialOrderModel != null && ConstantModel.detailsSpecialOrderModel!.data != null
                     ? FloatingActionButton(
-                        onPressed: () {
-                          if (ConstantModel.detailsSpecialOrderModel?.data?.latitude == null ||
-                              ConstantModel.detailsSpecialOrderModel?.data?.longitude == null) return;
+                        onPressed: () {final lat = ConstantModel.detailsSpecialOrderModel?.data?.latitude;
+                        final lng = ConstantModel.detailsSpecialOrderModel?.data?.longitude;
+
+                        if (lat == null || lng == null) return;
+                        if (lat.toString().trim().isEmpty || lng.toString().trim().isEmpty) return;
                           openGoogleMaps(
                             num.parse(ConstantModel.detailsSpecialOrderModel?.data?.latitude != null &&
                                         ConstantModel.detailsSpecialOrderModel?.data?.latitude != ''

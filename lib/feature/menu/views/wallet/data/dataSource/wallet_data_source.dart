@@ -21,7 +21,7 @@ class WalletDataSource extends WalletDataSourceAbstract {
   @override
   Future<Either<Failure, TransactionsModel>> getTransactions() async {
     try {
-      final response = await DioHelper.getData(url: '${EndPoints.getTransaction}/${userCacheValue?.data?.userId}');
+      final response = await DioHelper.getData(url: '/wallets/${userCacheValue?.data?.userId}/transactions');
       return right(TransactionsModel.fromJson(response.data));
     } catch (e) {
       if (e is DioException) {
@@ -34,7 +34,7 @@ class WalletDataSource extends WalletDataSourceAbstract {
   @override
   Future<Either<Failure, WalletModel>> getBalanceData() async {
     try {
-      final response = await DioHelper.getData(url: '${EndPoints.getBalance}/${userCacheValue?.data?.userId}');
+      final response = await DioHelper.getData(url: '/wallets/${userCacheValue?.data?.userId}/balance');
       return right(WalletModel.fromJson(response.data));
     } catch (e) {
       if (e is DioException) {

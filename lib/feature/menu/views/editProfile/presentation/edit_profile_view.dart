@@ -64,9 +64,19 @@ class _EditProfileViewState extends State<EditProfileView> {
                 const SizedBox(
                   height: 20,
                 ),
-                Text(
-                  userCacheValue?.data?.name ?? '',
-                  style: Theme.of(context).textTheme.titleMedium,
+                BlocProvider.value(
+                  value: cubit,
+                  child: BlocBuilder<UpdateProfileCubit, UpdateProfileState>(
+                    builder: (context, state) {
+                      final fName = profileCacheValue?.data?.firstName ?? '';
+                      final lName = profileCacheValue?.data?.lastName ?? '';
+                      final fullName = fName.isNotEmpty || lName.isNotEmpty ? '$fName $lName' : userCacheValue?.data?.name ?? '';
+                      return Text(
+                        fullName,
+                        style: Theme.of(context).textTheme.titleMedium,
+                      );
+                    },
+                  ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -104,20 +114,20 @@ class _EditProfileViewState extends State<EditProfileView> {
                   child: Column(
                     children: [
                       CustomTextFormField(
-                        labelStringText: 'Name'.tr(),
+                        labelStringText: 'First Name'.tr(),
                         controller: cubit.firstNameController,
-                        hintText: 'Please enter your name'.tr(),
+                        hintText: 'Please enter your first name'.tr(),
                         outPadding: EdgeInsets.zero,
                       ),
-                      // const SizedBox(
-                      //   height: 20,
-                      // ),
-                      // CustomTextFormField(
-                      //   labelStringText: 'last name'.tr(),
-                      //   controller: cubit.lastNameController,
-                      //   hintText: 'Please enter your last name'.tr(),
-                      //   outPadding: EdgeInsets.zero,
-                      // ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      CustomTextFormField(
+                        labelStringText: 'Last Name'.tr(),
+                        controller: cubit.lastNameController,
+                        hintText: 'Please enter your last name'.tr(),
+                        outPadding: EdgeInsets.zero,
+                      ),
                       const SizedBox(
                         height: 20,
                       ),
@@ -247,8 +257,11 @@ class _EditProfileViewState extends State<EditProfileView> {
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white),
                   ),
                   onPress: () {
-                    // Navigator.pop(context);
-                    cubit.updateProfile(context: context);
+                    if (cubit.hasChanges()) {
+                      cubit.updateProfile(context: context);
+                    } else {
+                      Utils.showToast(title: 'No changes detected'.tr(), state: UtilState.warning);
+                    }
                   },
                 ),
                 const SizedBox(

@@ -110,25 +110,25 @@ class EndPoints {
   static const privacyAndPolicy = '/privacy-policies';
   static const Orders = '/Order/GetAllWitPagination';
   static const GetOrderSchedule = '/Order/GetOrderSchedule/';
-  static const OrderDetails = '/Order/Get/';
+  static const OrderDetails = '/orders/';
   static const cancelOrder = '/Order/CancelOrder';
   static const cancelReason = '/CancelReason/GetAll';
 
   // orders
   static const getOrdersByStatus = '/orders/by-technical';
-  static const getOrderDetails = '/Order/Get/';
-  static const changeStatus = '/Order/ChangeStatus';
+  static const getOrderDetails = '/orders/';
+  static const changeStatus = '/orders/';
 
   // SpecialOrder
   static const getSpecialOrdersByStatus = '/special-orders/by-technical';
-  static const getSpecialOrderDetails = '/SpecialOrder/Get';
+  static const getSpecialOrderDetails = '/special-orders';
   static const getSpecialOrder = '/SpecialOrder/GetAllWitPagination';
   static const getAllSpecialOrder = '/SpecialOrder/GetAll';
-  static const getNewSpecialOrder = '/SpecialOrder/GetNewSpecialOrder';
+  static const getNewSpecialOrder = '/special-orders/new';
   static const addSpecialOrder = '/SpecialOrder/Create';
 
   // offer
-  static const createSpecialOrderOffer = '/SpecialOrderOffer/Create';
+  static const createSpecialOrderOffer = '/special-order-offers';
 
   // Wallet
   static const addWallet = '/Wallet/WalletTransaction';

@@ -24,7 +24,7 @@ class OffersOrderCubit extends Cubit<OffersOrderState> {
           emit(OffersOrderError(e: l.errMessage));
         }, (r) {
           ConstantModel.offersModel = r;
-          logger.i(r.toJson());
+          // logger.i(r.toJson());
           emit(OffersOrderSuccess());
         });
       },

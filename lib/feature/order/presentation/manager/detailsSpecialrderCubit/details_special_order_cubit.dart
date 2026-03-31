@@ -25,7 +25,7 @@ class DetailsSpecialOrderCubit extends Cubit<DetailsSpecialOrderState> {
 
           emit(DetailsSpecialOrderError(e: l.errMessage));
         }, (r) {
-          logger.i(r.toJson());
+          // logger.i(r.toJson());
           ConstantModel.detailsSpecialOrderModel = r;
           closeDialog(context);
           emit(DetailsSpecialOrderSuccess());

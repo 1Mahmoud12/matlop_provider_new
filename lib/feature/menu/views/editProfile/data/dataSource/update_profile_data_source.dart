@@ -47,7 +47,7 @@ class UpdateProfileDataSource extends UpdateProfileDataSourceInterface {
       // Backend route uses the authenticated user (no id in url).
       final String endpoint = EndPoints.technicalProfile;
       final response = await DioHelper.getData(url: endpoint);
-     logger.i(response.data);
+     // logger.i(response.data);
       if (response.data['code'] == 1) {
         return left(ServerFailure(response.data['message']));
       }

@@ -43,7 +43,7 @@ class SpecialOrderPlanDetails extends StatelessWidget {
           PlanDetailsContent(
             icon: AppIcons.clock,
             text: 'Price: '.tr(),
-            value: '${detailsSpecialOrderModel.data!.amount} ${'SAR'.tr()}',
+            value: '${detailsSpecialOrderModel.data!.amount?? 0} ${'SAR'.tr()}',
           ),
         ],
       ),

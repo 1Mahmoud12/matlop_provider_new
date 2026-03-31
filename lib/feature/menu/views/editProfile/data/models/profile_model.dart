@@ -59,10 +59,14 @@ class Data {
     gender = (json['gender'] ?? json['genderId']) ?? -1; // Support genderId from backend
     dateOfBirth = json['dateOfBirth']?.toString(); // Keep null if not provided
     mobileNumber = json['mobileNumber']?.toString() ?? ''; // Default to empty string
-    final rawImg = json['imgSrc'];
-    imgSrc = (rawImg == null || (rawImg is String && rawImg.isEmpty))
-        ? ''
-        : '${EndPoints.domain}$rawImg'; // Avoid returning domain when backend sends empty imgSrc
+    final rawImg = json['imgSrc']?.toString().trim();
+    if (rawImg == null || rawImg.isEmpty) {
+      imgSrc = '';
+    } else if (rawImg.startsWith('http')) {
+      imgSrc = rawImg;
+    } else {
+      imgSrc = '${EndPoints.domain}$rawImg';
+    }
     pinCode = json['pinCode'] ?? ''; // Default to empty string if null
     password = json['password'] ?? ''; // Default to empty string if null
     notes = json['notes'] ?? ''; // Default to empty string if null

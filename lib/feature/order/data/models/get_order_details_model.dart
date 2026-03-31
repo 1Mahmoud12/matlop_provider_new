@@ -7,7 +7,7 @@ class OrderDetailsModel {
 
   factory OrderDetailsModel.fromJson(Map<String, dynamic> json) {
     return OrderDetailsModel(
-      code: json['code'] ?? -1,
+      code: json['statusCode'] ?? json['code'] ?? -1,
       message: json['message'] ?? '',
       data: json['data'] != null ? OrderDetailsData.fromJson(json['data']) : null,
     );
@@ -80,17 +80,17 @@ class OrderDetailsData {
       orderId: json['orderId'] ?? -1,
       clientId: json['clientId'] ?? -1,
       clientName: json['clientName'] ?? '',
-      paymentWayId: json['paymentWayId'] ?? -1,
+      paymentWayId: json['paymentMethodId'] ?? json['paymentWayId'] ?? -1,
       latitude: json['latitude'] ?? -1,
       longitude: json['longitude'] ?? -1,
-      paymentWayName: json['paymentWayName'] ?? '',
+      paymentWayName: json['paymentMethodName'] ?? json['paymentWayName'] ?? '',
       packageId: json['packageId'] ?? -1,
       packageName: json['packageName'] ?? '',
       cancelReasonId: json['cancelReasonId'],
       orderCancelationNote: json['orderCancelationNote'] ?? '',
       coponeName: json['coponeName'] ?? '',
       coponeId: json['coponeId'] ?? -1,
-      media: (json['media'] as List<dynamic>?)?.map((e) => Media.fromJson(e)).toList() ?? [],
+      media: ((json['orderMedias'] ?? json['media']) as List<dynamic>?)?.map((e) => Media.fromJson(e)).toList() ?? [],
       notes: json['notes'] ?? '',
       locationId: json['locationId'] ?? -1,
       locationName: json['locationName'] ?? '',
@@ -103,9 +103,9 @@ class OrderDetailsData {
       package: json['package'] != null ? Package.fromJson(json['package']) : null,
       copones: json['copones'],
       orderTechnicalAssignments:
-          (json['orderTechnicalAssignments'] as List<dynamic>?)?.map((e) => OrderTechnicalAssignment.fromJson(e)).toList() ?? [],
-      orderScheduleDto: json['orderScheduleDto'],
-      orderAddtionalItem: json['orderAddtionalItem'] ?? [],
+          ((json['technicalAssignments'] ?? json['orderTechnicalAssignments']) as List<dynamic>?)?.map((e) => OrderTechnicalAssignment.fromJson(e)).toList() ?? [],
+      orderScheduleDto: json['orderSchedules'] ?? json['orderScheduleDto'],
+      orderAddtionalItem: json['additionalItems'] ?? json['orderAddtionalItem'] ?? [],
     );
   }
 }

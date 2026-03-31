@@ -51,7 +51,7 @@ class UpdateProfileParams {
       return {
         'userId': profileCacheValue?.data?.userId ?? 0,
         'firstName': firstName,
-        'lastName': 'lastName',
+        'lastName': lastName,
         'email': email,
         'mobileNumber': mobileNumber,
         'genderId': genderId,

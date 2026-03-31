@@ -33,6 +33,7 @@ import 'core/network/local/hive_data_base.dart';
 import 'core/themes/light.dart';
 import 'core/utils/bloc_observe.dart';
 import 'feature/auth/login/data/models/login_model.dart';
+import 'feature/menu/views/editProfile/data/models/profile_model.dart';
 
 Widget appStartScreen = const SplashScreenOne();
 final navigatorKey = GlobalKey<NavigatorState>();
@@ -53,6 +54,16 @@ void main() async {
   arabicLanguage = userCache?.get(languageKey, defaultValue: true);
   userCacheValue = LoginModel.fromJson(jsonDecode(await userCache!.get(userCacheKey, defaultValue: '{}')));
   Constants.token = userCacheValue?.data?.accessToken ?? '';
+
+  // Load profile cache so Home screen shows the correct image immediately on startup
+  final profileJson = await userCache!.get(profileCacheKey, defaultValue: '{}');
+  if (profileJson != '{}') {
+    try {
+      profileCacheValue = ProfileModel.fromJson(jsonDecode(profileJson));
+    } catch (_) {
+      profileCacheValue = null;
+    }
+  }
   // Constants.user = userCacheValue?.data?.type == 'developer';
   // checkInCache = userCache?.get(checkInKey, defaultValue: false);
   log('user id ======> ${userCacheValue?.data?.userId}');

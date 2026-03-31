@@ -28,9 +28,12 @@ class CustomLogoutDialog extends StatelessWidget {
     } catch (_) {
       // Ignore errors — always log out locally
     } finally {
-      // Clear local session data
+      // Clear local session data — including profileCacheValue so old
+      // account image/name never leaks into the next login session.
       userCacheValue = null;
+      profileCacheValue = null;
       userCache?.put(userCacheKey, '{}');
+      userCache?.put(profileCacheKey, '{}');
       Constants.token = '';
       Constants.fcmToken = '';
 

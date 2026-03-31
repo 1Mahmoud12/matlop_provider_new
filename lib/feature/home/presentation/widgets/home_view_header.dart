@@ -1,4 +1,4 @@
-import 'package:easy_localization/easy_localization.dart'; // Add this import for localization
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:matlop_provider/core/component/cache_image.dart';
 import 'package:matlop_provider/core/component/notification_icon.dart';
@@ -7,11 +7,14 @@ import 'package:matlop_provider/core/utils/constants.dart';
 import 'package:matlop_provider/core/utils/navigate.dart';
 import 'package:matlop_provider/feature/menu/views/editProfile/presentation/edit_profile_view.dart';
 
-class HomeViewHeader extends StatelessWidget {
-  const HomeViewHeader({
-    super.key,
-  });
+class HomeViewHeader extends StatefulWidget {
+  const HomeViewHeader({super.key});
 
+  @override
+  State<HomeViewHeader> createState() => _HomeViewHeaderState();
+}
+
+class _HomeViewHeaderState extends State<HomeViewHeader> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -31,32 +34,50 @@ class HomeViewHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               InkWell(
-                onTap: () {
-                  context.navigateToPage(const EditProfileView());
+                onTap: () async {
+                  await context.navigateToPage(const EditProfileView());
+                  if (mounted) setState(() {});
                 },
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    CacheImage(
-                      imageUrl: userCacheValue?.data?.imgSrc ?? '',
-                      width: 35,
-                      height: 35,
-                      circle: true,
-                      profileImage: true,
-                      previewImage: false,
-                    ),
+                    // Use profileCacheValue imgSrc directly — it's already the clean, trimmed full URL.
+                    // Key forces CacheImage to rebuild when the URL changes after a profile update.
+                    Builder(builder: (context) {
+                      final imgUrl = profileCacheValue?.data?.imgSrc?.trim() ?? '';
+                      return CacheImage(
+                        key: ValueKey(imgUrl),
+                        imageUrl: imgUrl,
+                        width: 35,
+                        height: 35,
+                        circle: true,
+                        profileImage: true,
+                        previewImage: false,
+                      );
+                    }),
                     const SizedBox(width: 10),
                     GestureDetector(
-                      onTap: () => context.navigateToPage(const EditProfileView()),
+                      onTap: () async {
+                        await context.navigateToPage(const EditProfileView());
+                        if (mounted) setState(() {});
+                      },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Welcome back,'.tr(), // Changed to English key
+                            'Welcome back,'.tr(),
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
                           Text(
-                            userCacheValue?.data?.name ?? Constants.unKnownValue, // Changed to English key
+                            // Show firstName + lastName from profileCacheValue (freshest source)
+                            // Fall back to userCacheValue name if profile hasn't loaded yet
+                            () {
+                              final fName = profileCacheValue?.data?.firstName ?? '';
+                              final lName = profileCacheValue?.data?.lastName ?? '';
+                              return fName.isNotEmpty || lName.isNotEmpty
+                                  ? '$fName $lName'.trim()
+                                  : userCacheValue?.data?.name ?? Constants.unKnownValue;
+                            }(),
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
                         ],

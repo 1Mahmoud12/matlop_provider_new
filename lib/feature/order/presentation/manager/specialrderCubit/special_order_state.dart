@@ -16,7 +16,13 @@ final class SpecialOrderError extends SpecialOrderState {
   const SpecialOrderError({required this.e});
 }
 
-final class SpecialOrderSuccess extends SpecialOrderState {}
+final class SpecialOrderSuccess extends SpecialOrderState {
+  final int timestamp;
+  SpecialOrderSuccess() : timestamp = DateTime.now().microsecondsSinceEpoch;
+
+  @override
+  List<Object> get props => [timestamp];
+}
 
 final class SpecialOrderDetailsLoading extends SpecialOrderState {}
 

@@ -17,7 +17,13 @@ final class OrderError extends OrderState {
   const OrderError({required this.e});
 }
 
-final class OrderSuccess extends OrderState {}
+final class OrderSuccess extends OrderState {
+  final int timestamp;
+  OrderSuccess() : timestamp = DateTime.now().microsecondsSinceEpoch;
+
+  @override
+  List<Object> get props => [timestamp];
+}
 
 final class OrderDetailsLoading extends OrderState {}
 

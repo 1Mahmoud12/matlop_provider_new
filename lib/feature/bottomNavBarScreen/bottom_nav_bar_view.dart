@@ -24,7 +24,6 @@ class _BottomNavBarViewState extends State<BottomNavBarView> {
 
   @override
   void initState() {
-    OrderCubit.of(context).getOrderByStatus(context, status: 7);
     _selectedIconIndex = widget.selectedIndex;
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) {

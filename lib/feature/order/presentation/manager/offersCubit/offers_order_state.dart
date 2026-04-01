@@ -17,7 +17,13 @@ final class OffersOrderError extends OffersOrderState {
   const OffersOrderError({required this.e});
 }
 
-final class OffersOrderSuccess extends OffersOrderState {}
+final class OffersOrderSuccess extends OffersOrderState {
+  final int timestamp;
+  OffersOrderSuccess() : timestamp = DateTime.now().microsecondsSinceEpoch;
+
+  @override
+  List<Object> get props => [timestamp];
+}
 
 final class OffersOrderDetailsLoading extends OffersOrderState {}
 

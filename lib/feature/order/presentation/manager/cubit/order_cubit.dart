@@ -57,7 +57,7 @@ class OrderCubit extends Cubit<OrderState> {
       (value) async {
         if (context.mounted) closeDialog(context);
         value.fold((l) {
-          // Utils.showToast(title: l.errMessage, state: UtilState.error);
+          Utils.showToast(title: l.errMessage, state: UtilState.error);
 
           emit(ChangeStatusError(e: l.errMessage));
         }, (r) {

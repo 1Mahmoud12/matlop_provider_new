@@ -54,14 +54,23 @@ class OrderDataSourceImpl extends OrderDataSource {
   @override
   Future<Either<Failure, String>> changeStatus({required int status, required int orderId}) async {
     try {
-      await DioHelper.putData(
-          endPoint: EndPoints.changeStatus,
+      final response = await DioHelper.putData(
+          endPoint: '${EndPoints.changeStatus}$orderId/status',
           query: {
-            'OrderId': orderId,
             'orderStatusEnum': status,
           },
           data: {},
           formDataIsEnabled: true);
+
+      if (response.data != null && response.data is Map<String, dynamic>) {
+        if (response.data['isSuccess'] == false) {
+          final errorMsg = response.data['error']?.toString() ?? response.data['message']?.toString() ?? 'Error changing status';
+          return left(ServerFailure(errorMsg));
+        } else {
+          final msg = response.data['message']?.toString() ?? '';
+          return right(msg.isNotEmpty ? msg : 'successfully_status_order_changed'.tr());
+        }
+      }
 
       return right('successfully_status_order_changed'.tr());
     } catch (e) {

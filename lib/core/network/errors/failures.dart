@@ -36,7 +36,7 @@ class ServerFailure extends Failure {
   }
 
   factory ServerFailure.fromResponse(int? statusCode, dynamic response) {
-    if (statusCode == 401 || statusCode == 422 || statusCode == 400 || statusCode == 404 || statusCode == 409) {
+    if (statusCode == 401 || statusCode == 403 || statusCode == 422 || statusCode == 400 || statusCode == 404 || statusCode == 409) {
       logger.e('message $response');
 
       if (response is Map<String, dynamic>) {

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:matlop_provider/feature/chat/presentation/manager/messageCubit/message_cubit.dart';
 import 'package:matlop_provider/feature/menu/views/editProfile/data/models/country_model.dart';
+import 'package:matlop_provider/feature/addNewAddress/data/models/country_model.dart' as add_new_address_country;
 
 class Constants {
   static String fontFamily = 'Montserrat';
@@ -27,6 +28,9 @@ class Constants {
   static List<String> selectedStatus = ['In Progress'.tr(), 'Completed'.tr(), 'Cancelled'.tr()];
   static List<String> orderType = ['Emergency Order'.tr(), 'Special Order'.tr()];
   static RemoteMessage? messageGlobal;
+  
+  static int? selectedCountryId;
+  static add_new_address_country.CountryData? myCountry;
 
   static List<Country> countries = [
     Country(flag: '🇺🇸', code: '+1'), // United States

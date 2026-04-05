@@ -172,7 +172,7 @@ class _MyAppState extends State<MyApp> {
           BlocProvider(create: (_) => BottomNavBarCubit()),
           BlocProvider(create: (_) => MenuCubit()),
           BlocProvider(create: (_) => AddNewAddressCubit()),
-          BlocProvider(create: (_) => CountryCubit()),
+          BlocProvider(lazy: false, create: (_) => CountryCubit()..getCountries(context)),
           BlocProvider(create: (_) => ResetPasswordCubit()),
           BlocProvider(create: (_) => OrderCubit()),
           BlocProvider(create: (_) => SpecialOrderCubit()),

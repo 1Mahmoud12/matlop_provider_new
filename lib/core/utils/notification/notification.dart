@@ -353,10 +353,11 @@ Future<void> selectTokens() async {
 
   // Send after token and deviceId are ready
   if (userCacheValue?.data != null && Constants.fcmToken.isNotEmpty) {
+    final currentToken = await Constants.messaging.getToken()?? Constants.fcmToken;
     MainDataSourceImpl().setFirebase(
       params: FirebaseParams(
         userId: userCacheValue!.data!.userId!,
-        fcmToken: Constants.fcmToken,
+        fcmToken:  currentToken,
         lang: arabicLanguage ? 'ar' : 'en',
       ),
     );

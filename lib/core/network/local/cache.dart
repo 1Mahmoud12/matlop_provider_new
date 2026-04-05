@@ -5,6 +5,7 @@ import 'package:matlop_provider/feature/menu/views/editProfile/data/models/profi
 Box? userCache;
 String userCacheBoxKey = 'userCache';
 // keys
+String countryIdKey = 'countryIdKey';
 
 String sliderValueKey = 'slider_value_key';
 String hoursWorkedKey = 'hours_worked_key';

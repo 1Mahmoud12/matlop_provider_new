@@ -38,51 +38,78 @@ class CountryData {
   final String? img; // Nullable field
   final String enName;
   final String arName;
-  final String currency;
-  final String nationality;
-  final String phoneLength;
+  final String? currency;
+  final String? nationality;
+  final String? phoneLength;
   final String phoneCode;
-  final String content;
-  final String shortName;
-  final String timeZone;
+  final String? content;
+  final String? shortName;
+  final String? timeZone;
   final bool status;
+  final int currencyId;
+  final int minPhoneLength;
+  final int maxPhoneLength;
+  final String? paymentUrl;
+  final String? phoneValidationMessageAr;
+  final String? phoneValidationMessageEn;
+  final String? taxName;
+  final num? taxPercentage;
+  final int? packagePriceDisplayMode;
 
   CountryData({
     required this.countryId,
     this.img,
     required this.enName,
     required this.arName,
-    required this.currency,
-    required this.nationality,
-    required this.phoneLength,
+    this.currency,
+    this.nationality,
+    this.phoneLength,
     required this.phoneCode,
-    required this.content,
-    required this.shortName,
-    required this.timeZone,
+    this.content,
+    this.shortName,
+    this.timeZone,
     required this.status,
+    required this.currencyId,
+    required this.minPhoneLength,
+    required this.maxPhoneLength,
+    this.paymentUrl,
+    this.phoneValidationMessageAr,
+    this.phoneValidationMessageEn,
+    this.taxName,
+    this.taxPercentage,
+    this.packagePriceDisplayMode,
   });
 
   factory CountryData.fromJson(Map<String, dynamic> json) {
     return CountryData(
-      countryId: json['countryId'] ?? -1,  // Default to -1 if 'countryId' is null
-      img: json['img'] ?? Constants.unKnownValue,  // Default to Constants.unKnownValue if 'img' is null
-      enName: json['enName'] ?? Constants.unKnownValue,  // Default to Constants.unKnownValue if 'enName' is null
-      arName: json['arName'] ?? Constants.unKnownValue,  // Default to Constants.unKnownValue if 'arName' is null
-      currency: json['currency'] ?? Constants.unKnownValue,  // Default to Constants.unKnownValue if 'currency' is null
-      nationality: json['nationality'] ?? Constants.unKnownValue,  // Default to Constants.unKnownValue if 'nationality' is null
-      phoneLength: json['phoneLength'] ?? Constants.unKnownValue,  // Default to Constants.unKnownValue if 'phoneLength' is null
-      phoneCode: json['phoneCode'] ?? Constants.unKnownValue,  // Default to Constants.unKnownValue if 'phoneCode' is null
-      content: json['content'] ?? Constants.unKnownValue,  // Default to Constants.unKnownValue if 'content' is null
-      shortName: json['shortName'] ?? Constants.unKnownValue,  // Default to Constants.unKnownValue if 'shortName' is null
-      timeZone: json['timeZone'] ?? Constants.unKnownValue,  // Default to Constants.unKnownValue if 'timeZone' is null
-      status: json['status'] ?? false,  // Default to false if 'status' is null
+      countryId: json['countryId'] ?? -1,
+      img: json['img'],
+      enName: json['enName'] ?? Constants.unKnownValue,
+      arName: json['arName'] ?? Constants.unKnownValue,
+      currency: json['currency'],
+      nationality: json['nationality'],
+      phoneLength: json['phoneLength'],
+      phoneCode: json['phoneCode'] ?? Constants.unKnownValue,
+      content: json['content'],
+      shortName: json['shortName'],
+      timeZone: json['timeZone'],
+      status: json['status'] ?? false,
+      currencyId: json['currencyId'] ?? -1,
+      minPhoneLength: json['minPhoneLength'] ?? 0,
+      maxPhoneLength: json['maxPhoneLength'] ?? 0,
+      paymentUrl: json['paymentUrl'],
+      phoneValidationMessageAr: json['phoneValidationMessageAr'],
+      phoneValidationMessageEn: json['phoneValidationMessageEn'],
+      taxName: json['taxName'],
+      taxPercentage: json['taxPercentage'],
+      packagePriceDisplayMode: json['packagePriceDisplayMode'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'countryId': countryId,
-      'img': img ?? Constants.unKnownValue,  // Default to Constants.unKnownValue if 'img' is null
+      'img': img,
       'enName': enName,
       'arName': arName,
       'currency': currency,
@@ -93,6 +120,15 @@ class CountryData {
       'shortName': shortName,
       'timeZone': timeZone,
       'status': status,
+      'currencyId': currencyId,
+      'minPhoneLength': minPhoneLength,
+      'maxPhoneLength': maxPhoneLength,
+      'paymentUrl': paymentUrl,
+      'phoneValidationMessageAr': phoneValidationMessageAr,
+      'phoneValidationMessageEn': phoneValidationMessageEn,
+      'taxName': taxName,
+      'taxPercentage': taxPercentage,
+      'packagePriceDisplayMode': packagePriceDisplayMode,
     };
   }
 }

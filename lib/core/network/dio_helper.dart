@@ -44,6 +44,7 @@ class DioHelper {
       'Authorization': 'Bearer $token',
       'Content-Type': 'application/json',
       'Accept': 'application/json',
+      if (Constants.selectedCountryId != null) 'X-Country-id': Constants.selectedCountryId,
     };
     return dio!
         .get(
@@ -76,8 +77,8 @@ class DioHelper {
       'Authorization': 'Bearer $token',
       'Content-Type': 'application/json',
       'Accept': 'application/json',
+      if (Constants.selectedCountryId != null) 'X-Country-id': Constants.selectedCountryId,
     };
-
 
     return dio!
         .post(
@@ -111,16 +112,20 @@ class DioHelper {
       'Accept': '*/*',
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $token',
-
+      if (Constants.selectedCountryId != null) 'X-Country-id': Constants.selectedCountryId,
     };
 
-    return dio!.put(
+    return dio!
+        .put(
       endPoint,
       queryParameters: query,
       data: formDataIsEnabled ? json.encode(data) : data,
-    ).then((value) {
-      return value;
-    },);
+    )
+        .then(
+      (value) {
+        return value;
+      },
+    );
   }
 
   // deleteData ====>>>
@@ -137,7 +142,7 @@ class DioHelper {
       'Authorization': 'Bearer $token',
       'Content-Type': 'application/json',
       'Accept': '*/*',
-
+      if (Constants.selectedCountryId != null) 'X-Country-id': Constants.selectedCountryId,
     };
 
     return dio!.delete(

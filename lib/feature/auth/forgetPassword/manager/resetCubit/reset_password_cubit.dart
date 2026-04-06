@@ -19,6 +19,8 @@ class ResetPasswordCubit extends Cubit<ResetPasswordState> {
   final TextEditingController confirmPasswordController = TextEditingController();
   final TextEditingController forgetPasswordController = TextEditingController();
 
+  String _verifiedOtp = '';
+
   final ResetPasswordDataSourceInterface loginDataSource = ResetPasswordDataSource();
 
   void verifyPhoneNumber({required BuildContext context}) {
@@ -68,8 +70,7 @@ class ResetPasswordCubit extends Cubit<ResetPasswordState> {
           (r) async {
             Utils.showToast(title: r, state: UtilState.success);
 
-            //   userCacheValue = r;
-            // Constants.token = r.data?.tokenType ?? '';
+            _verifiedOtp = otp;
 
             context.navigateToPage(
               BlocProvider.value(
@@ -88,7 +89,7 @@ class ResetPasswordCubit extends Cubit<ResetPasswordState> {
   void resetPassword({required BuildContext context}) {
     emit(VerifyLoading());
     loginDataSource
-        .resetPassword(mobile: phoneController.text, password: passwordController.text, confirmPassword: confirmPasswordController.text)
+        .resetPassword(mobile: phoneController.text, verificationCode: _verifiedOtp, newPassword: passwordController.text)
         .then(
       (value) async {
         value.fold(

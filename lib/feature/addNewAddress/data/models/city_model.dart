@@ -65,7 +65,7 @@ class CityData {
       latitude: json['latitude'] ?? Constants.unKnownValue,  // Default to Constants.unKnownValue if null
       longitude: json['longitude'] ?? Constants.unKnownValue,  // Default to Constants.unKnownValue if null
       status: json['status'] ?? false,  // Default to false if 'status' is null
-      countryId: json['countryId'] ?? -1,  // Default to -1 if 'countryId' is null
+      countryId: json['countryId'] ?? -1,  // Default to -1 if 'countryId' is absent
     );
   }
 

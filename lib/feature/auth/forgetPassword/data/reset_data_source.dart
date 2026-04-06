@@ -17,8 +17,8 @@ abstract class ResetPasswordDataSourceInterface {
 
   Future<Either<Failure, String>> resetPassword({
     required String mobile,
-    required String password,
-    required String confirmPassword,
+    required String verificationCode,
+    required String newPassword,
   });
 }
 
@@ -61,8 +61,8 @@ class ResetPasswordDataSource extends ResetPasswordDataSourceInterface {
       final response = await DioHelper.postData(
         endPoint: endpoint,
         data: {
-          'mobile': mobile,
-          'otpCode': otp,
+          'mobileNumber': mobile,
+          'verificationCode': otp,
         },
       );
       if (response.data['code'] == 1) {
@@ -82,8 +82,8 @@ class ResetPasswordDataSource extends ResetPasswordDataSourceInterface {
   @override
   Future<Either<Failure, String>> resetPassword({
     required String mobile,
-    required String password,
-    required String confirmPassword,
+    required String verificationCode,
+    required String newPassword,
   }) async {
     try {
       const endpoint = EndPoints.resetPassword;
@@ -91,8 +91,8 @@ class ResetPasswordDataSource extends ResetPasswordDataSourceInterface {
         endPoint: endpoint,
         data: {
           'mobileNumber': mobile,
-          'password': password,
-          'confirmPassword': confirmPassword,
+          'verificationCode': verificationCode,
+          'newPassword': newPassword,
         },
       );
       if (response.data['code'] == 1) {

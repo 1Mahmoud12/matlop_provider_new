@@ -46,7 +46,8 @@ class Data {
     this.password,
     this.notes,
     this.technicalSpecialistId,
-  });
+    List<ProfileCity>? cities,
+  }) : cities = cities ?? [];
 
   Data.fromJson(dynamic json) {
     userId = json['userId'] ?? -1; // Default to -1 if null
@@ -73,6 +74,7 @@ class Data {
     technicalSpecialistId = json['technicalSpecialistId'] != null
         ? num.tryParse(json['technicalSpecialistId'].toString())
         : null; // Safely parse num from String, int, or null
+    cities = (json['cities'] as List<dynamic>? ?? []).map((e) => ProfileCity.fromJson(e)).toList();
   }
 
   int? userId; // Nullable integer
@@ -84,6 +86,7 @@ class Data {
   bool? isActive; // Nullable boolean
   int? gender; // Nullable integer
   num? technicalSpecialistId; // Nullable integer
+  late List<ProfileCity> cities;
   String? dateOfBirth; // Nullable string
   String? mobileNumber; // Nullable string
   String? imgSrc; // Nullable string
@@ -108,6 +111,29 @@ class Data {
     map['password'] = password ?? ''; // Ensure password is never null
     map['notes'] = notes ?? ''; // Ensure notes is never null
     map['technicalSpecialistId'] = technicalSpecialistId ?? ''; // Ensure notes is never null
+    map['cities'] = cities.map((e) => e.toJson()).toList();
     return map;
   }
+}
+
+class ProfileCity {
+  final int cityId;
+  final String cityNameAr;
+  final String cityNameEn;
+
+  ProfileCity({required this.cityId, required this.cityNameAr, required this.cityNameEn});
+
+  factory ProfileCity.fromJson(Map<String, dynamic> json) {
+    return ProfileCity(
+      cityId: json['cityId'] ?? -1,
+      cityNameAr: json['cityNameAr'] ?? '',
+      cityNameEn: json['cityNameEn'] ?? '',
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'cityId': cityId,
+        'cityNameAr': cityNameAr,
+        'cityNameEn': cityNameEn,
+      };
 }

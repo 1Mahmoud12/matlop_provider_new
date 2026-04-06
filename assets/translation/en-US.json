@@ -264,5 +264,15 @@
   "send_offer": "Send Offer",
   "No changes detected": "No changes detected",
   "Profile updated successfully": "Profile updated successfully",
+  "My Cities": "My Cities",
+  "All Cities": "All Cities",
+  "Search Results": "Search Results",
+  "Search cities...": "Search cities...",
+  "No cities found": "No cities found",
+  "Save Changes": "Save Changes",
+  "Failed to load cities": "Failed to load cities",
+  "Failed to update cities": "Failed to update cities",
+  "Cities updated successfully": "Cities updated successfully",
+  "User not found": "User not found",
   "": ""
 }

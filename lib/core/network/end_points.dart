@@ -135,6 +135,10 @@ class EndPoints {
   static const getBalance = '/Wallet/GetBalanceClientId';
   static const getTransaction = '/Wallet/GetClientTransactions';
 
+  // Cities
+  static const getCities = '/cities';
+  static const updateTechnicalCities = '/technicals/cities';
+
   // Notification
   static const getNotification = '/notifications';
 

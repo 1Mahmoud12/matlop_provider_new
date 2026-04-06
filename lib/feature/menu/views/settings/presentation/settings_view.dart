@@ -1,8 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:matlop_provider/core/component/custom_app_bar.dart';
 import 'package:matlop_provider/core/utils/app_icons.dart';
+import 'package:matlop_provider/core/utils/navigate.dart';
 import 'package:matlop_provider/feature/menu/presentation/widgets/menu_item.dart';
+import 'package:matlop_provider/feature/menu/views/myCities/manager/cities_cubit.dart';
+import 'package:matlop_provider/feature/menu/views/myCities/presentation/my_cities_view.dart';
 import 'package:matlop_provider/feature/menu/views/settings/presentation/widgets/delete_account_bottom_sheet.dart';
 import 'package:matlop_provider/feature/menu/views/settings/presentation/widgets/selected_language_dialog.dart';
 
@@ -28,6 +32,18 @@ class _SettingsViewState extends State<SettingsView> {
           children: [
             const SizedBox(
               height: 20,
+            ),
+            MenuItem(
+              icon: AppIcons.location,
+              text: 'My Cities'.tr(),
+              onTap: () {
+                context.navigateToPage(
+                  BlocProvider(
+                    create: (_) => CitiesCubit(),
+                    child: const MyCitiesView(),
+                  ),
+                );
+              },
             ),
             MenuItem(
               icon: AppIcons.wallet,

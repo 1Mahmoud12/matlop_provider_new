@@ -329,5 +329,15 @@
   "Select birth date": "حدد تاريخ الميلاد",
   "No changes detected": "لم يتم اكتشاف أي تغييرات",
   "Profile updated successfully": "تم تحديث الملف الشخصي بنجاح",
+  "My Cities": "مدني",
+  "All Cities": "كل المدن",
+  "Search Results": "نتائج البحث",
+  "Search cities...": "البحث عن مدن...",
+  "No cities found": "لم يتم العثور على مدن",
+  "Save Changes": "حفظ التغييرات",
+  "Failed to load cities": "فشل في تحميل المدن",
+  "Failed to update cities": "فشل في تحديث المدن",
+  "Cities updated successfully": "تم تحديث المدن بنجاح",
+  "User not found": "المستخدم غير موجود",
   "": ""
 }

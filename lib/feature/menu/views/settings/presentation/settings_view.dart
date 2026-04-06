@@ -30,21 +30,7 @@ class _SettingsViewState extends State<SettingsView> {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           children: [
-            const SizedBox(
-              height: 20,
-            ),
-            MenuItem(
-              icon: AppIcons.location,
-              text: 'My Cities'.tr(),
-              onTap: () {
-                context.navigateToPage(
-                  BlocProvider(
-                    create: (_) => CitiesCubit(),
-                    child: const MyCitiesView(),
-                  ),
-                );
-              },
-            ),
+
             MenuItem(
               icon: AppIcons.wallet,
               text: 'Language'.tr(),

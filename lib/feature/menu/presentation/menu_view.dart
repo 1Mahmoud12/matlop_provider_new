@@ -10,6 +10,10 @@ import 'package:matlop_provider/feature/menu/presentation/widgets/menu_header.da
 import 'package:matlop_provider/feature/menu/presentation/widgets/menu_item.dart';
 import 'package:matlop_provider/feature/menu/views/commonQuestions/presentation/common_questions_view.dart';
 import 'package:matlop_provider/feature/menu/views/commonQuestions/presentation/manager/cubit/faq_cubit.dart';
+import 'package:matlop_provider/feature/menu/views/myCities/manager/cities_cubit.dart';
+import 'package:matlop_provider/feature/menu/views/myCities/presentation/my_cities_view.dart';
+import 'package:matlop_provider/feature/menu/views/myWorkTime/manager/work_schedule_cubit.dart';
+import 'package:matlop_provider/feature/menu/views/myWorkTime/presentation/my_work_time_view.dart';
 import 'package:matlop_provider/feature/menu/views/privacy&policy/presentation/manager/cubit/privacy_and_policy_cubit.dart';
 import 'package:matlop_provider/feature/menu/views/privacy&policy/presentation/privacy_and_policy_view.dart';
 import 'package:matlop_provider/feature/menu/views/settings/presentation/settings_view.dart';
@@ -51,6 +55,31 @@ class _MenuViewState extends State<MenuView> {
                   text: 'My Wallet'.tr(),
                   onTap: () {
                     context.navigateToPage(const WalletView());
+                  },
+                ),
+
+                MenuItem(
+                  icon: AppIcons.global,
+                  text: 'My Cities'.tr(),
+                  onTap: () {
+                    context.navigateToPage(
+                      BlocProvider(
+                        create: (_) => CitiesCubit(),
+                        child: const MyCitiesView(),
+                      ),
+                    );
+                  },
+                ),
+                MenuItem(
+                  icon: AppIcons.schedule,
+                  text: 'Work schedule'.tr(),
+                  onTap: () {
+                    context.navigateToPage(
+                      BlocProvider(
+                        create: (_) => WorkScheduleCubit(),
+                        child: const MyWorkTimeView(),
+                      ),
+                    );
                   },
                 ),
                 MenuItem(

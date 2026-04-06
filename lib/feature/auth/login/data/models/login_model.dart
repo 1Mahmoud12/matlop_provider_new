@@ -285,35 +285,72 @@ class CityModel {
 }
 
 class WorkScheduleModel {
+  /// Present on [EndPoints.technicalWorkSchedule] list items.
+  final int? id;
+  final int? technicalId;
+  final String? technicalName;
+
   final int? dayOfWeek;
+
+  /// Login/profile payload uses [dayNameEn] / [dayNameAr]; list API uses [dayName].
   final String? dayNameEn;
   final String? dayNameAr;
+  final String? dayName;
+
   final String? startTime;
   final String? endTime;
+  final num? totalHours;
 
   WorkScheduleModel({
+    this.id,
+    this.technicalId,
+    this.technicalName,
     this.dayOfWeek,
     this.dayNameEn,
     this.dayNameAr,
+    this.dayName,
     this.startTime,
     this.endTime,
+    this.totalHours,
   });
+
+  /// Prefer English profile field, then list API `dayName`.
+  String get displayDayName => dayNameEn ?? dayName ?? '';
 
   factory WorkScheduleModel.fromJson(Map<String, dynamic> json) {
     return WorkScheduleModel(
+      id: json['id'],
+      technicalId: json['technicalId'],
+      technicalName: json['technicalName'],
       dayOfWeek: json['dayOfWeek'],
       dayNameEn: json['dayNameEn'],
       dayNameAr: json['dayNameAr'],
+      dayName: json['dayName'],
       startTime: json['startTime'],
       endTime: json['endTime'],
+      totalHours: json['totalHours'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
+      if (id != null) 'id': id,
+      if (technicalId != null) 'technicalId': technicalId,
+      if (technicalName != null) 'technicalName': technicalName,
       'dayOfWeek': dayOfWeek,
       'dayNameEn': dayNameEn,
       'dayNameAr': dayNameAr,
+      'dayName': dayName,
+      'startTime': startTime,
+      'endTime': endTime,
+      if (totalHours != null) 'totalHours': totalHours,
+    };
+  }
+
+  /// Body item for [EndPoints.updateTechnicalWorkSchedule].
+  Map<String, dynamic> toUpdateScheduleMap() {
+    return {
+      'dayOfWeek': dayOfWeek,
       'startTime': startTime,
       'endTime': endTime,
     };

@@ -274,5 +274,12 @@
   "Failed to update cities": "Failed to update cities",
   "Cities updated successfully": "Cities updated successfully",
   "User not found": "User not found",
+  "My Services": "My Services",
+  "All Services": "All Services",
+  "Search Services...": "Search Services...",
+  "No services found": "No services found",
+  "Failed to load services": "Failed to load services",
+  "Failed to update services": "Failed to update services",
+  "Services updated successfully": "Services updated successfully",
   "": ""
 }

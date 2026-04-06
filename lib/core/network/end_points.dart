@@ -139,6 +139,10 @@ class EndPoints {
   static const getCities = '/cities';
   static const updateTechnicalCities = '/technicals/cities';
 
+  // Services
+  static const getTechnicalServices = '/technicals/technicalservices';
+  static const updateTechnicalServices = '/technicals/services';
+
   /// All technicals' weekly rows; filter client-side by [technicalId].
   static const technicalWorkSchedule = '/technicals/technicalworkSchedule';
   static const updateTechnicalWorkSchedule = '/technicals/work-schedule';

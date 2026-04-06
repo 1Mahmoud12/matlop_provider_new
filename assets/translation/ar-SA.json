@@ -339,5 +339,12 @@
   "Failed to update cities": "فشل في تحديث المدن",
   "Cities updated successfully": "تم تحديث المدن بنجاح",
   "User not found": "المستخدم غير موجود",
+  "My Services": "خدماتي",
+  "All Services": "جميع الخدمات",
+  "Search Services...": "ابحث عن الخدمات...",
+  "No services found": "لم يتم العثور على خدمات",
+  "Failed to load services": "فشل في تحميل الخدمات",
+  "Failed to update services": "فشل في تحديث الخدمات",
+  "Services updated successfully": "تم تحديث الخدمات بنجاح",
   "": ""
 }

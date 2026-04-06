@@ -47,7 +47,9 @@ class Data {
     this.notes,
     this.technicalSpecialistId,
     List<ProfileCity>? cities,
-  }) : cities = cities ?? [];
+    List<ProfileService>? services,
+  })  : cities = cities ?? [],
+        services = services ?? [];
 
   Data.fromJson(dynamic json) {
     userId = json['userId'] ?? -1; // Default to -1 if null
@@ -75,6 +77,7 @@ class Data {
         ? num.tryParse(json['technicalSpecialistId'].toString())
         : null; // Safely parse num from String, int, or null
     cities = (json['cities'] as List<dynamic>? ?? []).map((e) => ProfileCity.fromJson(e)).toList();
+    services = (json['services'] as List<dynamic>? ?? []).map((e) => ProfileService.fromJson(e)).toList();
   }
 
   int? userId; // Nullable integer
@@ -87,6 +90,7 @@ class Data {
   int? gender; // Nullable integer
   num? technicalSpecialistId; // Nullable integer
   late List<ProfileCity> cities;
+  late List<ProfileService> services;
   String? dateOfBirth; // Nullable string
   String? mobileNumber; // Nullable string
   String? imgSrc; // Nullable string
@@ -112,6 +116,7 @@ class Data {
     map['notes'] = notes ?? ''; // Ensure notes is never null
     map['technicalSpecialistId'] = technicalSpecialistId ?? ''; // Ensure notes is never null
     map['cities'] = cities.map((e) => e.toJson()).toList();
+    map['services'] = services.map((e) => e.toJson()).toList();
     return map;
   }
 }
@@ -135,5 +140,27 @@ class ProfileCity {
         'cityId': cityId,
         'cityNameAr': cityNameAr,
         'cityNameEn': cityNameEn,
+      };
+}
+
+class ProfileService {
+  final int serviceId;
+  final String serviceNameAr;
+  final String serviceNameEn;
+
+  ProfileService({required this.serviceId, required this.serviceNameAr, required this.serviceNameEn});
+
+  factory ProfileService.fromJson(Map<String, dynamic> json) {
+    return ProfileService(
+      serviceId: json['serviceId'] ?? -1,
+      serviceNameAr: json['serviceNameAr'] ?? '',
+      serviceNameEn: json['serviceNameEn'] ?? '',
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'serviceId': serviceId,
+        'serviceNameAr': serviceNameAr,
+        'serviceNameEn': serviceNameEn,
       };
 }

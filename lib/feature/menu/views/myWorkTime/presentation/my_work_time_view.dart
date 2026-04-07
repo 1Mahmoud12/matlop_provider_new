@@ -37,32 +37,6 @@ class _MyWorkTimeViewState extends State<MyWorkTimeView> with SingleTickerProvid
     super.dispose();
   }
 
-  Future<void> _pickDaySchedule(BuildContext context, DayScheduleRow row) async {
-    final cubit = WorkScheduleCubit.of(context);
-
-    final startPick = await showTimePicker(
-      context: context,
-      initialTime: parseApiTimeToTimeOfDay(row.startTime),
-    );
-    if (!context.mounted || startPick == null) {
-      return;
-    }
-
-    final endPick = await showTimePicker(
-      context: context,
-      initialTime: parseApiTimeToTimeOfDay(row.endTime),
-    );
-    if (!context.mounted || endPick == null) {
-      return;
-    }
-
-    cubit.updateDayTimes(
-      row.dayOfWeek,
-      startTime: timeOfDayToApi(startPick),
-      endTime: timeOfDayToApi(endPick),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,58 +61,61 @@ class _MyWorkTimeViewState extends State<MyWorkTimeView> with SingleTickerProvid
             return _buildError(context, state.message, cubit);
           }
 
+          final hoursLabel =
+              '${formatWorkTimeTo12h(kDefaultWorkStart)} – ${formatWorkTimeTo12h(kDefaultWorkEnd)}';
+
           return Stack(
             children: [
-              ListView.separated(
+              ListView(
                 padding: const EdgeInsets.fromLTRB(16, 16, 16, 100),
-                itemCount: cubit.rows.length,
-                separatorBuilder: (_, __) => const SizedBox(height: 8),
-                itemBuilder: (context, i) {
-                  final row = cubit.rows[i];
-                  final range =
-                      '${formatWorkTimeTo12h(row.startTime)} – ${formatWorkTimeTo12h(row.endTime)}';
-                  return Material(
-                    color: row.fromUserCache
-                        ? AppColors.primaryColor.withValues(alpha: 0.08)
-                        : Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        border: row.fromUserCache
-                            ? Border.all(color: AppColors.primaryColor, width: 1.5)
-                            : null,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: Text(
+                      hoursLabel,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: AppColors.subTextColor,
+                        fontSize: 14,
                       ),
-                      child: ListTile(
-                        selected: row.fromUserCache,
-                        selectedTileColor: Colors.transparent,
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        title: Text(
-                          row.dayName,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.cBoldTextColor,
-                          ),
-                        ),
-                        subtitle: Padding(
-                          padding: const EdgeInsets.only(top: 6),
-                          child: Text(
-                            range,
-                            style: const TextStyle(
-                              color: AppColors.subTextColor,
-                              fontSize: 14,
+                    ),
+                  ),
+                  ...cubit.days.map(
+                    (d) => Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: Material(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(12),
+                          onTap: () => cubit.toggleDay(d.dayOfWeek),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            child: Row(
+                              children: [
+                                Checkbox(
+                                  value: d.selected,
+                                  activeColor: AppColors.primaryColor,
+                                  onChanged: (_) => cubit.toggleDay(d.dayOfWeek),
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    d.dayName,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      color: AppColors.cBoldTextColor,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
-                        trailing: Icon(
-                          row.fromUserCache ? Icons.check_circle_rounded : Icons.schedule_rounded,
-                          color: AppColors.primaryColor,
-                        ),
-                        onTap: () => _pickDaySchedule(context, row),
                       ),
                     ),
-                  );
-                },
+                  ),
+                ],
               ),
               Positioned(
                 bottom: 24,

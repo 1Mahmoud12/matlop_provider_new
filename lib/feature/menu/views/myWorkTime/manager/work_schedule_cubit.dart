@@ -18,21 +18,19 @@ const List<String> kWeekdayNamesEn = [
   'Saturday',
 ];
 
-class DayScheduleRow {
+/// Single slot used for every selected day on save (no per-day time editing in UI).
+const String kDefaultWorkStart = '09:00:00';
+const String kDefaultWorkEnd = '17:00:00';
+
+class WorkDayRow {
   final int dayOfWeek;
   final String dayName;
-  String startTime;
-  String endTime;
+  bool selected;
 
-  /// True when times came from [userCacheValue] profile `workSchedules` for this [dayOfWeek].
-  bool fromUserCache;
-
-  DayScheduleRow({
+  WorkDayRow({
     required this.dayOfWeek,
     required this.dayName,
-    required this.startTime,
-    required this.endTime,
-    this.fromUserCache = false,
+    required this.selected,
   });
 }
 
@@ -43,20 +41,15 @@ class WorkScheduleCubit extends Cubit<WorkScheduleState> {
 
   final WorkScheduleDataSourceInterface _dataSource = WorkScheduleDataSource();
 
-  List<DayScheduleRow> rows = [];
-  List<DayScheduleRow> _baseline = [];
+  List<WorkDayRow> days = [];
+  Set<int> _baselineSelected = {};
 
   bool get hasChanges {
-    if (_baseline.length != rows.length) {
-      return true;
-    }
-    for (var i = 0; i < rows.length; i++) {
-      if (rows[i].startTime != _baseline[i].startTime || rows[i].endTime != _baseline[i].endTime) {
-        return true;
-      }
-    }
-    return false;
+    final current = _currentSelectedSet();
+    return current.length != _baselineSelected.length || !current.containsAll(_baselineSelected);
   }
+
+  Set<int> _currentSelectedSet() => days.where((d) => d.selected).map((d) => d.dayOfWeek).toSet();
 
   Future<void> loadSchedules() async {
     emit(WorkScheduleLoading());
@@ -75,66 +68,29 @@ class WorkScheduleCubit extends Cubit<WorkScheduleState> {
         final mine = all.where((s) => s.technicalId == userId && s.dayOfWeek != null).toList();
         final byDay = {for (final s in mine) s.dayOfWeek!: s};
 
-        final cacheList = userCacheValue?.data?.profile?.workSchedules ?? <WorkScheduleModel>[];
-        final cacheByDay = {
-          for (final w in cacheList)
-            if (w.dayOfWeek != null) w.dayOfWeek!: w,
-        };
-
-        rows = List.generate(7, (dow) {
-          final cached = cacheByDay[dow];
+        days = List.generate(7, (dow) {
           final s = byDay[dow];
-
-          final cacheHasTimes = cached != null &&
-              (cached.startTime ?? '').isNotEmpty &&
-              (cached.endTime ?? '').isNotEmpty;
-
-          if (cacheHasTimes) {
-            final name = cached.displayDayName.isNotEmpty ? cached.displayDayName : kWeekdayNamesEn[dow];
-            return DayScheduleRow(
-              dayOfWeek: dow,
-              dayName: name,
-              startTime: cached.startTime ?? '09:00:00',
-              endTime: cached.endTime ?? '17:00:00',
-              fromUserCache: true,
-            );
-          }
-
           final name = (s?.displayDayName ?? '').isNotEmpty ? s!.displayDayName : kWeekdayNamesEn[dow];
-          return DayScheduleRow(
+          return WorkDayRow(
             dayOfWeek: dow,
             dayName: name,
-            startTime: s?.startTime ?? '09:00:00',
-            endTime: s?.endTime ?? '17:00:00',
-            fromUserCache: false,
+            selected: s != null,
           );
         });
 
-        _baseline = rows
-            .map(
-              (r) => DayScheduleRow(
-                dayOfWeek: r.dayOfWeek,
-                dayName: r.dayName,
-                startTime: r.startTime,
-                endTime: r.endTime,
-                fromUserCache: r.fromUserCache,
-              ),
-            )
-            .toList();
+        _baselineSelected = Set<int>.from(_currentSelectedSet());
 
         emit(WorkScheduleSuccess());
       },
     );
   }
 
-  void updateDayTimes(int dayOfWeek, {required String startTime, required String endTime}) {
-    final i = rows.indexWhere((r) => r.dayOfWeek == dayOfWeek);
+  void toggleDay(int dayOfWeek) {
+    final i = days.indexWhere((d) => d.dayOfWeek == dayOfWeek);
     if (i == -1) {
       return;
     }
-    rows[i].startTime = startTime;
-    rows[i].endTime = endTime;
-    rows[i].fromUserCache = false;
+    days[i].selected = !days[i].selected;
     emit(WorkScheduleSuccess());
   }
 
@@ -147,12 +103,13 @@ class WorkScheduleCubit extends Cubit<WorkScheduleState> {
 
     emit(WorkScheduleUpdateLoading());
 
-    final schedules = rows
+    final schedules = days
+        .where((d) => d.selected)
         .map(
-          (r) => WorkScheduleModel(
-            dayOfWeek: r.dayOfWeek,
-            startTime: r.startTime,
-            endTime: r.endTime,
+          (d) => WorkScheduleModel(
+            dayOfWeek: d.dayOfWeek,
+            startTime: kDefaultWorkStart,
+            endTime: kDefaultWorkEnd,
           ).toUpdateScheduleMap(),
         )
         .toList();
@@ -168,17 +125,7 @@ class WorkScheduleCubit extends Cubit<WorkScheduleState> {
         Utils.showToast(title: failure.errMessage, state: UtilState.error);
       },
       (_) {
-        _baseline = rows
-            .map(
-              (r) => DayScheduleRow(
-                dayOfWeek: r.dayOfWeek,
-                dayName: r.dayName,
-                startTime: r.startTime,
-                endTime: r.endTime,
-                fromUserCache: r.fromUserCache,
-              ),
-            )
-            .toList();
+        _baselineSelected = Set<int>.from(_currentSelectedSet());
         emit(WorkScheduleUpdateSuccess());
         Utils.showToast(title: 'Work schedule updated'.tr(), state: UtilState.success);
       },

@@ -12,6 +12,8 @@ import 'package:matlop_provider/feature/menu/views/commonQuestions/presentation/
 import 'package:matlop_provider/feature/menu/views/commonQuestions/presentation/manager/cubit/faq_cubit.dart';
 import 'package:matlop_provider/feature/menu/views/myCities/manager/cities_cubit.dart';
 import 'package:matlop_provider/feature/menu/views/myCities/presentation/my_cities_view.dart';
+import 'package:matlop_provider/feature/menu/views/myServices/manager/services_cubit.dart';
+import 'package:matlop_provider/feature/menu/views/myServices/presentation/my_services_view.dart';
 import 'package:matlop_provider/feature/menu/views/myWorkTime/manager/work_schedule_cubit.dart';
 import 'package:matlop_provider/feature/menu/views/myWorkTime/presentation/my_work_time_view.dart';
 import 'package:matlop_provider/feature/menu/views/privacy&policy/presentation/manager/cubit/privacy_and_policy_cubit.dart';
@@ -57,7 +59,18 @@ class _MenuViewState extends State<MenuView> {
                     context.navigateToPage(const WalletView());
                   },
                 ),
-
+                MenuItem(
+                  icon: AppIcons.global,
+                  text: 'My Services'.tr(),
+                  onTap: () {
+                    context.navigateToPage(
+                      BlocProvider(
+                        create: (_) => ServicesCubit(),
+                        child: const MyServicesView(),
+                      ),
+                    );
+                  },
+                ),
                 MenuItem(
                   icon: AppIcons.global,
                   text: 'My Cities'.tr(),

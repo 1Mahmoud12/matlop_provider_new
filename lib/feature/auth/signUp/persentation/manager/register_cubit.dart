@@ -48,10 +48,7 @@ class RegisterCubit extends Cubit<RegisterState> {
         password: passwordController.text,
         phone: phoneController.text,
         countryId: countryId,
-        nationalNo: nationalNo.text,
-        technicalTypeEnum: technicalTypeEnum == TechType.technical ? 1 : 3,
-        userTypeId: technicalTypeEnum == TechType.technical ? 3 : 4,
-        technicalCategoryId: 1, // Sending 0 as per instructions, or maybe keep 1? The curl says 0.
+        technicalTypeEnum: technicalTypeEnum == TechType.technical ? 3 : 9,
         technicalServiceIds: selectedTechnicals.map((e) => e.technicalSpecialistId ?? 0).toList(),
         genderId: selectedGender.id,
       ),

@@ -5,11 +5,8 @@ class SingUpParameters {
   final String username;
   final String password;
   final String phone;
-  final String nationalNo;
   final int countryId;
-  final int userTypeId;
   final int technicalTypeEnum;
-  final int technicalCategoryId;
   final List<int> technicalServiceIds;
   final int genderId;
 
@@ -20,12 +17,9 @@ class SingUpParameters {
     required this.email,
     required this.password,
     required this.phone,
-    required this.nationalNo,
     required this.countryId,
     required this.technicalTypeEnum,
-    required this.technicalCategoryId,
     required this.technicalServiceIds,
-    required this.userTypeId,
     this.genderId = 1, // default: male
   });
 
@@ -38,9 +32,10 @@ class SingUpParameters {
       'password': password,
       'mobileNumber': '0$phone',
       'genderId': genderId,
-      'technicalCategoryId': technicalCategoryId,
-      'technicalType': technicalTypeEnum,
+      'roleId': technicalTypeEnum,
       'technicalServiceIds': technicalServiceIds,
+      "isTechnical": true,
+
     };
   }
 }

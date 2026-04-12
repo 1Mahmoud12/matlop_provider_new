@@ -17,6 +17,16 @@ const List<String> kWeekdayNamesEn = [
   'Friday',
   'Saturday',
 ];
+//
+// const List<String> kWeekdayNamesAr = [
+//   'الأحد',
+//   'الإثنين',
+//   'الثلاثاء',
+//   'الأربعاء',
+//   'الخميس',
+//   'الجمعة',
+//   'السبت',
+// ];
 
 /// Single slot used for every selected day on save (no per-day time editing in UI).
 const String kDefaultWorkStart = '09:00:00';
@@ -51,7 +61,7 @@ class WorkScheduleCubit extends Cubit<WorkScheduleState> {
 
   Set<int> _currentSelectedSet() => days.where((d) => d.selected).map((d) => d.dayOfWeek).toSet();
 
-  Future<void> loadSchedules() async {
+  Future<void> loadSchedules({String locale = 'en'}) async {
     emit(WorkScheduleLoading());
 
     final userId = userCacheValue?.data?.userId ?? -1;
@@ -70,10 +80,11 @@ class WorkScheduleCubit extends Cubit<WorkScheduleState> {
 
         days = List.generate(7, (dow) {
           final s = byDay[dow];
-          final name = (s?.displayDayName ?? '').isNotEmpty ? s!.displayDayName : kWeekdayNamesEn[dow];
+          final fallback =  kWeekdayNamesEn[dow];
+          final name = s != null ? s.localizedDayName(locale) : fallback;
           return WorkDayRow(
             dayOfWeek: dow,
-            dayName: name,
+            dayName: name.isNotEmpty ? name : fallback,
             selected: s != null,
           );
         });

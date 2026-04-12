@@ -346,5 +346,10 @@
   "Failed to load services": "فشل في تحميل الخدمات",
   "Failed to update services": "فشل في تحديث الخدمات",
   "Services updated successfully": "تم تحديث الخدمات بنجاح",
+  "Work schedule": "جدول العمل",
+  "Work schedule updated": "تم تحديث جدول العمل بنجاح",
+  "Password reset successful!": "تم إعادة تعيين كلمة المرور بنجاح!",
+  "Your password has been updated. You can now log in with your new password.": "تم تحديث كلمة مرورك. يمكنك الآن تسجيل الدخول بكلمة المرور الجديدة.",
+  "Code verified successfully": "تم التحقق من الكود بنجاح",
   "": ""
 }

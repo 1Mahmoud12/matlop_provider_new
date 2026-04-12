@@ -281,5 +281,10 @@
   "Failed to load services": "Failed to load services",
   "Failed to update services": "Failed to update services",
   "Services updated successfully": "Services updated successfully",
+  "Work schedule": "Work schedule",
+  "Work schedule updated": "Work schedule updated successfully",
+  "Password reset successful!": "Password reset successful!",
+  "Your password has been updated. You can now log in with your new password.": "Your password has been updated. You can now log in with your new password.",
+  "Code verified successfully": "Code verified successfully",
   "": ""
 }

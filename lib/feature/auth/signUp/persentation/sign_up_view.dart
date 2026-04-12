@@ -21,7 +21,11 @@ import 'package:matlop_provider/feature/auth/login/presentation/manager/cubit/lo
 import 'package:matlop_provider/feature/auth/signUp/persentation/manager/register_cubit.dart';
 import 'package:matlop_provider/feature/auth/signUp/persentation/widgets/account_action_text.dart';
 import 'package:matlop_provider/feature/auth/signUp/persentation/widgets/technical_widget.dart';
-import 'package:matlop_provider/feature/menu/views/editProfile/data/models/country_model.dart';
+import 'package:matlop_provider/feature/menu/views/editProfile/data/models/country_model.dart' as profile_country;
+import 'package:matlop_provider/core/utils/constant_model.dart';
+import 'package:matlop_provider/core/network/local/cache.dart';
+import 'package:matlop_provider/feature/addNewAddress/data/models/country_model.dart' as add_new_address_country;
+import 'package:matlop_provider/feature/addNewAddress/presentation/manager/getCountriesCubit/country_cubit.dart';
 
 class SignUpView extends StatefulWidget {
   const SignUpView({super.key});
@@ -32,12 +36,11 @@ class SignUpView extends StatefulWidget {
 
 class _SignUpViewState extends State<SignUpView> {
   final formKey = GlobalKey<FormState>();
-  Country? selectedCountry;
+  add_new_address_country.CountryData? selectedCountry;
   final FocusNode _locationNameFocusNode = FocusNode();
 
   @override
   void initState() {
-    selectedCountry = Constants.countries[4];
     super.initState();
   }
 
@@ -113,42 +116,76 @@ class _SignUpViewState extends State<SignUpView> {
                     const SizedBox(
                       height: 20,
                     ),
-                    CustomTextFormField(
-                      // prefixIcon: Padding(
-                      //   padding:
-                      //       EdgeInsets.only(left: context.locale.languageCode == 'en' ? 8 : 0, right: context.locale.languageCode == 'ar' ? 8 : 0),
-                      //   child: CountryDropdown(
-                      //     selectedCountry: selectedCountry,
-                      //     onChanged: (Country? newValue) {
-                      //       setState(() {
-                      //         selectedCountry = newValue;
-                      //       });
-                      //     },
-                      //   ),
-                      // ),
-                      arabicLanguage: false,
-                      labelStringText: 'Phone Number'.tr(),
-                      controller: RegisterCubit.of(context).phoneController,
-                      hintText: '5xxxxxxxxx'.tr(),
-                      outPadding: EdgeInsets.zero,
-                      textInputType: TextInputType.number,
-                      suffixIcon: Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: SvgPicture.asset(AppIcons.saudiFlagIc),
-                      ),
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        LengthLimitingTextInputFormatter(9),
-                        TextInputFormatter.withFunction((oldValue, newValue) {
-                          final text = newValue.text;
+                    BlocBuilder<CountryCubit, CountryState>(
+                      builder: (context, state) {
+                        final List<add_new_address_country.CountryData> apiCountries = ConstantModel.countryModel?.data ?? [];
+                        if (selectedCountry == null && apiCountries.isNotEmpty) {
+                          selectedCountry = apiCountries.firstWhere((c) => c.countryId == 1, orElse: () => apiCountries.first);
+                          RegisterCubit.of(context).countryId = selectedCountry!.countryId;
+                        }
 
-                          // Enforce the "05" rule
-                          //  if (text.isEmpty) return oldValue; // Prevent deleting all text
-                          if (text.length == 1 && text[0] != '5') return oldValue; // Second char must be "5"
+                        final List<DropDownModel> cList = apiCountries.map((e) {
+                          return DropDownModel(
+                            '${e.phoneCode}',
+                            e.countryId,
+                          );
+                        }).toList();
 
-                          return newValue; // Allow valid input
-                        }),
-                      ],
+                        return CustomTextFormField(
+                          labelStringText: 'Phone Number'.tr(),
+                          controller: RegisterCubit.of(context).phoneController,
+                          hintText: 'xxxxxxxxx',
+                          textInputType: TextInputType.number,
+                          outPadding: EdgeInsets.zero,
+                          arabicLanguage: false,
+                          suffixIcon: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (selectedCountry != null)
+                                SizedBox(
+                                  width: 110,
+                                  child: CustomDropdownWithModel(
+                                    text: '${selectedCountry!.phoneCode}',
+                                    itemList: cList,
+                                    textStyle: Theme.of(context).textTheme.titleMedium!.copyWith(fontSize: 14),
+                                    onItemSelected: (DropDownModel country) {
+                                      setState(() {
+                                        if (country.value != selectedCountry!.countryId) {
+                                          RegisterCubit.of(context).phoneController.clear();
+                                        }
+                                        selectedCountry = apiCountries.firstWhere((c) => c.countryId == country.value);
+                                        RegisterCubit.of(context).countryId = selectedCountry!.countryId;
+                                        Constants.selectedCountryId = selectedCountry!.countryId;
+                                        Constants.myCountry = selectedCountry;
+                                        userCache?.put(countryIdKey, selectedCountry!.countryId);
+                                      });
+                                    },
+                                  ),
+                                ),
+                            ],
+                          ),
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                            LengthLimitingTextInputFormatter(selectedCountry?.maxPhoneLength ?? 15),
+                            TextInputFormatter.withFunction((oldValue, newValue) {
+                              return newValue;
+                            }),
+                          ],
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Empty Field'.tr();
+                            }
+                            final minLength = selectedCountry?.minPhoneLength ?? 0;
+                            if (value.length < minLength) {
+                              final isArabic = context.locale.languageCode == 'ar';
+                              return isArabic
+                                  ? (selectedCountry?.phoneValidationMessageAr ?? 'Please enter a valid phone number'.tr())
+                                  : (selectedCountry?.phoneValidationMessageEn ?? 'Please enter a valid phone number'.tr());
+                            }
+                            return null;
+                          },
+                        );
+                      },
                     ),
                     // CustomTextFormField(
                     //   labelStringText: 'Phone Number'.tr(),

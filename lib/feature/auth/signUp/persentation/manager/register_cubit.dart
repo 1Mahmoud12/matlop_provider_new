@@ -1,8 +1,13 @@
 import 'dart:developer';
 
+import 'dart:convert';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:matlop_provider/core/utils/constants.dart';
+import 'package:matlop_provider/core/network/local/cache.dart';
+import 'package:matlop_provider/core/utils/notification/notification.dart';
+import 'package:matlop_provider/feature/bottomNavBarScreen/bottom_nav_bar_view.dart';
 import 'package:matlop_provider/core/utils/constant_model.dart';
 import 'package:matlop_provider/core/utils/constants_enum.dart';
 import 'package:matlop_provider/core/utils/navigate.dart';
@@ -49,7 +54,7 @@ class RegisterCubit extends Cubit<RegisterState> {
         phone: phoneController.text,
         countryId: countryId,
         technicalTypeEnum: technicalTypeEnum == TechType.technical ? 3 : 9,
-        technicalServiceIds: selectedTechnicals.map((e) => e.technicalSpecialistId ?? 0).toList(),
+        technicalServiceIds: selectedTechnicals.map((e) => e.serviceId ?? 0).toList(),
         genderId: selectedGender.id,
       ),
     )
@@ -61,21 +66,15 @@ class RegisterCubit extends Cubit<RegisterState> {
             emit(RegisterError(e: l.errMessage));
           },
           (r) async {
-            log('Success');
-            //  userCacheValue = r;
-            // Constants.token = r.data?.tokenType ?? '';
-
-            //Constants.user = true;
-            // home.getDistricts();
-            // home.getProjectsWithNoPagination();
-            Utils.showToast(title: 'Register success, you can log in now'.tr(), state: UtilState.success);
-            context.navigateToPage(BlocProvider(
-              create: (context) => LoginCubit(),
-              child: const LoginView(),
-            ));
-
-            //  await userCache?.put(userCacheKey, jsonEncode(r.toJson()));
-            // await userCache?.put(rememberMeKey, rememberMe);
+            log('Success Registration');
+            userCacheValue = r;
+            Constants.token = r.data?.accessToken ?? '';
+            selectTokens();
+            context.navigateToPage(
+              const BottomNavBarView(),
+            );
+            await userCache?.put(userCacheKey, jsonEncode(r.toJson()));
+            await userCache?.put(rememberMeKey, rememberMe);
             emit(RegisterSuccess());
           },
         );
@@ -104,13 +103,14 @@ class RegisterCubit extends Cubit<RegisterState> {
   List<ItemTechnicalSpecialListModel> selectedTechnicals = [];
   TextEditingController nameController = TextEditingController();
 
-  toggleTechnicalSpecial({required ItemTechnicalSpecialListModel technical}) {
-    if (selectedTechnicals.any((e) => e.technicalSpecialistId == technical.technicalSpecialistId)) {
-      selectedTechnicals.removeWhere((e) => e.technicalSpecialistId == technical.technicalSpecialistId);
+  toggleTechnicalSpecial({required ItemTechnicalSpecialListModel technical, required BuildContext context}) {
+    if (selectedTechnicals.any((e) => e.serviceId == technical.serviceId)) {
+      selectedTechnicals.removeWhere((e) => e.serviceId == technical.serviceId);
     } else {
       selectedTechnicals.add(technical);
     }
-    nameController.text = selectedTechnicals.map((e) => e.enName ?? "").join(', ');
+    bool isAr = context.locale.languageCode == 'ar';
+    nameController.text = selectedTechnicals.map((e) => isAr ? (e.arName ?? "") : (e.enName ?? "")).join(', ');
     emit(AddTechnicalState());
   }
 }

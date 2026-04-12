@@ -33,24 +33,24 @@ class TechnicalSpecialListModel {
 
 class ItemTechnicalSpecialListModel {
   ItemTechnicalSpecialListModel({
-    this.technicalSpecialistId,
+    this.serviceId,
     this.enName,
     this.arName,
   });
 
   ItemTechnicalSpecialListModel.fromJson(dynamic json) {
-    technicalSpecialistId = json['technicalSpecialistId'];
+    serviceId = json['serviceId'];
     enName = json['enName'];
     arName = json['arName'];
   }
 
-  int? technicalSpecialistId;
+  int? serviceId;
   String? enName;
   String? arName;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    map['technicalSpecialistId'] = technicalSpecialistId;
+    map['serviceId'] = serviceId;
     map['enName'] = enName;
     map['arName'] = arName;
     return map;

@@ -17,6 +17,8 @@ class MyWorkTimeView extends StatefulWidget {
 class _MyWorkTimeViewState extends State<MyWorkTimeView> with SingleTickerProviderStateMixin {
   late AnimationController _fabController;
 
+  bool _loaded = false;
+
   @override
   void initState() {
     super.initState();
@@ -24,11 +26,19 @@ class _MyWorkTimeViewState extends State<MyWorkTimeView> with SingleTickerProvid
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
-    context.read<WorkScheduleCubit>().loadSchedules().then((_) {
-      if (mounted) {
-        _fabController.forward();
-      }
-    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_loaded) {
+      _loaded = true;
+      context.read<WorkScheduleCubit>().loadSchedules(locale: context.locale.languageCode).then((_) {
+        if (mounted) {
+          _fabController.forward();
+        }
+      });
+    }
   }
 
   @override

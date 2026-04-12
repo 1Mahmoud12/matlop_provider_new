@@ -32,9 +32,9 @@ class SingUpParameters {
       'password': password,
       'mobileNumber': '0$phone',
       'genderId': genderId,
-      'roleId': technicalTypeEnum,
+      'roleType': technicalTypeEnum,
       'technicalServiceIds': technicalServiceIds,
-      "isTechnical": true,
+      // "isTechnical": true,
 
     };
   }

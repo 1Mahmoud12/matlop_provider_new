@@ -58,7 +58,7 @@ class _HomeViewState extends State<HomeView> {
       body: Column(
         children: [
           const HomeViewHeader(),
-          if (userCacheValue?.data?.profile?.technicalType != 3)
+          if (userCacheValue?.data?.profile?.roleId != 9)
             CustomSwitcher(
               selectedIndex: _selectedIndex,
               pageOffset: _pageOffset,
@@ -84,7 +84,7 @@ class _HomeViewState extends State<HomeView> {
                     ),
               ),
             ),
-          if (userCacheValue?.data?.profile?.technicalType != 3)
+          if (userCacheValue?.data?.profile?.roleId != 9)
             Expanded(
               child: PageView.builder(
                 controller: _pageController,

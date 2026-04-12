@@ -317,6 +317,12 @@ class WorkScheduleModel {
   /// Prefer English profile field, then list API `dayName`.
   String get displayDayName => dayNameEn ?? dayName ?? '';
 
+  /// Returns the localized day name based on [locale] ('ar' → Arabic, else English).
+  String localizedDayName(String locale) {
+    if (locale == 'ar') return dayNameAr ?? dayNameEn ?? dayName ?? '';
+    return dayNameEn ?? dayName ?? '';
+  }
+
   factory WorkScheduleModel.fromJson(Map<String, dynamic> json) {
     return WorkScheduleModel(
       id: json['id'],

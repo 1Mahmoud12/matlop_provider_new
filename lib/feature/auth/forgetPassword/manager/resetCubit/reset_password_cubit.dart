@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:matlop_provider/core/utils/navigate.dart';
@@ -33,7 +34,7 @@ class ResetPasswordCubit extends Cubit<ResetPasswordState> {
             emit(ResetPasswordError(e: l.errMessage));
           },
           (r) async {
-            Utils.showToast(title: r, state: UtilState.success);
+            Utils.showToast(title: 'A code has been sent to your phone number. Please enter it'.tr(), state: UtilState.success);
 
             //   userCacheValue = r;
             // Constants.token = r.data?.tokenType ?? '';
@@ -68,7 +69,7 @@ class ResetPasswordCubit extends Cubit<ResetPasswordState> {
             emit(VerifyError(e: l.errMessage));
           },
           (r) async {
-            Utils.showToast(title: r, state: UtilState.success);
+            Utils.showToast(title: 'Code verified successfully'.tr(), state: UtilState.success);
 
             _verifiedOtp = otp;
 
@@ -98,19 +99,16 @@ class ResetPasswordCubit extends Cubit<ResetPasswordState> {
             emit(VerifyError(e: l.errMessage));
           },
           (r) async {
-            Utils.showToast(title: r, state: UtilState.success);
-
-            //   userCacheValue = r;
-            // Constants.token = r.data?.tokenType ?? '';
-
-            context.navigateToPage(
-              BlocProvider(
-                create: (context) => LoginCubit(),
-                child: const LoginView(),
-              ),
-            );
-
             emit(VerifySuccess());
+            Utils.showToast(title: 'Password reset successful!'.tr(), state: UtilState.success);
+            if (context.mounted) {
+              context.navigateToPage(
+                BlocProvider(
+                  create: (context) => LoginCubit(),
+                  child: const LoginView(),
+                ),
+              );
+            }
           },
         );
       },

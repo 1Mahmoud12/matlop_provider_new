@@ -1,0 +1,21 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "matlop-user-c0acc",
+          "appId": "1:254320271002:android:d2dbd13ae485e02b44c923",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "matlop-user-c0acc",
+          "configurations": {
+            "android": "1:254320271002:android:d2dbd13ae485e02b44c923"
+          }
+        }
+      }
+    }
+  }
+}

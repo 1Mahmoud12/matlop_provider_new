@@ -26,6 +26,44 @@
     },
     {
       "client_info": {
+        "mobilesdk_app_id": "1:254320271002:android:d2dbd13ae485e02b44c923",
+        "android_client_info": {
+          "package_name": "com.matlop.provider"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAduA4L3YaFXEKvt1jyavDQDhwsjvjpQCE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:254320271002:android:5d28673a554325e644c923",
+        "android_client_info": {
+          "package_name": "com.matlop.service"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAduA4L3YaFXEKvt1jyavDQDhwsjvjpQCE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:254320271002:android:460f6a582c37138244c923",
         "android_client_info": {
           "package_name": "com.matlop.user"

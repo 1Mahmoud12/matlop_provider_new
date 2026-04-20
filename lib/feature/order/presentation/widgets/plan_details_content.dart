@@ -27,7 +27,7 @@ class PlanDetailsContent extends StatelessWidget {
           text,
           style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.textColor, fontSize: 14.sp),
         ),
-        const Spacer(),
+        // const Spacer(),
         Expanded(
           child: Text(
             value,

@@ -14,6 +14,7 @@
   "Please enter your ID number": "Please enter your ID number",
   "Country": "Country",
   "Password": "Password",
+  "Equipments": "Equipments",
   "Confirm Password": "Confirm Password",
   "Create Account": "Create Account",
   "Already have an account?": "Already have an account?",
@@ -286,5 +287,11 @@
   "Password reset successful!": "Password reset successful!",
   "Your password has been updated. You can now log in with your new password.": "Your password has been updated. You can now log in with your new password.",
   "Code verified successfully": "Code verified successfully",
+  "Subtotal:": "Subtotal:",
+  "Tax": "Tax",
+  "Order Total:": "Order Total:",
+  "Visits Schedule": "Visits Schedule",
+  "Visit": "Visit",
+  "Billing Details": "Billing Details",
   "": ""
 }

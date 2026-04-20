@@ -11,8 +11,11 @@ import 'package:matlop_provider/core/themes/colors.dart';
 import 'package:matlop_provider/core/utils/constant_model.dart';
 import 'package:matlop_provider/core/utils/empty_data_widget.dart';
 import 'package:matlop_provider/core/utils/navigate.dart';
+import 'package:matlop_provider/core/utils/constants_enum.dart';
 import 'package:matlop_provider/feature/chat/presentation/messages_screen.dart';
 import 'package:matlop_provider/feature/home/presentation/widgets/plan_details_order_details.dart';
+import 'package:matlop_provider/feature/home/presentation/widgets/order_billing_details_widget.dart';
+import 'package:matlop_provider/feature/home/presentation/widgets/order_schedules_list_widget.dart';
 import 'package:matlop_provider/feature/order/presentation/manager/cubit/order_cubit.dart';
 import 'package:matlop_provider/feature/order/presentation/widgets/custom_stepper_widget.dart';
 import 'package:matlop_provider/feature/order/presentation/widgets/media_list.dart';
@@ -64,7 +67,7 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
                       } // context.navigateToPage(const ConfirmPaymentView());
                     },
                     child: Text(
-                      'Under inspection'.tr(),
+                      OrderStatusEnum.values[ConstantModel.orderDetailsModel!.data!.orderStatusEnum ?? 0].name.tr(),
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white),
                     ),
                   )
@@ -104,25 +107,27 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
                           },
                         ),
                         //  const SizedBox(height: 20),
-                        Text(
-                          'Order Image'.tr(),
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                        const SizedBox(height: 15),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.grey.withOpacity(0.15),
-                            borderRadius: BorderRadius.circular(10),
+                        if (ConstantModel.orderDetailsModel!.data!.media != null && ConstantModel.orderDetailsModel!.data!.media!.isNotEmpty) ...[
+                          Text(
+                            'Order Image'.tr(),
+                            style: Theme.of(context).textTheme.bodyLarge,
                           ),
-                          child: DottedBorder(
-                            options: RectDottedBorderOptions(
-                              color: Colors.grey.withOpacity(0.4),
-                              padding: const EdgeInsets.all(6),
+                          const SizedBox(height: 15),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.grey.withOpacity(0.15),
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                            child: MediaList(mediaList: ConstantModel.orderDetailsModel!.data!.media ?? []),
+                            child: DottedBorder(
+                              options: RectDottedBorderOptions(
+                                color: Colors.grey.withOpacity(0.4),
+                                padding: const EdgeInsets.all(6),
+                              ),
+                              child: MediaList(mediaList: ConstantModel.orderDetailsModel!.data!.media!),
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 15),
+                          const SizedBox(height: 15),
+                        ],
                         Text(
                           'Package Details'.tr(),
                           style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 16.sp),
@@ -131,6 +136,29 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
                         PlanDetailsOrderDetails(
                           orderData: ConstantModel.orderDetailsModel!.data!,
                         ),
+                        const SizedBox(height: 15),
+                        Text(
+                          'Billing Details'.tr(),
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 16.sp),
+                        ),
+                        const SizedBox(height: 15),
+                        OrderBillingDetailsWidget(
+                          orderData: ConstantModel.orderDetailsModel!.data!,
+                        ),
+                        if (ConstantModel.orderDetailsModel!.data?.orderSchedules != null &&
+                            ConstantModel.orderDetailsModel!.data!.orderSchedules!.isNotEmpty) ...[
+                              SizedBox(height: 15.h),
+                          Text(
+                            'Visits Schedule'.tr(),
+                            style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 16.sp),
+                          ),
+                          // const SizedBox(height: 15),
+                          const SizedBox(height: 15),
+                          OrderSchedulesListWidget(
+                            schedules: ConstantModel.orderDetailsModel!.data!.orderSchedules!,
+                          ),
+                        ],
+                        SizedBox(height: 150.h),
                       ],
                     ),
                   ),

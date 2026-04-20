@@ -4,6 +4,9 @@ import 'package:matlop_provider/core/component/custom_divider_widget.dart';
 import 'package:matlop_provider/core/utils/app_icons.dart';
 import 'package:matlop_provider/core/utils/utils.dart';
 import 'package:matlop_provider/feature/order/data/models/get_order_details_model.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:matlop_provider/core/component/cache_image.dart';
+import 'package:matlop_provider/core/themes/colors.dart';
 import 'package:matlop_provider/feature/order/presentation/widgets/plan_details_content.dart';
 
 class PlanDetailsOrderDetails extends StatefulWidget {
@@ -111,6 +114,66 @@ class _PlanDetailsOrderDetailsState extends State<PlanDetailsOrderDetails> {
           ),
           // const CustomDividerWidget(),
           // CoponeDetails(itemSpecialOrdersModel: package),
+          if (widget.orderData.orderEquipment != null && widget.orderData.orderEquipment!.isNotEmpty) ...[
+            const CustomDividerWidget(),
+            Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.handyman  , color: Colors.grey.withValues(alpha: .3), size: 14.sp),
+                  const SizedBox(width: 5),
+                  Text(
+                    'Equipments'.tr(),
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.textColor, fontSize: 14.sp),
+
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 10),
+            ...widget.orderData.orderEquipment!.map(
+              (equipment) => Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: Row(
+                  children: [
+                    if (equipment.image != null && equipment.image!.isNotEmpty)
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: CacheImage(
+                          imageUrl: equipment.image!,
+                          width: 40,
+                          height: 40,
+                          circle: false,
+                          profileImage: false,
+                          boxFit: BoxFit.cover,
+                        ),
+                      ),
+                    if (equipment.image != null && equipment.image!.isNotEmpty)
+                      const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        context.locale.languageCode == 'ar' ? (equipment.arName ?? '') : (equipment.enName ?? ''),
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              fontSize: 14.sp,
+                              color: AppColors.cBoldTextColor,
+                            ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    Text(
+                      '${Utils.convertNumberToArabic(equipment.price?.toString() ?? '0')} ${'SAR'.tr()}',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            // color: AppColors.primaryColor,
+                            fontWeight: FontWeight.w600,
+                          ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ],
       ),
     );

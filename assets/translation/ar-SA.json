@@ -17,6 +17,7 @@
   "Log In": "تسجيل الدخول",
   "Login": "تسجيل الدخول",
   "123456789": "123456789",
+  "Equipments": "المعدات",
   "Enter Password": "ادخل كلمة المرور",
   "Don't have an account?": "ليس لديك حساب؟",
   "Services": "الخدمات",
@@ -351,5 +352,11 @@
   "Password reset successful!": "تم إعادة تعيين كلمة المرور بنجاح!",
   "Your password has been updated. You can now log in with your new password.": "تم تحديث كلمة مرورك. يمكنك الآن تسجيل الدخول بكلمة المرور الجديدة.",
   "Code verified successfully": "تم التحقق من الكود بنجاح",
+  "Subtotal:": "المجموع الفرعي:",
+  "Tax": "الضريبة",
+  "Order Total:": "إجمالي الطلب:",
+  "Visits Schedule": "جدول الزيارات",
+  "Visit": "زيارة",
+  "Billing Details": "تفاصيل الفاتورة",
   "": ""
 }

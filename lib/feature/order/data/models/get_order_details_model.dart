@@ -43,6 +43,11 @@ class OrderDetailsData {
   List<OrderTechnicalAssignment>? orderTechnicalAssignments;
   dynamic orderScheduleDto;
   List<dynamic>? orderAddtionalItem;
+  List<OrderEquipment>? orderEquipment;
+  num? taxAmount;
+  num? taxPercentageSnapshot;
+  String? taxNameSnapshot;
+  List<OrderSchedule>? orderSchedules;
 
   OrderDetailsData({
     this.orderId,
@@ -73,6 +78,11 @@ class OrderDetailsData {
     this.orderAddtionalItem,
     this.latitude,
     this.longitude,
+    this.orderEquipment,
+    this.taxAmount,
+    this.taxPercentageSnapshot,
+    this.taxNameSnapshot,
+    this.orderSchedules,
   });
 
   factory OrderDetailsData.fromJson(Map<String, dynamic> json) {
@@ -106,6 +116,34 @@ class OrderDetailsData {
           ((json['technicalAssignments'] ?? json['orderTechnicalAssignments']) as List<dynamic>?)?.map((e) => OrderTechnicalAssignment.fromJson(e)).toList() ?? [],
       orderScheduleDto: json['orderSchedules'] ?? json['orderScheduleDto'],
       orderAddtionalItem: json['additionalItems'] ?? json['orderAddtionalItem'] ?? [],
+      orderEquipment: (json['orderEquipment'] as List<dynamic>?)?.map((e) => OrderEquipment.fromJson(e)).toList() ?? [],
+      taxAmount: json['taxAmount'] ?? 0,
+      taxPercentageSnapshot: json['taxPercentageSnapshot'] ?? 0,
+      taxNameSnapshot: json['taxNameSnapshot'] ?? '',
+      orderSchedules: (json['orderSchedules'] as List<dynamic>?)?.map((e) => OrderSchedule.fromJson(e)).toList() ?? [],
+    );
+  }
+}
+
+class OrderSchedule {
+  int? orderScheduleId;
+  String? visitDate;
+  bool? isCompleted;
+  bool? isCompletedVisit;
+
+  OrderSchedule({
+    this.orderScheduleId,
+    this.visitDate,
+    this.isCompleted,
+    this.isCompletedVisit,
+  });
+
+  factory OrderSchedule.fromJson(Map<String, dynamic> json) {
+    return OrderSchedule(
+      orderScheduleId: json['orderScheduleId'] ?? -1,
+      visitDate: json['visitDate'] ?? '',
+      isCompleted: json['isCompleted'] ?? false,
+      isCompletedVisit: json['isCompletedVisit'] ?? false,
     );
   }
 }
@@ -211,6 +249,38 @@ class OrderTechnicalAssignment {
       technicalName: json['technicalName'] ?? '',
       technicalType: json['technicalType'] ?? -1,
       technicalTypeName: json['technicalTypeName'] ?? '',
+    );
+  }
+}
+
+class OrderEquipment {
+  int? orderEquipmentId;
+  int? equipmentId;
+  int? orderId;
+  String? arName;
+  String? enName;
+  num? price;
+  String? image;
+
+  OrderEquipment({
+    this.orderEquipmentId,
+    this.equipmentId,
+    this.orderId,
+    this.arName,
+    this.enName,
+    this.price,
+    this.image,
+  });
+
+  factory OrderEquipment.fromJson(Map<String, dynamic> json) {
+    return OrderEquipment(
+      orderEquipmentId: json['orderEquipmentId'] ?? -1,
+      equipmentId: json['equipmentId'] ?? -1,
+      orderId: json['orderId'] ?? -1,
+      arName: json['arName'] ?? '',
+      enName: json['enName'] ?? '',
+      price: json['price'] ?? 0,
+      image: json['image'] ?? '',
     );
   }
 }

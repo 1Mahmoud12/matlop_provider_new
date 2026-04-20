@@ -41,7 +41,7 @@ class OrderDataSourceImpl extends OrderDataSource {
   Future<Either<Failure, OrderDetailsModel>> getOrderDetails({required BuildContext context, required int orderId}) async {
     try {
       final response = await DioHelper.getData(url: '${EndPoints.getOrderDetails}$orderId', context: context);
-      logger.i(response.data);
+      // logger.i(response.data);
       return right(OrderDetailsModel.fromJson(response.data));
     } catch (e) {
       if (e is DioException) {

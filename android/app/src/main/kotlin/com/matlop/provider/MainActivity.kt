@@ -1,4 +1,4 @@
-package com.matlo.matlop_provider
+package  com.matlop.provider
 
 import io.flutter.embedding.android.FlutterActivity
 

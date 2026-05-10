@@ -1,32 +1,29 @@
 class SingUpParameters {
-  final String firstName;
-  final String lastName;
+  final String fullName;
   final String email;
   final String username;
   final String password;
   final String phone;
-  final int countryId;
+  final int genderId;
   final int technicalTypeEnum;
   final List<int> technicalServiceIds;
-  final int genderId;
+  final int workerTypeId;
 
   SingUpParameters({
-    required this.firstName,
-    required this.lastName,
+    required this.fullName,
     required this.username,
     required this.email,
     required this.password,
     required this.phone,
-    required this.countryId,
     required this.technicalTypeEnum,
     required this.technicalServiceIds,
-    this.genderId = 1, // default: male
+    required this.workerTypeId,
+    this.genderId = 1,
   });
 
   Map<String, dynamic> toJson() {
     return {
-      'firstName': firstName,
-      'lastName': lastName,
+      'fullName': fullName,
       'userName': username,
       'email': email,
       'password': password,
@@ -34,9 +31,7 @@ class SingUpParameters {
       'genderId': genderId,
       'roleType': technicalTypeEnum,
       'technicalServiceIds': technicalServiceIds,
-      // "isTechnical": true,
-
+      'workerTypeId': workerTypeId,
     };
   }
 }
-

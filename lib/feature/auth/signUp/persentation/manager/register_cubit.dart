@@ -16,6 +16,7 @@ import 'package:matlop_provider/feature/auth/login/presentation/login_view.dart'
 import 'package:matlop_provider/feature/auth/login/presentation/manager/cubit/login_cubit.dart';
 import 'package:matlop_provider/feature/auth/signUp/data/data_source.dart';
 import 'package:matlop_provider/feature/auth/signUp/data/technical_special_list_model.dart';
+import 'package:matlop_provider/feature/auth/signUp/data/worker_type_model.dart';
 
 import '../../data/model.dart';
 
@@ -27,8 +28,8 @@ class RegisterCubit extends Cubit<RegisterState> {
   RegisterCubit(this.technicalTypeEnum) : super(RegisterInitial());
 
   static RegisterCubit of(BuildContext context) => BlocProvider.of(context);
-  final TextEditingController firstNameController = TextEditingController();
-  final TextEditingController lastNameController = TextEditingController();
+
+  final TextEditingController fullNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController userNameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
@@ -37,8 +38,27 @@ class RegisterCubit extends Cubit<RegisterState> {
   final TextEditingController nationalNo = TextEditingController();
   TextEditingController countryName = TextEditingController();
   int countryId = -1;
+
   final RegisterDataSource registerDataSource = RegisterDataSourceImpl();
   GenderEnum selectedGender = GenderEnum.male;
+
+  // Worker type
+  List<WorkerTypeItem> workerTypes = [];
+  WorkerTypeItem? selectedWorkerType;
+
+  void getWorkerTypes() {
+    emit(GetWorkerTypesLoading());
+    registerDataSource.getAllWorkerTypes().then((value) {
+      value.fold(
+            (l) => emit(GetWorkerTypesError(e: l.errMessage)),
+            (r) {
+          workerTypes = r.data?.where((e) => e.isActive == true).toList() ?? [];
+          if (workerTypes.isNotEmpty) selectedWorkerType = workerTypes.first;
+          emit(GetWorkerTypesSuccess());
+        },
+      );
+    });
+  }
 
   void register({required BuildContext context}) {
     emit(RegisterLoading());
@@ -46,33 +66,31 @@ class RegisterCubit extends Cubit<RegisterState> {
     registerDataSource
         .register(
       params: SingUpParameters(
-        firstName: firstNameController.text,
-        lastName: lastNameController.text,
+        fullName: fullNameController.text,
         username: userNameController.text,
         email: emailController.text,
         password: passwordController.text,
         phone: phoneController.text,
-        countryId: countryId,
+        // countryId: countryId,
         technicalTypeEnum: technicalTypeEnum == TechType.technical ? 3 : 9,
         technicalServiceIds: selectedTechnicals.map((e) => e.serviceId ?? 0).toList(),
         genderId: selectedGender.id,
+        workerTypeId: selectedWorkerType?.id ?? 0,
       ),
     )
         .then(
-      (value) async {
+          (value) async {
         value.fold(
-          (l) {
+              (l) {
             Utils.showToast(title: l.errMessage, state: UtilState.error);
             emit(RegisterError(e: l.errMessage));
           },
-          (r) async {
+              (r) async {
             log('Success Registration');
             userCacheValue = r;
             Constants.token = r.data?.accessToken ?? '';
             selectTokens();
-            context.navigateToPage(
-              const BottomNavBarView(),
-            );
+            context.navigateToPage(const BottomNavBarView());
             await userCache?.put(userCacheKey, jsonEncode(r.toJson()));
             await userCache?.put(rememberMeKey, rememberMe);
             emit(RegisterSuccess());
@@ -85,13 +103,10 @@ class RegisterCubit extends Cubit<RegisterState> {
   void getAllTechnicalSpecial({required BuildContext context}) {
     emit(GetAllTechnicalSpecialListLoading());
     registerDataSource.getAllTechnicalSpecialList().then(
-      (value) async {
+          (value) async {
         value.fold(
-          (l) {
-            //  Utils.showToast(title: l.errMessage, state: UtilState.error);
-            emit(GetAllTechnicalSpecialListError(e: l.errMessage));
-          },
-          (r) async {
+              (l) => emit(GetAllTechnicalSpecialListError(e: l.errMessage)),
+              (r) async {
             ConstantModel.technicalSpecialListModel = r;
             emit(GetAllTechnicalSpecialListSuccess());
           },

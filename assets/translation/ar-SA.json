@@ -172,7 +172,7 @@
   "female": "انثى",
   "Please enter your first name": "برجاءادخال الاسم الاول",
   "Please enter your last name": "برجاءادخال الاسم الاخير",
-  "Please enter your email": "برجاءادخال البريد الالكتروني",
+  "Please enter your email": "برجاء ادخال البريد الإلكتروني",
   "Email": "البريد الالكتروني",
   "Select Gender": "اختر النوع",
   "Select Date": "اختر التاريخ",
@@ -358,5 +358,13 @@
   "Visits Schedule": "جدول الزيارات",
   "Visit": "زيارة",
   "Billing Details": "تفاصيل الفاتورة",
-  "": ""
+  "": "",
+  "Full Name": "الاسم الكامل",
+  "Please enter your full name": "برجاء ادخال الاسم الكامل",
+  "Name must contain letters only": "الاسم يجب أن يحتوي على حروف فقط",
+  "Nationality": "الجنسية",
+  "Select worker type": "اختر الجنسية",
+  "Worker Type": "الجنسية",
+  "Please select a worker type": "برجاء اختيار الجنسية",
+  "email": "البريد الإلكتروني"
 }

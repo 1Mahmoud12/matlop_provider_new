@@ -16,6 +16,8 @@ import 'package:matlop_provider/core/utils/utils.dart';
 import 'package:matlop_provider/feature/bottomNavBarScreen/bottom_nav_bar_view.dart';
 import 'package:matlop_provider/feature/menu/views/editProfile/data/dataSource/update_profile_data_source.dart';
 import 'package:matlop_provider/feature/menu/views/editProfile/data/models/update_profile_params.dart';
+import 'package:matlop_provider/feature/auth/signUp/data/data_source.dart';
+import 'package:matlop_provider/feature/auth/signUp/data/worker_type_model.dart';
 
 import '../../../../../core/network/end_points.dart';
 import '../../../../auth/login/data/models/login_model.dart';
@@ -26,8 +28,7 @@ class UpdateProfileCubit extends Cubit<UpdateProfileState> {
   UpdateProfileCubit() : super(UpdateProfileInitial());
 
   static UpdateProfileCubit of(BuildContext context) => BlocProvider.of(context);
-  TextEditingController firstNameController = TextEditingController(text: profileCacheValue?.data?.firstName);
-  TextEditingController lastNameController = TextEditingController(text: profileCacheValue?.data?.lastName);
+  TextEditingController fullNameController = TextEditingController(text: profileCacheValue?.data?.fullName ?? '');
   TextEditingController usernameController = TextEditingController(text: profileCacheValue?.data?.username);
   TextEditingController mobileNumberController = TextEditingController(text: profileCacheValue?.data?.mobileNumber);
   TextEditingController dateOfBirthController = TextEditingController(text: profileCacheValue?.data?.dateOfBirth);
@@ -35,8 +36,13 @@ class UpdateProfileCubit extends Cubit<UpdateProfileState> {
 
   int gender = profileCacheValue?.data?.gender ?? 1;
   final UpdateProfileDataSourceInterface loginDataSource = UpdateProfileDataSource();
+  final RegisterDataSource _registerDataSource = RegisterDataSourceImpl();
   File? imageFile;
   String urlImage = '';
+
+  // Worker type
+  List<WorkerTypeItem> workerTypes = [];
+  WorkerTypeItem? selectedWorkerType;
 
   Future<void> getProfile({required BuildContext context, bool reset = true}) async {
     emit(UpdateProfileLoading());
@@ -54,9 +60,8 @@ class UpdateProfileCubit extends Cubit<UpdateProfileState> {
             profileCacheValue = r;
             await userCache?.put(profileCacheKey, jsonEncode(r.toJson()));
             urlImage = r.data?.imgSrc?.trim() ?? '';
-            // Instead of creating new TextEditingControllers, update the text of existing ones
-            firstNameController.text = profileCacheValue?.data?.firstName ?? '';
-            lastNameController.text = profileCacheValue?.data?.lastName ?? '';
+            // Update controllers with fresh profile data
+            fullNameController.text = profileCacheValue?.data?.fullName ?? '';
             usernameController.text = profileCacheValue?.data?.username ?? '';
             if (profileCacheValue?.data?.dateOfBirth != null) {
               final customDate = DateTime.parse(profileCacheValue!.data!.dateOfBirth!);
@@ -78,14 +83,37 @@ class UpdateProfileCubit extends Cubit<UpdateProfileState> {
     );
   }
 
+  void getWorkerTypes() {
+    emit(GetWorkerTypesLoading());
+    _registerDataSource.getAllWorkerTypes().then((value) {
+      value.fold(
+        (l) => emit(GetWorkerTypesError(e: l.errMessage)),
+        (r) {
+          workerTypes = r.data?.where((e) => e.isActive == true).toList() ?? [];
+          // Pre-select the worker type matching the cached profile
+          final cachedId = profileCacheValue?.data?.workerTypeId;
+          if (cachedId != null && workerTypes.isNotEmpty) {
+            selectedWorkerType = workerTypes.firstWhere(
+              (e) => e.id == cachedId,
+              orElse: () => workerTypes.first,
+            );
+          } else if (workerTypes.isNotEmpty) {
+            selectedWorkerType = workerTypes.first;
+          }
+          emit(GetWorkerTypesSuccess());
+        },
+      );
+    });
+  }
+
   bool hasChanges() {
     if (imageFile != null) return true;
-    if (firstNameController.text != (profileCacheValue?.data?.firstName ?? '')) return true;
-    if (lastNameController.text != (profileCacheValue?.data?.lastName ?? '')) return true;
+    if (fullNameController.text != (profileCacheValue?.data?.fullName ?? '')) return true;
     if (emailController.text != (profileCacheValue?.data?.email ?? '')) return true;
     if (usernameController.text != (profileCacheValue?.data?.username ?? '')) return true;
     if (mobileNumberController.text != (profileCacheValue?.data?.mobileNumber ?? '')) return true;
     if (gender != (profileCacheValue?.data?.gender ?? 1)) return true;
+    if (selectedWorkerType?.id != profileCacheValue?.data?.workerTypeId) return true;
     return false;
   }
 
@@ -97,13 +125,11 @@ class UpdateProfileCubit extends Cubit<UpdateProfileState> {
     loginDataSource
         .updateProfile(
       params: UpdateProfileParams(
-        firstName: firstNameController.text,
-        // Last name has no input field in the UI — fall back to cached value
-        // to avoid sending an empty string that the API rejects.
-        lastName: lastNameController.text.isNotEmpty ? lastNameController.text : profileCacheValue?.data?.lastName ?? '',
+        fullName: fullNameController.text,
         mobileNumber: mobileNumberController.text,
         email: emailController.text,
         genderId: gender,
+        workerTypeId: selectedWorkerType?.id ?? profileCacheValue?.data?.workerTypeId ?? 0,
         imgSrc: imageFile,
       ),
     )
@@ -122,8 +148,7 @@ class UpdateProfileCubit extends Cubit<UpdateProfileState> {
             profileCacheValue = r;
 
             profileCacheValue?.data?.email = emailController.text;
-            profileCacheValue?.data?.firstName = firstNameController.text;
-            profileCacheValue?.data?.lastName = lastNameController.text;
+            profileCacheValue?.data?.fullName = fullNameController.text;
             profileCacheValue?.data?.username = usernameController.text;
             profileCacheValue?.data?.gender = gender;
             profileCacheValue?.data?.dateOfBirth = dateOfBirthController.text;
@@ -138,8 +163,7 @@ class UpdateProfileCubit extends Cubit<UpdateProfileState> {
 
               final userMap = userCacheValue!.toJson();
               if (userMap['data'] != null && userMap['data']['profile'] != null) {
-                userMap['data']['profile']['firstName'] = firstNameController.text;
-                userMap['data']['profile']['fullName'] = '${firstNameController.text} ${lastNameController.text}';
+                userMap['data']['profile']['fullName'] = fullNameController.text;
                 // Store relative path since LoginResponseData.imgSrc getter prepends the domain
                 final fullImg = profileCacheValue?.data?.imgSrc ?? '';
                 final relativeImg = fullImg.startsWith(EndPoints.domain)

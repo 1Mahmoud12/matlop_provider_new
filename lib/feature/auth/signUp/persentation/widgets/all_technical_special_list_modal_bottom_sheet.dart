@@ -49,85 +49,84 @@ class _SelectTechnicalSpecialListBottomSheetState extends State<SelectTechnicalS
             return state is GetAllTechnicalSpecialListLoading
                 ? const LoadingWidget()
                 : state is GetAllTechnicalSpecialListSuccess || state is AddTechnicalState
-                    ? SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              'Select your technical special'.tr(),
-                              style: Theme.of(context).textTheme.bodyLarge,
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            if (ConstantModel.technicalSpecialListModel?.data?.isEmpty ?? true)
-                              Container(
-                                padding: const EdgeInsets.only(top: 40),
-                                child: Column(
-                                  children: [
-                                    Center(
-                                      child: Text(
-                                        'There is technical special'.tr(),
-                                        style: Theme.of(context).textTheme.bodyLarge,
+                    ? Column(
+                        // ← Column, NOT SingleChildScrollView
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          // ── Fixed header ──────────────────────────────
+                          Text(
+                            'Select your technical special'.tr(),
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          ),
+                          const SizedBox(height: 20),
+
+                          // ── Scrollable list only ──────────────────────
+                          Flexible(
+                            child: SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  if (ConstantModel.technicalSpecialListModel?.data?.isEmpty ?? true)
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 40),
+                                      child: Center(
+                                        child: Text(
+                                          'There is technical special'.tr(),
+                                          style: Theme.of(context).textTheme.bodyLarge,
+                                        ),
+                                      ),
+                                    )
+                                  else
+                                    Column(
+                                      children: List.generate(
+                                        ConstantModel.technicalSpecialListModel?.data?.length ?? 0,
+                                        (index) {
+                                          final item = ConstantModel.technicalSpecialListModel?.data?[index];
+                                          if (item == null) return const SizedBox.shrink();
+                                          final isSelected =
+                                              widget.registerCubit.selectedTechnicals.any((e) => e.serviceId == item.serviceId);
+                                          bool isAr = context.locale.languageCode == 'ar';
+                                          return CheckboxListTile(
+                                            value: isSelected,
+                                            title: Text(
+                                                isAr ? (item.arName ?? Constants.unKnownValue) : (item.enName ?? Constants.unKnownValue)),
+                                            onChanged: (value) {
+                                              widget.registerCubit.toggleTechnicalSpecial(technical: item, context: context);
+                                            },
+                                            controlAffinity: ListTileControlAffinity.leading,
+                                            activeColor: Theme.of(context).primaryColor,
+                                            contentPadding: EdgeInsets.zero,
+                                          );
+                                        },
                                       ),
                                     ),
-                                    const SizedBox(
-                                      height: 20,
-                                    ),
-                                  ],
-                                ),
-                              )
-                            else
-                              Column(
-                                children: List.generate(ConstantModel.technicalSpecialListModel?.data?.length ?? 0, (index) {
-                                  final item = ConstantModel.technicalSpecialListModel?.data?[index];
-                                  if (item == null) return const SizedBox.shrink();
-                                  final isSelected = widget.registerCubit.selectedTechnicals
-                                      .any((e) => e.serviceId == item.serviceId);
-                                  bool isAr = context.locale.languageCode == 'ar';
-                                  return CheckboxListTile(
-                                    value: isSelected,
-                                    title: Text(isAr ? (item.arName ?? Constants.unKnownValue) : (item.enName ?? Constants.unKnownValue)),
-                                    onChanged: (value) {
-                                      widget.registerCubit.toggleTechnicalSpecial(technical: item, context: context);
-                                    },
-                                    controlAffinity: ListTileControlAffinity.leading,
-                                    activeColor: Theme.of(context).primaryColor,
-                                    contentPadding: EdgeInsets.zero,
-                                  );
-                                }),
-                              ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            Center(
-                              child: CustomTextButton(
-                                gradientColors: true,
-                                stops: const [0.5, 1],
-                                onPress: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Text(
-                                  'Done'.tr(),
-                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white),
-                                ),
+                                ],
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+
+                          // ── Fixed button ───────────────────────────────
+                          const SizedBox(height: 20),
+                          Center(
+                            child: CustomTextButton(
+                              gradientColors: true,
+                              stops: const [0.5, 1],
+                              onPress: () => Navigator.pop(context),
+                              child: Text(
+                                'Done'.tr(),
+                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        ],
                       )
                     : state is GetAllTechnicalSpecialListError
                         ? Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              ServerErrorWidget(
-                                data: state.e,
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
+                              ServerErrorWidget(data: state.e),
+                              const SizedBox(height: 20),
                             ],
                           )
                         : Text('Something went wrong'.tr());

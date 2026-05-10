@@ -41,6 +41,7 @@ class _EditProfileViewState extends State<EditProfileView> {
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) {
         cubit.getProfile(context: context);
+        cubit.getWorkerTypes();
       },
     );
   }
@@ -68,11 +69,8 @@ class _EditProfileViewState extends State<EditProfileView> {
                   value: cubit,
                   child: BlocBuilder<UpdateProfileCubit, UpdateProfileState>(
                     builder: (context, state) {
-                      final fName = profileCacheValue?.data?.firstName ?? '';
-                      final lName = profileCacheValue?.data?.lastName ?? '';
-                      final fullName = fName.isNotEmpty || lName.isNotEmpty ? '$fName $lName' : userCacheValue?.data?.name ?? '';
                       return Text(
-                        fullName,
+                        profileCacheValue?.data?.fullName ?? userCacheValue?.data?.name ?? '',
                         style: Theme.of(context).textTheme.titleMedium,
                       );
                     },
@@ -113,19 +111,11 @@ class _EditProfileViewState extends State<EditProfileView> {
                   key: formKey,
                   child: Column(
                     children: [
+                      // Full Name
                       CustomTextFormField(
-                        labelStringText: 'First Name'.tr(),
-                        controller: cubit.firstNameController,
-                        hintText: 'Please enter your first name'.tr(),
-                        outPadding: EdgeInsets.zero,
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      CustomTextFormField(
-                        labelStringText: 'Last Name'.tr(),
-                        controller: cubit.lastNameController,
-                        hintText: 'Please enter your last name'.tr(),
+                        labelStringText: 'Full Name'.tr(),
+                        controller: cubit.fullNameController,
+                        hintText: 'Please enter your full name'.tr(),
                         outPadding: EdgeInsets.zero,
                       ),
                       const SizedBox(
@@ -208,9 +198,9 @@ class _EditProfileViewState extends State<EditProfileView> {
                 //   ),
                 // ),
 
-                const SizedBox(
-                  height: 20,
-                ),
+                // const SizedBox(
+                //   height: 20,
+                // ),
                 // InkWell(
                 //   onTap: () {
                 //     showDialog(
@@ -250,6 +240,52 @@ class _EditProfileViewState extends State<EditProfileView> {
                 // const SizedBox(
                 //   height: 40,
                 // ),
+
+                // ── Worker Type ───────────────────────────────────────
+                BlocProvider.value(
+                  value: cubit,
+                  child: BlocBuilder<UpdateProfileCubit, UpdateProfileState>(
+                    buildWhen: (_, current) =>
+                        current is GetWorkerTypesLoading ||
+                        current is GetWorkerTypesSuccess ||
+                        current is GetWorkerTypesError ||
+                        current is UpdateProfileSuccess,
+                    builder: (context, state) {
+                      final isLoading = state is GetWorkerTypesLoading;
+                      final isAr = context.locale.languageCode == 'ar';
+                      final workerList = cubit.workerTypes
+                          .map((e) => DropDownModel(
+                                isAr ? (e.arName ?? '') : (e.enName ?? ''),
+                                e.id ?? 0,
+                              ))
+                          .toList();
+
+                      return AbsorbPointer(
+                        absorbing: isLoading,
+                        child: Opacity(
+                          opacity: isLoading ? 0.5 : 1.0,
+                          child: CustomDropdownWithModel(
+                            nameFiled: 'Worker Type'.tr(),
+                            text: cubit.selectedWorkerType == null
+                                ? 'Select worker type'.tr()
+                                : (isAr
+                                    ? (cubit.selectedWorkerType!.arName ?? '')
+                                    : (cubit.selectedWorkerType!.enName ?? '')),
+                            itemList: workerList,
+                            textStyle: Theme.of(context).textTheme.bodyMedium!,
+                            onItemSelected: (item) {
+                              cubit.selectedWorkerType = cubit.workerTypes
+                                  .firstWhere((e) => e.id == item.value);
+                              setState(() {});
+                            },
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                const SizedBox(height: 20),
+
                 CustomTextButton(
                   borderRadius: 20,
                   child: Text(

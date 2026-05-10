@@ -5,19 +5,19 @@ import 'dart:io';
 import 'package:matlop_provider/core/network/local/cache.dart';
 
 class UpdateProfileParams {
-  final String firstName;
-  final String lastName;
+  final String fullName;
   final String email;
   final String mobileNumber;
   final File? imgSrc;
   final int genderId;
+  final int workerTypeId;
 
   UpdateProfileParams({
-    required this.firstName,
-    required this.lastName,
+    required this.fullName,
     required this.email,
     required this.mobileNumber,
     required this.genderId,
+    required this.workerTypeId,
     this.imgSrc,
   });
 
@@ -50,12 +50,12 @@ class UpdateProfileParams {
 
       return {
         'userId': profileCacheValue?.data?.userId ?? 0,
-        'firstName': firstName,
-        'lastName': lastName,
+        'fullName': fullName,
         'email': email,
         'mobileNumber': mobileNumber,
         'genderId': genderId,
-        'imgSrc': imgSrcValue, // always present
+        'workerTypeId': workerTypeId,
+        'imgSrc': imgSrcValue,
       };
     } catch (e) {
       log('Error in toJson method: $e');

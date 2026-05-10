@@ -24,3 +24,13 @@ final class VerifyError extends UpdateProfileState {
 }
 
 final class VerifySuccess extends UpdateProfileState {}
+
+// Worker type states
+final class GetWorkerTypesLoading extends UpdateProfileState {}
+
+final class GetWorkerTypesSuccess extends UpdateProfileState {}
+
+final class GetWorkerTypesError extends UpdateProfileState {
+  final String e;
+  GetWorkerTypesError({required this.e});
+}

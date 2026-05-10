@@ -293,5 +293,14 @@
   "Visits Schedule": "Visits Schedule",
   "Visit": "Visit",
   "Billing Details": "Billing Details",
-  "": ""
+  "": "",
+  "Full Name": "Full Name",
+  "Please enter your full name": "Please enter your full name",
+  "Name must contain letters only": "Name must contain letters only",
+  "Nationality": "Nationality",
+  "Select worker type": "Select nationality",
+  "Worker Type": "Nationality",
+  "Please select a worker type": "Please select a nationality",
+  "email": "Email",
+  "Please enter your email": "Please enter your email"
 }

@@ -33,6 +33,7 @@ class Data {
   Data({
     this.userId,
     this.userTypeId,
+    this.fullName,
     this.firstName,
     this.lastName,
     this.username,
@@ -46,22 +47,32 @@ class Data {
     this.password,
     this.notes,
     this.technicalSpecialistId,
+    this.workerTypeId,
     List<ProfileCity>? cities,
     List<ProfileService>? services,
   })  : cities = cities ?? [],
         services = services ?? [];
 
   Data.fromJson(dynamic json) {
-    userId = json['userId'] ?? -1; // Default to -1 if null
-    userTypeId = json['userTypeId'] ?? json['roleId'] ?? -1; // Fallback to roleId if needed
-    firstName = json['firstName']?.toString() ?? ''; // Default to empty string
-    lastName = json['lastName']?.toString() ?? ''; // This endpoint may not return lastName
-    username = json['username']?.toString() ?? json['userName']?.toString() ?? ''; // Support both keys
-    email = json['email']?.toString() ?? ''; // Default to empty string
-    isActive = json['isActive'] ?? false; // Default to false if null
-    gender = (json['gender'] ?? json['genderId']) ?? -1; // Support genderId from backend
-    dateOfBirth = json['dateOfBirth']?.toString(); // Keep null if not provided
-    mobileNumber = json['mobileNumber']?.toString() ?? ''; // Default to empty string
+    userId = json['userId'] ?? -1;
+    userTypeId = json['userTypeId'] ?? json['roleId'] ?? -1;
+    firstName = json['firstName']?.toString() ?? '';
+    lastName = json['lastName']?.toString() ?? '';
+    // Prefer the dedicated fullName field; fall back to composing from firstName + lastName
+    final rawFullName = json['fullName']?.toString();
+    if (rawFullName != null && rawFullName.isNotEmpty) {
+      fullName = rawFullName;
+    } else {
+      final fn = firstName ?? '';
+      final ln = lastName ?? '';
+      fullName = (fn.isEmpty && ln.isEmpty) ? '' : '$fn $ln'.trim();
+    }
+    username = json['username']?.toString() ?? json['userName']?.toString() ?? '';
+    email = json['email']?.toString() ?? '';
+    isActive = json['isActive'] ?? false;
+    gender = (json['gender'] ?? json['genderId']) ?? -1;
+    dateOfBirth = json['dateOfBirth']?.toString();
+    mobileNumber = json['mobileNumber']?.toString() ?? '';
     final rawImg = json['imgSrc']?.toString().trim();
     if (rawImg == null || rawImg.isEmpty) {
       imgSrc = '';
@@ -70,51 +81,56 @@ class Data {
     } else {
       imgSrc = '${EndPoints.domain}$rawImg';
     }
-    pinCode = json['pinCode'] ?? ''; // Default to empty string if null
-    password = json['password'] ?? ''; // Default to empty string if null
-    notes = json['notes'] ?? ''; // Default to empty string if null
+    pinCode = json['pinCode'] ?? '';
+    password = json['password'] ?? '';
+    notes = json['notes'] ?? '';
+    workerTypeId = json['workerTypeId'] != null ? (json['workerTypeId'] as num).toInt() : null;
     technicalSpecialistId = json['technicalSpecialistId'] != null
         ? num.tryParse(json['technicalSpecialistId'].toString())
-        : null; // Safely parse num from String, int, or null
+        : null;
     cities = (json['cities'] as List<dynamic>? ?? []).map((e) => ProfileCity.fromJson(e)).toList();
     services = (json['services'] as List<dynamic>? ?? []).map((e) => ProfileService.fromJson(e)).toList();
   }
 
-  int? userId; // Nullable integer
-  int? userTypeId; // Nullable integer
-  String? firstName; // Nullable string
-  String? lastName; // Nullable string
-  String? username; // Nullable string
-  String? email; // Nullable string
-  bool? isActive; // Nullable boolean
-  int? gender; // Nullable integer
-  num? technicalSpecialistId; // Nullable integer
+  int? userId;
+  int? userTypeId;
+  String? fullName;
+  String? firstName;
+  String? lastName;
+  String? username;
+  String? email;
+  bool? isActive;
+  int? gender;
+  int? workerTypeId;
+  num? technicalSpecialistId;
   late List<ProfileCity> cities;
   late List<ProfileService> services;
-  String? dateOfBirth; // Nullable string
-  String? mobileNumber; // Nullable string
-  String? imgSrc; // Nullable string
-  dynamic pinCode; // Nullable dynamic
-  dynamic password; // Nullable dynamic
-  dynamic notes; // Nullable dynamic
+  String? dateOfBirth;
+  String? mobileNumber;
+  String? imgSrc;
+  dynamic pinCode;
+  dynamic password;
+  dynamic notes;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['userId'] = userId;
     map['userTypeId'] = userTypeId;
-    map['firstName'] = firstName ?? 'Unknown'; // Ensure firstName is never null
-    map['lastName'] = lastName ?? 'Unknown'; // Ensure lastName is never null
-    map['username'] = username ?? 'Unknown'; // Ensure username is never null
-    map['email'] = email ?? 'Unknown'; // Ensure email is never null
-    map['isActive'] = isActive ?? false; // Ensure isActive is never null
-    map['gender'] = gender ?? -1; // Ensure gender is never null
-    map['dateOfBirth'] = dateOfBirth ?? ''; // Keep empty string if not provided
-    map['mobileNumber'] = mobileNumber ?? ''; // Ensure mobileNumber is never null
-    map['imgSrc'] = imgSrc ?? ''; // Ensure imgSrc is never null
-    map['pinCode'] = pinCode ?? ''; // Ensure pinCode is never null
-    map['password'] = password ?? ''; // Ensure password is never null
-    map['notes'] = notes ?? ''; // Ensure notes is never null
-    map['technicalSpecialistId'] = technicalSpecialistId ?? ''; // Ensure notes is never null
+    map['fullName'] = fullName ?? '';
+    map['firstName'] = firstName ?? '';
+    map['lastName'] = lastName ?? '';
+    map['username'] = username ?? '';
+    map['email'] = email ?? '';
+    map['isActive'] = isActive ?? false;
+    map['gender'] = gender ?? -1;
+    map['dateOfBirth'] = dateOfBirth ?? '';
+    map['mobileNumber'] = mobileNumber ?? '';
+    map['imgSrc'] = imgSrc ?? '';
+    map['pinCode'] = pinCode ?? '';
+    map['password'] = password ?? '';
+    map['notes'] = notes ?? '';
+    map['workerTypeId'] = workerTypeId;
+    map['technicalSpecialistId'] = technicalSpecialistId;
     map['cities'] = cities.map((e) => e.toJson()).toList();
     map['services'] = services.map((e) => e.toJson()).toList();
     return map;

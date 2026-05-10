@@ -1,5 +1,5 @@
 class EndPoints {
-  static const domain = 'https://test.wrdah.com';
+  static const domain = 'https://backend.matlop.com';
 
   //static const domainPrimary = 'https://aspdev.matlop.com/index.html';
   static const baseUrl = '$domain/api';
@@ -28,6 +28,7 @@ class EndPoints {
   // Home
   static const getAllBlogs = '/client/get-all-blogs';
 
+  static const getWorkerTypes ='/worker-types';
   // search
   static const projectDistricts = '/client/project_districts';
   static const features = '/client/features';

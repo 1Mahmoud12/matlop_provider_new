@@ -32,7 +32,7 @@ class ResetPasswordDataSource extends ResetPasswordDataSourceInterface {
       final response = await DioHelper.postData(
         endPoint: endpoint,
         data: {
-          'mobileNumber': '0${mobileNumber}',
+          'Identifier': '0$mobileNumber',
         },
       );
       log('object response.data ${response.data.runtimeType}');

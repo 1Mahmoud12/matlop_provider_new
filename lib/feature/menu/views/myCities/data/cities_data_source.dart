@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:matlop_provider/core/network/dio_helper.dart';
 import 'package:matlop_provider/core/network/end_points.dart';
 import 'package:matlop_provider/core/network/errors/failures.dart';
+import 'package:matlop_provider/core/utils/constants.dart';
 import 'package:matlop_provider/feature/addNewAddress/data/models/city_model.dart';
 
 abstract class CitiesDataSourceInterface {
@@ -22,12 +23,10 @@ class CitiesDataSource extends CitiesDataSourceInterface {
   @override
   Future<Either<Failure, List<CityData>>> getAllCities() async {
     try {
-      final response = await DioHelper.getData(url: EndPoints.getCities);
+      final response = await DioHelper.getData(url: '${EndPoints.getCities}/${Constants.selectedCountryId}');
       final data = response.data;
       if (data['isSuccess'] == true) {
-        final cities = (data['data'] as List<dynamic>)
-            .map((e) => CityData.fromJson(e))
-            .toList();
+        final cities = (data['data'] as List<dynamic>).map((e) => CityData.fromJson(e)).toList();
         return right(cities);
       }
       return left(ServerFailure(data['error'] ?? 'Failed to load cities'));

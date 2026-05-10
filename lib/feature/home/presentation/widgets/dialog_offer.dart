@@ -82,7 +82,7 @@ class _AddOfferViewState extends State<AddOfferView> {
               gradientColors: true,
               onPress: () {
                 if (globalKey.currentState?.validate() == false) {
-                } else if (int.parse(widget.cubit.amountController.text) == 0) {
+                } else if (num.parse(widget.cubit.amountController.text) == 0) {
                   return Utils.showToast(title: "amount don't must equal zero", state: UtilState.warning);
                 } else {
                   widget.cubit.createOffer(context, specialOrderId: widget.idSpecialOrder);

@@ -1,5 +1,6 @@
 class EndPoints {
   static const domain = 'https://backend.matlop.com';
+  static const domainTest = 'https://test.wrdah.com';
 
   //static const domainPrimary = 'https://aspdev.matlop.com/index.html';
   static const baseUrl = '$domain/api';
@@ -18,6 +19,7 @@ class EndPoints {
 
   static const updateProfile = '/Technical/Update';
   static const getProfileById = '/Technical/GetById';
+
   // New endpoint returns the currently authenticated technical profile.
   static const technicalProfile = '/technicals/profile';
 
@@ -28,7 +30,8 @@ class EndPoints {
   // Home
   static const getAllBlogs = '/client/get-all-blogs';
 
-  static const getWorkerTypes ='/worker-types';
+  static const getWorkerTypes = '/worker-types';
+
   // search
   static const projectDistricts = '/client/project_districts';
   static const features = '/client/features';
@@ -137,7 +140,7 @@ class EndPoints {
   static const getTransaction = '/Wallet/GetClientTransactions';
 
   // Cities
-  static const getCities = '/cities';
+  static const getCities = '/cities/country';
   static const updateTechnicalCities = '/technicals/cities';
 
   // Services

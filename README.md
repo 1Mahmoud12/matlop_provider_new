@@ -32,3 +32,57 @@ pod install
 open .
 cd ..
 ```
+
+```shell
+flutter clean  
+flutter build apk
+open build/app/outputs/flutter-apk/
+```
+
+```shell
+flutter clean  
+```
+
+```shell
+flutter clean  
+flutter pub get
+cd ios
+rm podfile.lock
+rm -rf pods
+rm -rf .symlinks
+pod install
+open .
+cd ..
+```
+
+```shell
+flutter clean  
+cd ios
+rm podfile.lock
+rm -rf pods
+rm -rf .symlinks
+cd ..
+```
+
+```shell
+flutter clean 
+flutter pub get
+flutter build appbundle
+open build/app/outputs/bundle/release/
+```
+
+```shell
+flutter clean  
+flutter pub get
+cd ios
+rm podfile.lock
+rm -rf pods
+rm -rf .symlinks
+pod install
+open .
+cd ..
+flutter build appbundle
+open build/app/outputs/bundle/release/
+```
+
+

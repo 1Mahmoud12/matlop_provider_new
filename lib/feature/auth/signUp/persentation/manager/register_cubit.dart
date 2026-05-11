@@ -87,12 +87,16 @@ class RegisterCubit extends Cubit<RegisterState> {
           },
               (r) async {
             log('Success Registration');
-            userCacheValue = r;
-            Constants.token = r.data?.accessToken ?? '';
-            selectTokens();
-            context.navigateToPage(const BottomNavBarView());
-            await userCache?.put(userCacheKey, jsonEncode(r.toJson()));
-            await userCache?.put(rememberMeKey, rememberMe);
+            Utils.showToast(
+              title: 'Register success, you can log in now'.tr(),
+              state: UtilState.success,
+            );
+            context.navigateToPage(
+              BlocProvider(
+                create: (context) => LoginCubit(),
+                child: const LoginView(),
+              ),
+            );
             emit(RegisterSuccess());
           },
         );
@@ -126,6 +130,12 @@ class RegisterCubit extends Cubit<RegisterState> {
     }
     bool isAr = context.locale.languageCode == 'ar';
     nameController.text = selectedTechnicals.map((e) => isAr ? (e.arName ?? "") : (e.enName ?? "")).join(', ');
+    emit(AddTechnicalState());
+  }
+
+  void clearTechnicalSpecial() {
+    selectedTechnicals.clear();
+    nameController.clear();
     emit(AddTechnicalState());
   }
 }

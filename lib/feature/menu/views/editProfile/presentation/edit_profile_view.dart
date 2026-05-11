@@ -211,7 +211,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                 //             color: AppColors.transparent,
                 //             child: CustomCalendarWidget(
                 //               initialDate: DateTime.parse(cubit.dateOfBirthController.text),
-                //               onDateSelected: (date) {
+                //               onDa teSelected: (date) {
                 //                 setState(() {
                 //                   cubit.dateOfBirthController.text = DateFormat('yyyy-MM-dd', 'en').format(date);
                 //                 });

@@ -8,6 +8,7 @@ import 'package:matlop_provider/core/network/local/cache.dart';
 import 'package:matlop_provider/core/themes/colors.dart';
 import 'package:matlop_provider/core/themes/styles.dart';
 import 'package:matlop_provider/core/utils/app_images.dart';
+import 'package:matlop_provider/core/utils/constants.dart';
 import 'package:matlop_provider/core/utils/navigate.dart';
 import 'package:matlop_provider/feature/auth/login/presentation/login_view.dart';
 import 'package:matlop_provider/feature/auth/login/presentation/manager/cubit/login_cubit.dart';
@@ -51,6 +52,7 @@ class _SplashScreenOneState extends State<SplashScreenOne> with TickerProviderSt
 
           context.navigateToPage(
               userCacheValue?.data != null ? const BottomNavBarView() : BlocProvider(create: (_) => LoginCubit(), child: const LoginView()));
+          Constants.selectedCountryId = userCacheValue?.data?.profile?.countryId;
 
           // context.navigateToPage(const BottomNavBarScreen());
         }

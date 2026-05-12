@@ -49,5 +49,9 @@
     	<string>This app requires access to the photo library so you can pick a profile picture</string>
     	<key>NSCameraUsageDescription</key>
         	<string>This app requires access to the camera so you can pick a profile picture</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>We use your location while you use the app to center the map, detect your current position when adding addresses, and show location-based service information.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>We use your location for map and address features and to show location-based service information. This access level may be requested so the app can obtain and update your position when those features need it.</string>
 </dict>
 </plist>

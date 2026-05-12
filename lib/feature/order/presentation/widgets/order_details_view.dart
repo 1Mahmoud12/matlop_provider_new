@@ -9,13 +9,13 @@ import 'package:matlop_provider/core/component/buttons/custom_text_button.dart';
 import 'package:matlop_provider/core/component/custom_app_bar.dart';
 import 'package:matlop_provider/core/themes/colors.dart';
 import 'package:matlop_provider/core/utils/constant_model.dart';
+import 'package:matlop_provider/core/utils/constants_enum.dart';
 import 'package:matlop_provider/core/utils/empty_data_widget.dart';
 import 'package:matlop_provider/core/utils/navigate.dart';
-import 'package:matlop_provider/core/utils/constants_enum.dart';
 import 'package:matlop_provider/feature/chat/presentation/messages_screen.dart';
-import 'package:matlop_provider/feature/home/presentation/widgets/plan_details_order_details.dart';
 import 'package:matlop_provider/feature/home/presentation/widgets/order_billing_details_widget.dart';
 import 'package:matlop_provider/feature/home/presentation/widgets/order_schedules_list_widget.dart';
+import 'package:matlop_provider/feature/home/presentation/widgets/plan_details_order_details.dart';
 import 'package:matlop_provider/feature/order/presentation/manager/cubit/order_cubit.dart';
 import 'package:matlop_provider/feature/order/presentation/widgets/custom_stepper_widget.dart';
 import 'package:matlop_provider/feature/order/presentation/widgets/media_list.dart';
@@ -147,7 +147,7 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
                         ),
                         if (ConstantModel.orderDetailsModel!.data?.orderSchedules != null &&
                             ConstantModel.orderDetailsModel!.data!.orderSchedules!.isNotEmpty) ...[
-                              SizedBox(height: 15.h),
+                          SizedBox(height: 15.h),
                           Text(
                             'Visits Schedule'.tr(),
                             style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 16.sp),

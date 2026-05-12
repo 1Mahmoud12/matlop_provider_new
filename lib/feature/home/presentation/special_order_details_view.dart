@@ -21,6 +21,7 @@ import 'package:matlop_provider/feature/home/presentation/widgets/dialog_offer.d
 import 'package:matlop_provider/feature/home/presentation/widgets/special_order_plan_details.dart';
 import 'package:matlop_provider/feature/order/presentation/manager/detailsSpecialrderCubit/details_special_order_cubit.dart';
 import 'package:matlop_provider/feature/order/presentation/manager/offersCubit/offers_order_cubit.dart';
+import 'package:matlop_provider/feature/order/presentation/widgets/custom_stepper_widget.dart';
 import 'package:matlop_provider/feature/order/presentation/widgets/order_details_view.dart';
 
 class SpecialOrderDetailsView extends StatefulWidget {
@@ -102,7 +103,8 @@ class _OrderDetailsViewState extends State<SpecialOrderDetailsView> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const SizedBox(height: 20),
-                          // const CustomStepper(),
+                          if (ConstantModel.detailsSpecialOrderModel!.data!.specialOrderStatus!.toInt() < 7)
+                            CustomStepper(selectedStatus: ConstantModel.detailsSpecialOrderModel!.data!.specialOrderStatus!.toInt()),
                           const SizedBox(height: 20),
                           Text(
                             'Order Image'.tr(),
@@ -208,6 +210,32 @@ class _OrderDetailsViewState extends State<SpecialOrderDetailsView> {
                 : const SizedBox(),
           ),
         ),
+        // persistentFooterButtons: [
+        //   BlocBuilder<DetailsSpecialOrderCubit, DetailsSpecialOrderState>(
+        //     builder: (context, state) => ConstantModel.orderDetailsModel != null &&
+        //         ConstantModel.detailsSpecialOrderModel!.data != null &&
+        //         ConstantModel.detailsSpecialOrderModel!.data!.specialOrderEnum! >= 2 &&
+        //         ConstantModel.detailsSpecialOrderModel!.data!.specialOrderEnum! < 5
+        //         ? CustomTextButton(
+        //       width: MediaQuery.sizeOf(context).width,
+        //       borderRadius: 16,
+        //       onPress: () {
+        //         if (ConstantModel.orderDetailsModel!.data!.orderStatusEnum == 2) {
+        //           SpecialOrderCubit.of(context).changeStatus(context, status: 3, orderId: widget.orderData);
+        //         } else if (ConstantModel.orderDetailsModel!.data!.orderStatusEnum == 3) {
+        //           SpecialOrderCubit.of(context).changeStatus(context, status: 4, orderId: widget.orderData);
+        //         } else if (ConstantModel.orderDetailsModel!.data!.orderStatusEnum == 4) {
+        //           SpecialOrderCubit.of(context).changeStatus(context, status: 5, orderId: widget.orderData);
+        //         } // context.navigateToPage(const ConfirmPaymentView());
+        //       },
+        //       child: Text(
+        //         OrderStatusEnum.values[ConstantModel.orderDetailsModel!.data!.orderStatusEnum ?? 0].name.tr(),
+        //         style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white),
+        //       ),
+        //     )
+        //         : const SizedBox(),
+        //   )
+        // ],
         floatingActionButton: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

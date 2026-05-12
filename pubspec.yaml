@@ -82,6 +82,7 @@ dependencies:
   url_launcher: ^6.3.2
   url_launcher_ios: any
   pretty_dio_logger: ^1.4.0
+  chucker_flutter: ^1.9.1
 
 
 dev_dependencies:

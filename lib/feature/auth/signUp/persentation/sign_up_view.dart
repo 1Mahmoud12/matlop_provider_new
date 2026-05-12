@@ -131,6 +131,14 @@ class _SignUpViewState extends State<SignUpView> {
                         orElse: () => apiCountries.first,
                       );
                       cubit.countryId = selectedCountry!.countryId;
+                      ConstantModel.technicalSpecialListModel = null;
+                      //
+                      // Ensure Constants.selectedCountryId aligns with the selectedCountry
+                      if (Constants.selectedCountryId != selectedCountry!.countryId) {
+                        Constants.selectedCountryId = selectedCountry!.countryId;
+                        Constants.myCountry = selectedCountry;
+                        userCache?.put(countryIdKey, selectedCountry!.countryId);
+                      }
                     }
 
                     final List<DropDownModel> cList = apiCountries.map((e) {
@@ -161,13 +169,18 @@ class _SignUpViewState extends State<SignUpView> {
                                   setState(() {
                                     if (country.value != selectedCountry!.countryId) {
                                       cubit.phoneController.clear();
+                                      
+                                      // Clear data related to previous country
+                                      cubit.clearTechnicalSpecial();
+                                      ConstantModel.technicalSpecialListModel = null;
+
+                                      selectedCountry = apiCountries
+                                          .firstWhere((c) => c.countryId == country.value);
+                                      cubit.countryId = selectedCountry!.countryId;
+                                      Constants.selectedCountryId = selectedCountry!.countryId;
+                                      Constants.myCountry = selectedCountry;
+                                      userCache?.put(countryIdKey, selectedCountry!.countryId);
                                     }
-                                    selectedCountry = apiCountries
-                                        .firstWhere((c) => c.countryId == country.value);
-                                    cubit.countryId = selectedCountry!.countryId;
-                                    Constants.selectedCountryId = selectedCountry!.countryId;
-                                    Constants.myCountry = selectedCountry;
-                                    userCache?.put(countryIdKey, selectedCountry!.countryId);
                                   });
                                 },
                               ),

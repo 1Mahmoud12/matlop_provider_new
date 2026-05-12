@@ -34,6 +34,7 @@ import 'core/themes/light.dart';
 import 'core/utils/bloc_observe.dart';
 import 'feature/auth/login/data/models/login_model.dart';
 import 'feature/menu/views/editProfile/data/models/profile_model.dart';
+import 'package:chucker_flutter/chucker_flutter.dart';
 
 Widget appStartScreen = const SplashScreenOne();
 final navigatorKey = GlobalKey<NavigatorState>();
@@ -188,6 +189,7 @@ class _MyAppState extends State<MyApp> {
           supportedLocales: context.supportedLocales,
           locale: context.locale,
           navigatorKey: navigatorKey,
+          navigatorObservers: [ChuckerFlutter.navigatorObserver],
 
           //locale: DevicePreview.locale(context),
           //builder: DevicePreview.appBuilder,

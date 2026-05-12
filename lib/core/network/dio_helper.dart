@@ -8,6 +8,7 @@ import 'package:matlop_provider/core/utils/constants.dart';
 import 'package:matlop_provider/core/utils/utils.dart';
 import 'package:matlop_provider/main.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+import 'package:chucker_flutter/chucker_flutter.dart';
 
 // ignore: avoid_classes_with_only_static_members
 class DioHelper {
@@ -30,6 +31,7 @@ class DioHelper {
       compact: true,
       maxWidth: 90,
     ));
+    dio!.interceptors.add(ChuckerDioInterceptor());
   }
 
   // get data ====>>>

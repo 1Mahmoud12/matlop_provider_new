@@ -79,8 +79,8 @@ rm -rf .symlinks
 pod install
 open .
 cd ..
-flutter build apk
-open build/app/outputs/flutter-apk/
+flutter build appbundle
+open build/app/outputs/bundle/release/
 ```
 
 

@@ -6,6 +6,8 @@ class EndPoints {
   static const baseUrl = '$domain/api';
   static const storageUrl = 'https://tashira.infinitybridge.org/storage/';
 
+  static const appVersion = '/app-versions';
+
   //Auth
   static const login = '/auth/technical-login';
   static const verifyOtp = '/Authentication/VerfiyOtp';

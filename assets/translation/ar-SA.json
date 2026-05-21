@@ -366,5 +366,9 @@
   "Select worker type": "اختر الجنسية",
   "Worker Type": "الجنسية",
   "Please select a worker type": "برجاء اختيار الجنسية",
-  "email": "البريد الإلكتروني"
+  "email": "البريد الإلكتروني",
+  "new_updates_are_available": "يوجد تحديثات جديدة",
+  "we_have_new_updates_for_our_app": "لدينا تحديثات جديدة للتطبيق",
+  "update_now": "تحديث الان",
+  "update_later": "تحديث لاحقا"
 }

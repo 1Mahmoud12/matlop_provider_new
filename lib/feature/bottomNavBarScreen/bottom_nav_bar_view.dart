@@ -8,6 +8,7 @@ import 'package:matlop_provider/core/utils/utils.dart';
 import 'package:matlop_provider/feature/bottomNavBarScreen/presentation/manager/cubit/bottom_nav_bar_cubit.dart';
 import 'package:matlop_provider/feature/bottomNavBarScreen/presentation/widgets/custom_bottom_nav_bar.dart';
 import 'package:matlop_provider/feature/order/presentation/manager/cubit/order_cubit.dart'; // Add this to exit the app
+import 'package:matlop_provider/core/utils/versionAndUpdateApp/alert_dialog_for_update_app.dart';
 
 class BottomNavBarView extends StatefulWidget {
   const BottomNavBarView({super.key, this.selectedIndex = 0});
@@ -28,6 +29,7 @@ class _BottomNavBarViewState extends State<BottomNavBarView> {
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) {
         userCache?.put(languageKey, context.locale.languageCode == 'ar');
+        checkVersion(context);
       },
     );
     super.initState();

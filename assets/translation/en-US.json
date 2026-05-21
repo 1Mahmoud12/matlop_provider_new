@@ -302,5 +302,9 @@
   "Worker Type": "Nationality",
   "Please select a worker type": "Please select a nationality",
   "email": "Email",
-  "Please enter your email": "Please enter your email"
+  "Please enter your email": "Please enter your email",
+  "new_updates_are_available": "New updates are available",
+  "we_have_new_updates_for_our_app": "We have new updates for our app",
+  "update_now": "Update Now",
+  "update_later": "Update Later"
 }

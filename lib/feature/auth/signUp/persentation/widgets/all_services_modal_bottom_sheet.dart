@@ -8,21 +8,21 @@ import 'package:matlop_provider/core/utils/server_error_widget.dart';
 import 'package:matlop_provider/core/component/buttons/custom_text_button.dart';
 import 'package:matlop_provider/feature/auth/signUp/persentation/manager/register_cubit.dart';
 
-class SelectTechnicalSpecialListBottomSheet extends StatefulWidget {
+class SelectServicesBottomSheet extends StatefulWidget {
   final RegisterCubit registerCubit;
 
-  const SelectTechnicalSpecialListBottomSheet({super.key, required this.registerCubit});
+  const SelectServicesBottomSheet({super.key, required this.registerCubit});
 
   @override
-  State<SelectTechnicalSpecialListBottomSheet> createState() => _SelectTechnicalSpecialListBottomSheetState();
+  State<SelectServicesBottomSheet> createState() => _SelectServicesBottomSheetState();
 }
 
-class _SelectTechnicalSpecialListBottomSheetState extends State<SelectTechnicalSpecialListBottomSheet> {
+class _SelectServicesBottomSheetState extends State<SelectServicesBottomSheet> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) {
-        widget.registerCubit.getAllTechnicalSpecial(context: context);
+        widget.registerCubit.getAllServices(context: context);
       },
     );
     super.initState();
@@ -50,28 +50,24 @@ class _SelectTechnicalSpecialListBottomSheetState extends State<SelectTechnicalS
                 ? const LoadingWidget()
                 : state is GetAllTechnicalSpecialListSuccess || state is AddTechnicalState
                     ? Column(
-                        // ← Column, NOT SingleChildScrollView
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          // ── Fixed header ──────────────────────────────
                           Text(
-                            'Select your technical special'.tr(),
+                            'Select services'.tr(),
                             style: Theme.of(context).textTheme.bodyLarge,
                           ),
                           const SizedBox(height: 20),
-
-                          // ── Scrollable list only ──────────────────────
                           Flexible(
                             child: SingleChildScrollView(
                               child: Column(
                                 children: [
-                                  if (ConstantModel.technicalSpecialListModel?.data?.isEmpty ?? true)
+                                  if (ConstantModel.servicesListModel?.data?.isEmpty ?? true)
                                     Padding(
                                       padding: const EdgeInsets.only(top: 40),
                                       child: Center(
                                         child: Text(
-                                          'There is technical special'.tr(),
+                                          'No services found'.tr(),
                                           style: Theme.of(context).textTheme.bodyLarge,
                                         ),
                                       ),
@@ -79,21 +75,21 @@ class _SelectTechnicalSpecialListBottomSheetState extends State<SelectTechnicalS
                                   else
                                     Column(
                                       children: List.generate(
-                                        ConstantModel.technicalSpecialListModel?.data?.length ?? 0,
+                                        ConstantModel.servicesListModel?.data?.length ?? 0,
                                         (index) {
-                                          final item = ConstantModel.technicalSpecialListModel?.data?[index];
+                                          final item = ConstantModel.servicesListModel?.data?[index];
                                           if (item == null) return const SizedBox.shrink();
-                                          final isSelected = widget.registerCubit.selectedTechnicalSpecialist?.technicalSpecialistId == item.technicalSpecialistId;
+                                          final isSelected =
+                                              widget.registerCubit.selectedServices.any((e) => e.technicalSpecialistId == item.technicalSpecialistId);
                                           bool isAr = context.locale.languageCode == 'ar';
-                                          return RadioListTile<int?>(
-                                            value: item.technicalSpecialistId,
-                                            groupValue: widget.registerCubit.selectedTechnicalSpecialist?.technicalSpecialistId,
+                                          return CheckboxListTile(
+                                            value: isSelected,
                                             title: Text(
                                                 isAr ? (item.arName ?? Constants.unKnownValue) : (item.enName ?? Constants.unKnownValue)),
                                             onChanged: (value) {
-                                              widget.registerCubit.selectTechnicalSpecialist(technical: item, context: context);
-                                              Navigator.pop(context); // Auto-close on single selection
+                                              widget.registerCubit.toggleService(service: item, context: context);
                                             },
+                                            controlAffinity: ListTileControlAffinity.leading,
                                             activeColor: Theme.of(context).primaryColor,
                                             contentPadding: EdgeInsets.zero,
                                           );
@@ -104,8 +100,18 @@ class _SelectTechnicalSpecialListBottomSheetState extends State<SelectTechnicalS
                               ),
                             ),
                           ),
-
-                          // Removed fixed done button since auto-close on selection
+                          const SizedBox(height: 20),
+                          Center(
+                            child: CustomTextButton(
+                              gradientColors: true,
+                              stops: const [0.5, 1],
+                              onPress: () => Navigator.pop(context),
+                              child: Text(
+                                'Done'.tr(),
+                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white),
+                              ),
+                            ),
+                          ),
                         ],
                       )
                     : state is GetAllTechnicalSpecialListError

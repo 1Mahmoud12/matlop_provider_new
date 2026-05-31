@@ -6,8 +6,9 @@ class SingUpParameters {
   final String phone;
   final int genderId;
   final int technicalTypeEnum;
+  final int? technicalSpecialistId;
   final List<int> technicalServiceIds;
-  final int workerTypeId;
+  final int? workerTypeId;
 
   SingUpParameters({
     required this.fullName,
@@ -16,8 +17,9 @@ class SingUpParameters {
     required this.password,
     required this.phone,
     required this.technicalTypeEnum,
+    required this.technicalSpecialistId,
     required this.technicalServiceIds,
-    required this.workerTypeId,
+    this.workerTypeId,
     this.genderId = 1,
   });
 
@@ -30,6 +32,7 @@ class SingUpParameters {
       'mobileNumber': '0$phone',
       'genderId': genderId,
       'roleType': technicalTypeEnum,
+      'technicalSpecialistId': technicalSpecialistId ?? 0,
       'technicalServiceIds': technicalServiceIds,
       'workerTypeId': workerTypeId,
     };

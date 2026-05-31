@@ -367,8 +367,17 @@
   "Worker Type": "الجنسية",
   "Please select a worker type": "برجاء اختيار الجنسية",
   "email": "البريد الإلكتروني",
+  "Done": "تم",
   "new_updates_are_available": "يوجد تحديثات جديدة",
   "we_have_new_updates_for_our_app": "لدينا تحديثات جديدة للتطبيق",
   "update_now": "تحديث الان",
-  "update_later": "تحديث لاحقا"
+  "update_later": "تحديث لاحقا",
+  "reset_password_success_body": "تم إعادة تعيين كلمة المرور بنجاح، يمكنك تسجيل الدخول الآن",
+  "passwords_not_match": "كلمات المرور غير متطابقة",
+  "Please reset your password": "برجاء إعادة تعيين كلمة المرور",
+  "Password must be at least 6 characters": "يجب أن تكون كلمة المرور 6 أحرف على الأقل",
+  "Select services": "اختر الخدمات",
+  "Dont worry This happens Please enter your phone number linked to your account": "لا تقلق! هذا يحدث. برجاء إدخال رقم هاتفك المرتبط بحسابك",
+  "Passwords do not match": "كلمات المرور غير متطابقة",
+  "Please enter complete OTP code": "برجاء إدخال كود التحقق كاملاً"
 }

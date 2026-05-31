@@ -33,5 +33,6 @@ class ConstantModel {
   static SpecialOrdersModel? offersModel;
   static DetailsSpecialOrderModel? detailsSpecialOrderModel;
   static TechnicalSpecialListModel? technicalSpecialListModel;
+  static TechnicalSpecialListModel? servicesListModel;
   static FireNotificationModel? notificationModel;
 }

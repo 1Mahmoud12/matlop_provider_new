@@ -15,6 +15,8 @@ abstract class RegisterDataSource {
   Future<Either<Failure, LoginModel>> register({required SingUpParameters params});
 
   Future<Either<Failure, TechnicalSpecialListModel>> getAllTechnicalSpecialList();
+  
+  Future<Either<Failure, TechnicalSpecialListModel>> getAllServices();
 
   Future<Either<Failure, WorkerTypeModel>> getAllWorkerTypes();
 }
@@ -36,6 +38,13 @@ class RegisterDataSourceImpl implements RegisterDataSource {
     } catch (error) {
       if (error is DioException) {
         log('Error: ${error.message}');
+        if (error.response?.statusCode == 400 && error.response?.data != null) {
+          final responseData = error.response!.data;
+          final domainError = responseData['domainError'];
+          if (domainError != null && domainError['code'] == 'Technical.PendingActivation') {
+            return right(LoginModel.fromJson(responseData));
+          }
+        }
         return left(ServerFailure.fromDioException(error));
       }
       log('Error: $error');
@@ -50,8 +59,30 @@ class RegisterDataSourceImpl implements RegisterDataSource {
         url: EndPoints.getAllTechnicalSpecialist,
       );
 
-      if (response.data['code'] == 1) {
-        return left(ServerFailure(response.data['message']));
+      if (response.data['isSuccess'] == false) {
+        return left(ServerFailure(response.data['message'] ?? 'Error'));
+      }
+
+      return right(TechnicalSpecialListModel.fromJson(response.data));
+    } catch (error) {
+      if (error is DioException) {
+        log('Error: ${error.message}');
+        return left(ServerFailure.fromDioException(error));
+      }
+      log('Error: $error');
+      return left(ServerFailure(error.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, TechnicalSpecialListModel>> getAllServices() async {
+    try {
+      final response = await DioHelper.getData(
+        url: EndPoints.getAllServices,
+      );
+
+      if (response.data['isSuccess'] == false) {
+        return left(ServerFailure(response.data['message'] ?? 'Error'));
       }
 
       return right(TechnicalSpecialListModel.fromJson(response.data));

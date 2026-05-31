@@ -50,8 +50,8 @@ class RegisterCubit extends Cubit<RegisterState> {
     emit(GetWorkerTypesLoading());
     registerDataSource.getAllWorkerTypes().then((value) {
       value.fold(
-            (l) => emit(GetWorkerTypesError(e: l.errMessage)),
-            (r) {
+        (l) => emit(GetWorkerTypesError(e: l.errMessage)),
+        (r) {
           workerTypes = r.data?.where((e) => e.isActive == true).toList() ?? [];
           if (workerTypes.isNotEmpty) selectedWorkerType = workerTypes.first;
           emit(GetWorkerTypesSuccess());
@@ -73,30 +73,40 @@ class RegisterCubit extends Cubit<RegisterState> {
         phone: phoneController.text,
         // countryId: countryId,
         technicalTypeEnum: technicalTypeEnum == TechType.technical ? 3 : 9,
-        technicalServiceIds: selectedTechnicals.map((e) => e.serviceId ?? 0).toList(),
+        technicalSpecialistId: selectedTechnicalSpecialist?.technicalSpecialistId,
+        technicalServiceIds: selectedServices.map((e) => e.technicalSpecialistId ?? 0).toList(),
         genderId: selectedGender.id,
-        workerTypeId: selectedWorkerType?.id ?? 0,
+        workerTypeId: selectedWorkerType?.id,
       ),
     )
         .then(
-          (value) async {
+      (value) async {
         value.fold(
-              (l) {
+          (l) {
             Utils.showToast(title: l.errMessage, state: UtilState.error);
             emit(RegisterError(e: l.errMessage));
           },
-              (r) async {
+          (r) async {
             log('Success Registration');
+            String successMessage = 'Register success, you can log in now'.tr();
+            if (r.error != null && r.error!.isNotEmpty) {
+              successMessage = r.error!;
+            } else if (r.message != null && r.message!.isNotEmpty) {
+              successMessage = r.message!;
+            }
+
             Utils.showToast(
-              title: 'Register success, you can log in now'.tr(),
+              title: successMessage,
               state: UtilState.success,
             );
-            context.navigateToPage(
-              BlocProvider(
-                create: (context) => LoginCubit(),
-                child: const LoginView(),
-              ),
-            );
+            if (context.mounted) {
+              context.navigateToPage(
+                BlocProvider(
+                  create: (context) => LoginCubit(),
+                  child: const LoginView(),
+                ),
+              );
+            }
             emit(RegisterSuccess());
           },
         );
@@ -107,10 +117,10 @@ class RegisterCubit extends Cubit<RegisterState> {
   void getAllTechnicalSpecial({required BuildContext context}) {
     emit(GetAllTechnicalSpecialListLoading());
     registerDataSource.getAllTechnicalSpecialList().then(
-          (value) async {
+      (value) async {
         value.fold(
-              (l) => emit(GetAllTechnicalSpecialListError(e: l.errMessage)),
-              (r) async {
+          (l) => emit(GetAllTechnicalSpecialListError(e: l.errMessage)),
+          (r) async {
             ConstantModel.technicalSpecialListModel = r;
             emit(GetAllTechnicalSpecialListSuccess());
           },
@@ -119,23 +129,56 @@ class RegisterCubit extends Cubit<RegisterState> {
     );
   }
 
-  List<ItemTechnicalSpecialListModel> selectedTechnicals = [];
-  TextEditingController nameController = TextEditingController();
+  void getAllServices({required BuildContext context}) {
+    emit(GetAllTechnicalSpecialListLoading());
+    registerDataSource.getAllServices().then(
+      (value) async {
+        value.fold(
+          (l) => emit(GetAllTechnicalSpecialListError(e: l.errMessage)),
+          (r) async {
+            ConstantModel.servicesListModel = r;
+            emit(GetAllTechnicalSpecialListSuccess());
+          },
+        );
+      },
+    );
+  }
 
-  toggleTechnicalSpecial({required ItemTechnicalSpecialListModel technical, required BuildContext context}) {
-    if (selectedTechnicals.any((e) => e.serviceId == technical.serviceId)) {
-      selectedTechnicals.removeWhere((e) => e.serviceId == technical.serviceId);
-    } else {
-      selectedTechnicals.add(technical);
-    }
+  // --- Single Selection for Technical Specialist ---
+  ItemTechnicalSpecialListModel? selectedTechnicalSpecialist;
+  TextEditingController technicalSpecialistController = TextEditingController();
+
+  void selectTechnicalSpecialist({required ItemTechnicalSpecialListModel technical, required BuildContext context}) {
+    selectedTechnicalSpecialist = technical;
     bool isAr = context.locale.languageCode == 'ar';
-    nameController.text = selectedTechnicals.map((e) => isAr ? (e.arName ?? "") : (e.enName ?? "")).join(', ');
+    technicalSpecialistController.text = isAr ? (technical.arName ?? "") : (technical.enName ?? "");
     emit(AddTechnicalState());
   }
 
-  void clearTechnicalSpecial() {
-    selectedTechnicals.clear();
-    nameController.clear();
+  void clearTechnicalSpecialist() {
+    selectedTechnicalSpecialist = null;
+    technicalSpecialistController.clear();
+    emit(AddTechnicalState());
+  }
+
+  // --- Multiple Selection for Services ---
+  List<ItemTechnicalSpecialListModel> selectedServices = [];
+  TextEditingController servicesController = TextEditingController();
+
+  void toggleService({required ItemTechnicalSpecialListModel service, required BuildContext context}) {
+    if (selectedServices.any((e) => e.technicalSpecialistId == service.technicalSpecialistId)) {
+      selectedServices.removeWhere((e) => e.technicalSpecialistId == service.technicalSpecialistId);
+    } else {
+      selectedServices.add(service);
+    }
+    bool isAr = context.locale.languageCode == 'ar';
+    servicesController.text = selectedServices.map((e) => isAr ? (e.arName ?? "") : (e.enName ?? "")).join(', ');
+    emit(AddTechnicalState());
+  }
+
+  void clearServices() {
+    selectedServices.clear();
+    servicesController.clear();
     emit(AddTechnicalState());
   }
 }

@@ -49,7 +49,7 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
                 height: 10,
               ),
               Text(
-                'Please enter your phone number to reset your password'.tr(),
+                'Dont worry This happens Please enter your phone number linked to your account'.tr(),
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.textColor),
               ),
               const SizedBox(

@@ -26,7 +26,8 @@ class EndPoints {
   static const technicalProfile = '/technicals/profile';
 
   static const register = '/technicals/mobile-register';
-  static const getAllTechnicalSpecialist = '/services';
+  static const getAllTechnicalSpecialist = '/technical-specialists';
+  static const getAllServices = '/services';
   static const editProfile = '/client/edit-profile';
 
   // Home

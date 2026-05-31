@@ -17,6 +17,7 @@ import 'package:matlop_provider/feature/auth/login/presentation/manager/cubit/lo
 import 'package:matlop_provider/feature/auth/signUp/persentation/manager/register_cubit.dart';
 import 'package:matlop_provider/feature/auth/signUp/persentation/widgets/account_action_text.dart';
 import 'package:matlop_provider/feature/auth/signUp/persentation/widgets/technical_widget.dart';
+import 'package:matlop_provider/feature/auth/signUp/persentation/widgets/services_widget.dart';
 import 'package:matlop_provider/core/utils/constant_model.dart';
 import 'package:matlop_provider/core/network/local/cache.dart';
 import 'package:matlop_provider/feature/addNewAddress/data/models/country_model.dart' as add_new_address_country;
@@ -171,8 +172,10 @@ class _SignUpViewState extends State<SignUpView> {
                                       cubit.phoneController.clear();
                                       
                                       // Clear data related to previous country
-                                      cubit.clearTechnicalSpecial();
+                                      cubit.clearTechnicalSpecialist();
+                                      cubit.clearServices();
                                       ConstantModel.technicalSpecialListModel = null;
+                                      ConstantModel.servicesListModel = null;
 
                                       selectedCountry = apiCountries
                                           .firstWhere((c) => c.countryId == country.value);
@@ -280,6 +283,10 @@ class _SignUpViewState extends State<SignUpView> {
                 AddAdditionalItems(registerCubit: cubit),
                 const SizedBox(height: 20),
 
+                // ── Services ──────────────────────────────────────────
+                ServicesWidget(registerCubit: cubit),
+                const SizedBox(height: 20),
+
                 // ── Password ──────────────────────────────────────────
                 CustomTextFormField(
                   labelStringText: 'Password'.tr(),
@@ -327,13 +334,6 @@ class _SignUpViewState extends State<SignUpView> {
                       onPress: () {
                         if (state is RegisterLoading) return;
                         if (!formKey.currentState!.validate()) return;
-                        if (cubit.selectedWorkerType == null) {
-                          Utils.showToast(
-                            title: 'Please select a worker type'.tr(),
-                            state: UtilState.warning,
-                          );
-                          return;
-                        }
                         if (cubit.passwordController.text.isNotEmpty &&
                             cubit.passwordController.text !=
                                 cubit.confirmPasswordController.text) {

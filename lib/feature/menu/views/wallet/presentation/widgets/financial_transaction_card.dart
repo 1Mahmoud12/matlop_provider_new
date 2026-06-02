@@ -9,6 +9,8 @@ import 'package:matlop_provider/core/utils/app_icons.dart';
 import 'package:matlop_provider/core/utils/constants_enum.dart';
 import 'package:matlop_provider/feature/menu/views/wallet/data/model/transactions_model.dart';
 
+import '../../../../../../core/utils/utils.dart';
+
 class FinancialTransactionCard extends StatelessWidget {
   const FinancialTransactionCard({
     super.key,
@@ -92,7 +94,7 @@ class FinancialTransactionCard extends StatelessWidget {
                         Theme.of(context).textTheme.titleMedium!.copyWith(color: AppColors.cNewAmount, fontWeight: FontWeight.w700, fontSize: 16.sp),
                   ),
                   Text(
-                    ' ${'SAR'.tr()}',
+                    ' ${Utils.getLocalizedCurrencyLabel()}',
                     style: Theme.of(context).textTheme.bodySmall!.copyWith(color: AppColors.cNewAmount, fontWeight: FontWeight.w400, fontSize: 12.sp),
                   ),
                 ],

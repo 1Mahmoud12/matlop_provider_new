@@ -1,5 +1,6 @@
 import 'package:matlop_provider/feature/addNewAddress/data/models/city_model.dart';
 import 'package:matlop_provider/feature/addNewAddress/data/models/country_model.dart';
+import 'package:matlop_provider/feature/addNewAddress/data/models/currency_model.dart';
 import 'package:matlop_provider/feature/addNewAddress/data/models/districts_model.dart';
 import 'package:matlop_provider/feature/auth/signUp/data/technical_special_list_model.dart';
 import 'package:matlop_provider/feature/menu/views/commonQuestions/data/models/common_question_model.dart';
@@ -23,6 +24,7 @@ class ConstantModel {
   static ProfileModel? profileModel;
   static CityModel? cityModel;
   static CountryModel? countryModel;
+  static CurrencyModel? currencyModel;
   static DistrictModel? districtModel;
   static MyAddressModel? myAddressModel;
   static OrderDetailsModel? orderDetailsModel;

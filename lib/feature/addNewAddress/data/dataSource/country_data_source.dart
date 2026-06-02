@@ -5,6 +5,7 @@ import 'package:matlop_provider/core/network/dio_helper.dart';
 import 'package:matlop_provider/core/network/end_points.dart';
 import 'package:matlop_provider/core/network/errors/failures.dart';
 import 'package:matlop_provider/feature/addNewAddress/data/models/country_model.dart';
+import 'package:matlop_provider/feature/addNewAddress/data/models/currency_model.dart';
 import 'package:matlop_provider/main.dart';
 
 class CountryDataSource {
@@ -18,6 +19,19 @@ class CountryDataSource {
         if ('${e.response != null && e.response?.data != null && e.response?.data['code']}' == '1') {
           return right(CountryModel.fromJson(e.response?.data));
         }
+        return left(ServerFailure.fromDioException(e));
+      }
+      return left(ServerFailure(e.toString()));
+    }
+  }
+
+  static Future<Either<Failure, CurrencyModel>> getAllCurrency({required BuildContext context}) async {
+    try {
+      final response = await DioHelper.getData(url: EndPoints.getCurrency, context: context);
+      return right(CurrencyModel.fromJson(response.data));
+    } catch (e) {
+      logger.e('error in getAllCurrency $e ');
+      if (e is DioException) {
         return left(ServerFailure.fromDioException(e));
       }
       return left(ServerFailure(e.toString()));

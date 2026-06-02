@@ -92,7 +92,7 @@ class _PlanDetailsOrderDetailsState extends State<PlanDetailsOrderDetails> {
           PlanDetailsContent(
             icon: AppIcons.mainSection,
             text: 'Package price:'.tr(),
-            value: '${Utils.convertNumberToArabic(widget.orderData.package?.price?.toString() ?? '')} ${'SAR'.tr()}',
+            value: '${Utils.convertNumberToArabic(widget.orderData.package?.price?.toString() ?? '')} ${Utils.getLocalizedCurrencyLabel()}',
           ),
           const CustomDividerWidget(),
           PlanDetailsContent(
@@ -163,7 +163,7 @@ class _PlanDetailsOrderDetailsState extends State<PlanDetailsOrderDetails> {
                       ),
                     ),
                     Text(
-                      '${Utils.convertNumberToArabic(equipment.price?.toString() ?? '0')} ${'SAR'.tr()}',
+                      '${Utils.convertNumberToArabic(equipment.price?.toString() ?? '0')} ${Utils.getLocalizedCurrencyLabel()}',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             // color: AppColors.primaryColor,
                             fontWeight: FontWeight.w600,

@@ -93,7 +93,7 @@ class _NewTransactionState extends State<NewTransaction> {
                             width: 10,
                           ),
                           Text(
-                            'SAR'.tr(),
+                            Utils.getLocalizedCurrencyLabel(),
                             style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Colors.white.withOpacity(0.7)),
                           ),
                         ],

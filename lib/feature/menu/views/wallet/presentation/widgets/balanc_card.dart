@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:matlop_provider/core/utils/app_images.dart';
 
+import '../../../../../../core/utils/utils.dart';
+
 class BalanceCard extends StatelessWidget {
   const BalanceCard({
     super.key,
@@ -54,7 +56,7 @@ class BalanceCard extends StatelessWidget {
                         width: 10,
                       ),
                       Text(
-                        'SAR'.tr(), // Added .tr() for localization
+                        Utils.getLocalizedCurrencyLabel(), // Added .tr() for localization
                         style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Colors.white.withOpacity(0.7)),
                       ),
                     ],

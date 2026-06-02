@@ -20,12 +20,32 @@ class PriceAndOrderDescription extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Text(
-              '#${itemSpecialOrder.specialOrderId ?? Constants.unKnownValue}',
-              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    color: AppColors.textColor,
-                    fontWeight: FontWeight.bold,
+            Expanded(
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      '#${itemSpecialOrder.specialOrderId ?? Constants.unKnownValue}',
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            color: AppColors.textColor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
                   ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryColor.withOpacity(0.15),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      itemSpecialOrder.specialOrderName ?? Constants.unKnownValue,
+                      style: Theme.of(context).textTheme.bodySmall!.copyWith(color: AppColors.primaryColor),
+                      textAlign: TextAlign.center,
+                    ),
+                  )
+                ],
+              ),
             ),
             // const SizedBox(
             //   width: 3,
@@ -55,7 +75,7 @@ class PriceAndOrderDescription extends StatelessWidget {
           style: Theme.of(context).textTheme.bodySmall!.copyWith(
                 color: AppColors.textColor,
               ),
-          maxLines: 1,
+          maxLines: 2,
           overflow: TextOverflow.ellipsis,
         )
       ],

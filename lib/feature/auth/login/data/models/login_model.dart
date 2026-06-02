@@ -56,7 +56,7 @@ class LoginResponseData {
   int? get userId => profile?.userId;
   String? get mobileNumber => profile?.mobileNumber;
   String? get name => profile?.fullName ?? profile?.firstName ?? profile?.userName;
-  String? get imgSrc => profile?.imgSrc != null && profile!.imgSrc!.isNotEmpty ? '${EndPoints.domain}${profile!.imgSrc!}' : Constants.unKnownValue;
+  String? get imgSrc => profile?.imgSrc != null && profile!.imgSrc!.isNotEmpty ? profile!.imgSrc! : Constants.unKnownValue;
 
   LoginResponseData({
     this.profile,

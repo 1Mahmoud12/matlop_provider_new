@@ -51,22 +51,7 @@ class SpecialOrderCard extends StatelessWidget {
                     child: PriceAndOrderDescription(
                       itemSpecialOrder: itemSpecialOrder,
                     )),
-                const Spacer(),
-                Expanded(
-                  flex: 2,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryColor.withOpacity(0.15),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Text(
-                      itemSpecialOrder.specialOrderName ?? Constants.unKnownValue,
-                      style: Theme.of(context).textTheme.bodySmall!.copyWith(color: AppColors.primaryColor),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
+                // const Spacer(),
               ],
             ),
             const SizedBox(
@@ -89,11 +74,11 @@ class SpecialOrderCard extends StatelessWidget {
                         width: 60,
                         height: 60,
                         child: SmallChewieDemo(
-                          video: '${EndPoints.domain}${itemSpecialOrder.media?[index].src}',
+                          video: '${itemSpecialOrder.media?[index].src}',
                         ),
                       )
                     : CacheImage(
-                        imageUrl: '${EndPoints.domain}${itemSpecialOrder.media![index].src}',
+                        imageUrl: '${itemSpecialOrder.media![index].src}',
                         width: 60,
                         height: 60,
                       );

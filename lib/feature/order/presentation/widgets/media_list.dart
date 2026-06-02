@@ -31,13 +31,13 @@ class MediaList extends StatelessWidget {
                 if (mediaList[index].mediaTypeEnum == MediaTypeEnum.Video.index) {
                   context.navigateToPage(
                     ChewieDemo(
-                      video: '${EndPoints.domain}${mediaList[index].src}',
+                      video: '${mediaList[index].src}',
                     ),
                   );
                 } else {
                   context.navigateToPage(
                     PreviewPage(
-                      pictureUrl: '${EndPoints.domain}${mediaList[index].src}',
+                      pictureUrl: '${mediaList[index].src}',
                     ),
                   );
                 }
@@ -51,10 +51,10 @@ class MediaList extends StatelessWidget {
                     width: 60,
                     child: mediaList[index].mediaTypeEnum == MediaTypeEnum.Video.index
                         ? SmallChewieDemo(
-                            video: '${EndPoints.domain}${mediaList[index].src}',
+                            video: '${mediaList[index].src}',
                           )
                         : CachedNetworkImage(
-                            imageUrl: '${EndPoints.domain}${mediaList[index].src}',
+                            imageUrl: '${mediaList[index].src}',
                             placeholder: (context, url) => Image.asset(AppImages.loadingIndicator),
                             errorWidget: (context, url, error) => Container(
                               color: Colors.grey.withOpacity(0.2),

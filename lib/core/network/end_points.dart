@@ -86,6 +86,7 @@ class EndPoints {
   static const getContracts = '/ContractType/GetByServiceId';
   static const getPackagesByContractId = '/Package/GetPackageByContractId';
   static const GetCountry = '/countries';
+  static const getCurrency = '/Currency';
   static const getDistricts = '/District/GetByCityId?CityId=';
   static const getCitiesById = '/City/GetByCountryId/';
   static const postLocation = '/Location/Create';

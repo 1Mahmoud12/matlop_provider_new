@@ -11,6 +11,8 @@ import 'package:matlop_provider/core/component/sharred_divider.dart';
 import 'package:matlop_provider/core/themes/colors.dart';
 import 'package:matlop_provider/core/themes/styles.dart';
 import 'package:matlop_provider/core/utils/constants.dart';
+import 'package:matlop_provider/core/utils/constant_model.dart';
+import 'package:matlop_provider/main.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 enum UtilState {
@@ -21,6 +23,40 @@ enum UtilState {
 }
 
 class Utils {
+  static String getLocalizedCurrencyLabel() {
+    final currencies = ConstantModel.currencyModel?.data ?? [];
+    final selectedCountryId = Constants.selectedCountryId;
+
+    int effectiveCurrencyId = Constants.myCountry?.currencyId ?? 1;
+
+    if (selectedCountryId != null) {
+      final countries = ConstantModel.countryModel?.data ?? [];
+      if (countries.isNotEmpty) {
+        final currentCountry = countries.firstWhere(
+          (c) => c.countryId == selectedCountryId,
+          orElse: () => countries.first,
+        );
+        if (currentCountry.currencyId != null) {
+          effectiveCurrencyId = currentCountry.currencyId!;
+        }
+      }
+    }
+
+    final context = navigatorKey.currentContext;
+    final isArabic = context == null || context.locale.languageCode == 'ar';
+
+    if (currencies.isNotEmpty) {
+      final currency = currencies.firstWhere(
+        (c) => c.currencyId == effectiveCurrencyId,
+        orElse: () => currencies.first,
+      );
+
+      return isArabic ? (currency.arName ?? 'ر.س') : (currency.enName ?? 'SAR');
+    }
+
+    return isArabic ? 'ر.س' : 'SAR';
+  }
+
   static const boxShadow = BoxShadow(
     blurRadius: 35,
     offset: Offset(0, 9),

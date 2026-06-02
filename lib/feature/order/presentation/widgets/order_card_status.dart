@@ -7,6 +7,8 @@ import 'package:matlop_provider/core/utils/navigate.dart';
 import 'package:matlop_provider/feature/order/data/models/order_model.dart';
 import 'package:matlop_provider/feature/order/presentation/widgets/order_details_view.dart';
 
+import '../../../../core/utils/utils.dart';
+
 class OrderCardWithStatus extends StatefulWidget {
   final OrderData orderData;
 
@@ -79,7 +81,7 @@ class _OrderCardWithStatusState extends State<OrderCardWithStatus> {
             Row(
               children: [
                 Text(
-                  '${widget.orderData.package?.price} ${'SAR'.tr()} ',
+                  '${widget.orderData.package?.price} ${Utils.getLocalizedCurrencyLabel()} ',
                   // '200 ${'SAR'.tr()} ',
                   style: Theme.of(context).textTheme.titleMedium,
                 ),

@@ -26,21 +26,21 @@ class OrderBillingDetailsWidget extends StatelessWidget {
           PlanDetailsContent(
             icon: AppIcons.mainSection,
             text: 'Subtotal:'.tr(),
-            value: '${Utils.convertNumberToArabic(orderData.orderSubTotal?.toString() ?? '0')} ${'SAR'.tr()}',
+            value: '${Utils.convertNumberToArabic(orderData.orderSubTotal?.toString() ?? '0')} ${Utils.getLocalizedCurrencyLabel()}',
           ),
           if ((orderData.taxAmount ?? 0) > 0) ...[
             const CustomDividerWidget(),
             PlanDetailsContent(
               icon: AppIcons.mainSection,
               text: '${'Tax'.tr()} (${Utils.convertNumberToArabic(orderData.taxPercentageSnapshot?.toString() ?? '0')}%):',
-              value: '${Utils.convertNumberToArabic(orderData.taxAmount?.toString() ?? '0')} ${'SAR'.tr()}',
+              value: '${Utils.convertNumberToArabic(orderData.taxAmount?.toString() ?? '0')} ${Utils.getLocalizedCurrencyLabel()}',
             ),
           ],
           const CustomDividerWidget(),
           PlanDetailsContent(
             icon: AppIcons.card,
             text: 'Order Total:'.tr(),
-            value: '${Utils.convertNumberToArabic(orderData.orderTotal?.toString() ?? '0')} ${'SAR'.tr()}',
+            value: '${Utils.convertNumberToArabic(orderData.orderTotal?.toString() ?? '0')} ${Utils.getLocalizedCurrencyLabel()}',
           ),
         ],
       ),

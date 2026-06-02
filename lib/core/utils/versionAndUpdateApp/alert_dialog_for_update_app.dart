@@ -40,9 +40,7 @@ void checkVersion(BuildContext context) async {
 
         if (shouldUpdate || needsForceUpdate) {
           final packageInfo = await PackageInfo.fromPlatform();
-          final storeUrl = platformInfo.storeUrl.isNotEmpty
-              ? platformInfo.storeUrl
-              : (Platform.isAndroid
+          final storeUrl =  (Platform.isAndroid
                   ? 'https://play.google.com/store/apps/details?id=${packageInfo.packageName}'
                   : 'https://apps.apple.com/app/id${packageInfo.packageName}');
           if (context.mounted) {

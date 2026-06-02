@@ -90,8 +90,9 @@ class _LoginViewState extends State<LoginView> {
 
                       final List<DropDownModel> cList = apiCountries.map((e) {
                         return DropDownModel(
-                          '${e.phoneCode}',
+                          '+${e.phoneCode}',
                           e.countryId,
+                          image: e.img,
                         );
                       }).toList();
 
@@ -107,9 +108,10 @@ class _LoginViewState extends State<LoginView> {
                           children: [
                             if (selectedCountry != null)
                               SizedBox(
-                                width: 110,
+                                width: 135,
                                 child: CustomDropdownWithModel(
-                                  text: '${selectedCountry!.phoneCode}',
+                                  text: '+${selectedCountry!.phoneCode}',
+                                  image: selectedCountry!.img,
                                   itemList: cList,
                                   textStyle: Theme.of(context).textTheme.titleMedium!.copyWith(fontSize: 14),
                                   onItemSelected: (DropDownModel country) {

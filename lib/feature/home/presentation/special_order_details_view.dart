@@ -19,6 +19,7 @@ import 'package:matlop_provider/core/utils/navigate.dart';
 import 'package:matlop_provider/feature/chat/presentation/messages_screen.dart';
 import 'package:matlop_provider/feature/home/presentation/widgets/dialog_offer.dart';
 import 'package:matlop_provider/feature/home/presentation/widgets/special_order_plan_details.dart';
+import 'package:matlop_provider/feature/home/presentation/widgets/special_order_image_widget.dart';
 import 'package:matlop_provider/feature/order/presentation/manager/detailsSpecialrderCubit/details_special_order_cubit.dart';
 import 'package:matlop_provider/feature/order/presentation/manager/offersCubit/offers_order_cubit.dart';
 import 'package:matlop_provider/feature/order/presentation/widgets/custom_stepper_widget.dart';
@@ -106,74 +107,7 @@ class _OrderDetailsViewState extends State<SpecialOrderDetailsView> {
                           if (ConstantModel.detailsSpecialOrderModel!.data!.specialOrderStatus!.toInt() < 7)
                             CustomStepper(selectedStatus: ConstantModel.detailsSpecialOrderModel!.data!.specialOrderStatus!.toInt()),
                           const SizedBox(height: 20),
-                          Text(
-                            'Order Image'.tr(),
-                            style: Theme.of(context).textTheme.bodyLarge,
-                          ),
-                          const SizedBox(height: 15),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.grey.withOpacity(0.15),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: DottedBorder(
-                              options: RectDottedBorderOptions(
-                                color: Colors.grey.withOpacity(0.4),
-                                padding: const EdgeInsets.all(6),
-                              ),
-                              child: SizedBox(
-                                height: 60,
-                                width: MediaQuery.sizeOf(context).width,
-                                child: SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: Row(
-                                    children: List.generate(ConstantModel.detailsSpecialOrderModel!.data!.media?.length ?? 0, (index) {
-                                      return InkWell(
-                                        onTap: () {
-                                          if (ConstantModel.detailsSpecialOrderModel!.data!.media?[index].mediaTypeEnum ==
-                                              MediaTypeEnum.Video.index) {
-                                            context.navigateToPage(
-                                              ChewieDemo(
-                                                video: '${EndPoints.domain}${ConstantModel.detailsSpecialOrderModel!.data!.media?[index].src}',
-                                              ),
-                                            );
-                                          } else {
-                                            context.navigateToPage(
-                                              PreviewPage(
-                                                pictureUrl: '${EndPoints.domain}${ConstantModel.detailsSpecialOrderModel!.data!.media?[index].src}',
-                                              ),
-                                            );
-                                          }
-                                        },
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(right: 5),
-                                          child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(10),
-                                            child: SizedBox(
-                                              height: 60,
-                                              width: 60,
-                                              child: ConstantModel.detailsSpecialOrderModel!.data!.media?[index].mediaTypeEnum ==
-                                                      MediaTypeEnum.Video.index
-                                                  ? SmallChewieDemo(
-                                                      video: '${EndPoints.domain}${ConstantModel.detailsSpecialOrderModel!.data!.media?[index].src}',
-                                                    )
-                                                  : CacheImage(
-                                                      imageUrl:
-                                                          '${EndPoints.domain}${ConstantModel.detailsSpecialOrderModel!.data!.media![index].src}',
-                                                      height: 60,
-                                                      width: 60,
-                                                    ),
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    }),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 15),
+                          const SpecialOrderImageWidget(),
                           Text(
                             'Plan Details'.tr(),
                             style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 16.sp),

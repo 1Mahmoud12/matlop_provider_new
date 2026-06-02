@@ -143,7 +143,7 @@ class _SignUpViewState extends State<SignUpView> {
                     }
 
                     final List<DropDownModel> cList = apiCountries.map((e) {
-                      return DropDownModel('${e.phoneCode}', e.countryId);
+                      return DropDownModel('+${e.phoneCode}', e.countryId, image: e.img);
                     }).toList();
 
                     return CustomTextFormField(
@@ -158,9 +158,10 @@ class _SignUpViewState extends State<SignUpView> {
                         children: [
                           if (selectedCountry != null)
                             SizedBox(
-                              width: 110,
+                              width: 135,
                               child: CustomDropdownWithModel(
-                                text: '${selectedCountry!.phoneCode}',
+                                text: '+${selectedCountry!.phoneCode}',
+                                image: selectedCountry!.img,
                                 itemList: cList,
                                 textStyle: Theme.of(context)
                                     .textTheme

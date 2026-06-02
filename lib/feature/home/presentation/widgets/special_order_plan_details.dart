@@ -5,6 +5,8 @@ import 'package:matlop_provider/core/utils/app_icons.dart';
 import 'package:matlop_provider/feature/order/data/models/details_special_order_model.dart';
 import 'package:matlop_provider/feature/order/presentation/widgets/plan_details_content.dart';
 
+import '../../../../core/utils/utils.dart';
+
 class SpecialOrderPlanDetails extends StatelessWidget {
   final DetailsSpecialOrderModel detailsSpecialOrderModel;
 
@@ -43,7 +45,7 @@ class SpecialOrderPlanDetails extends StatelessWidget {
           PlanDetailsContent(
             icon: AppIcons.clock,
             text: 'Price: '.tr(),
-            value: '${detailsSpecialOrderModel.data!.amount?? 0} ${'SAR'.tr()}',
+            value: '${detailsSpecialOrderModel.data!.amount?? 0} ${Utils.getLocalizedCurrencyLabel()}',
           ),
         ],
       ),

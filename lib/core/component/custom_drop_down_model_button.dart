@@ -2,15 +2,17 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:matlop_provider/core/themes/colors.dart';
+import 'package:matlop_provider/core/component/cache_image.dart';
 
 class DropDownModel extends Equatable {
   final String text;
   final int value;
+  final String? image;
 
-  const DropDownModel(this.text, this.value);
+  const DropDownModel(this.text, this.value, {this.image});
 
   @override
-  List<Object?> get props => [text, value];
+  List<Object?> get props => [text, value, image];
 }
 
 class CustomDropdownWithModel extends StatefulWidget {
@@ -24,9 +26,11 @@ class CustomDropdownWithModel extends StatefulWidget {
     this.value,
     this.errorText,
     this.showError = false,
+    this.image,
   });
 
   final String text;
+  final String? image;
   final List<DropDownModel> itemList;
   final Function(DropDownModel)? onItemSelected;
   final TextStyle textStyle;
@@ -40,11 +44,17 @@ class CustomDropdownWithModel extends StatefulWidget {
 }
 
 class CustomDropdownWithModelState extends State<CustomDropdownWithModel> {
-  String? _selectedItemEvent;
+  DropDownModel? _selectedItem;
 
   @override
   void initState() {
-    _selectedItemEvent = widget.value;
+    if (widget.value != null) {
+      try {
+        _selectedItem = widget.itemList.firstWhere((element) => element.text == widget.value || element.value.toString() == widget.value);
+      } catch (e) {
+        // Not found
+      }
+    }
     super.initState();
   }
 
@@ -78,11 +88,47 @@ class CustomDropdownWithModelState extends State<CustomDropdownWithModel> {
             isExpanded: true,
             iconSize: 30.0,
             elevation: 16,
-            hint: Text((_selectedItemEvent ?? widget.text).tr(), style: widget.textStyle),
+            value: _selectedItem,
+            hint: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (widget.image != null) ...[
+                  CacheImage(
+                    imageUrl: widget.image!,
+                    width: 24,
+                    height: 24,
+                    profileImage: false,
+                    previewImage: false,
+                  ),
+                  const SizedBox(width: 8),
+                ],
+                Text(widget.text.tr(), style: widget.textStyle, overflow: TextOverflow.ellipsis),
+              ],
+            ),
+            selectedItemBuilder: (BuildContext context) {
+              return widget.itemList.map((DropDownModel item) {
+                return Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (item.image != null) ...[
+                      CacheImage(
+                        imageUrl: item.image!,
+                        width: 24,
+                        height: 24,
+                        profileImage: false,
+                        previewImage: false,
+                      ),
+                      const SizedBox(width: 8),
+                    ],
+                    Text(item.text.tr(), style: widget.textStyle, overflow: TextOverflow.ellipsis),
+                  ],
+                );
+              }).toList();
+            },
             underline: const SizedBox.shrink(),
             onChanged: (DropDownModel? newValue) {
               setState(() {
-                _selectedItemEvent = newValue?.text;
+                _selectedItem = newValue;
               });
               if (widget.onItemSelected != null && newValue != null) {
                 widget.onItemSelected!(newValue);
@@ -91,12 +137,27 @@ class CustomDropdownWithModelState extends State<CustomDropdownWithModel> {
             items: widget.itemList.map((DropDownModel value) {
               return DropdownMenuItem<DropDownModel>(
                 value: value,
-                child: Text(value.text.tr()),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (value.image != null) ...[
+                      CacheImage(
+                        imageUrl: value.image!,
+                        width: 24,
+                        height: 24,
+                        profileImage: false,
+                        previewImage: false,
+                      ),
+                      const SizedBox(width: 8),
+                    ],
+                    Text(value.text.tr(), overflow: TextOverflow.ellipsis),
+                  ],
+                ),
               );
             }).toList(),
           ),
         ),
-        if (widget.showError && _selectedItemEvent == null && widget.errorText != null)
+        if (widget.showError && _selectedItem == null && widget.errorText != null)
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
             child: Text(

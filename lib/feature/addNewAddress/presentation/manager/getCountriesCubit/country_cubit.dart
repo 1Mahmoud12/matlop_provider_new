@@ -15,6 +15,7 @@ class CountryCubit extends Cubit<CountryState> {
 
   void getCountries(BuildContext context) async {
     emit(CountryILoading());
+    getAllCurrency(context);
 
     await CountryDataSource.getCounties(context: context).then(
       (value) {
@@ -23,6 +24,19 @@ class CountryCubit extends Cubit<CountryState> {
           emit(CountryError(e: l.errMessage));
         }, (r) {
           ConstantModel.countryModel = r;
+          emit(CountrySuccess());
+        });
+      },
+    );
+  }
+
+  Future<void> getAllCurrency(BuildContext context) async {
+    await CountryDataSource.getAllCurrency(context: context).then(
+      (value) {
+        value.fold((l) {
+          emit(CountryError(e: l.errMessage));
+        }, (r) {
+          ConstantModel.currencyModel = r;
           emit(CountrySuccess());
         });
       },

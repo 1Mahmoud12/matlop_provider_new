@@ -56,6 +56,8 @@ void main() async {
   arabicLanguage = userCache?.get(languageKey, defaultValue: true);
   userCacheValue = LoginModel.fromJson(jsonDecode(await userCache!.get(userCacheKey, defaultValue: '{}')));
   Constants.token = userCacheValue?.data?.accessToken ?? '';
+  Constants.refreshToken = userCacheValue?.data?.refreshToken ?? '';
+  Constants.fcmToken = userCache?.get(fcmTokenKey, defaultValue: '') ?? '';
 
   // Load profile cache so Home screen shows the correct image immediately on startup
   final profileJson = await userCache!.get(profileCacheKey, defaultValue: '{}');

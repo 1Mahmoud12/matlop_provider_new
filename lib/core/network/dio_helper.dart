@@ -10,10 +10,16 @@ import 'package:matlop_provider/core/utils/constants.dart';
 import 'package:matlop_provider/core/utils/utils.dart';
 import 'package:matlop_provider/main.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:matlop_provider/core/utils/navigate.dart';
+import 'package:matlop_provider/feature/auth/login/presentation/manager/cubit/login_cubit.dart';
+import 'package:matlop_provider/feature/auth/login/presentation/login_view.dart';
+import 'package:matlop_provider/core/network/local/cache.dart';
 
 // ignore: avoid_classes_with_only_static_members
 class DioHelper {
   static Dio? dio;
+  static bool _isRefreshing = false;
 
   // ignore: always_declare_return_types
   static init() {
@@ -32,6 +38,104 @@ class DioHelper {
       compact: true,
       maxWidth: 90,
     ));
+    
+    dio?.interceptors.add(
+      InterceptorsWrapper(
+        onError: (DioException err, ErrorInterceptorHandler handler) async {
+          final statusCode = err.response?.statusCode;
+
+          // Only intercept 401, and only once (no infinite refresh loop)
+          if (statusCode == 401 && !_isRefreshing) {
+            final accessToken = Constants.token;
+            final refreshToken = Constants.refreshToken;
+
+            // Nothing to refresh with if tokens are empty (logged-out state)
+            if (accessToken.isEmpty) {
+              return handler.next(err);
+            }
+
+            _isRefreshing = true;
+            try {
+              // Separate Dio to avoid triggering this interceptor recursively
+              final refreshDio = Dio();
+              final refreshResponse = await refreshDio.post(
+                '${EndPoints.baseUrl}${EndPoints.refreshToken}',
+                options: Options(
+                  headers: {
+                    'Authorization': 'Bearer $accessToken',
+                    'accept': '*/*',
+                    'Content-Type': 'application/json',
+                    'culture': Constants.currentLanguage,
+                    'ui-culture': Constants.currentLanguage,
+                    if (Constants.selectedCountryId != null) 'X-Country-id': Constants.selectedCountryId,
+                  },
+                ),
+                data: {
+                  'accessToken': accessToken,
+                  'refreshToken': refreshToken,
+                },
+              );
+
+              final data = refreshResponse.data;
+              final newAccess = data['data']?['accessToken'] ?? data['accessToken'] ?? '';
+              final newRefresh = data['data']?['refreshToken'] ?? data['refreshToken'] ?? '';
+
+              if (newAccess.isEmpty) {
+                throw Exception('Empty access token in refresh response');
+              }
+
+              // Persist new tokens in memory
+              Constants.token = newAccess;
+              Constants.refreshToken = newRefresh;
+
+              // Persist to Hive cache so tokens survive a restart
+              if (userCacheValue?.data != null) {
+                userCacheValue!.data!.accessToken = newAccess;
+                userCacheValue!.data!.refreshToken = newRefresh;
+                await userCache?.put(userCacheKey, jsonEncode(userCacheValue!.toJson()));
+              }
+
+              logger.i('[Token Refresh] ✅ Token refreshed successfully.');
+
+              // Retry the original failed request with the new token
+              final opts = err.requestOptions;
+              opts.headers['Authorization'] = 'Bearer $newAccess';
+
+              final retryResponse = await dio!.request(
+                opts.path,
+                options: Options(
+                  method: opts.method,
+                  headers: opts.headers,
+                ),
+                data: opts.data,
+                queryParameters: opts.queryParameters,
+              );
+
+              return handler.resolve(retryResponse);
+            } catch (e) {
+              logger.e('[Token Refresh] ❌ Refresh failed: $e');
+              // Clear tokens so further 401s don't loop
+              Constants.token = '';
+              Constants.refreshToken = '';
+
+              userCacheValue = null;
+              userCache?.put(userCacheKey, '{}');
+
+              // Force navigation to Login screen
+              if (navigatorKey.currentContext != null) {
+                navigatorKey.currentContext!.navigateToPageWithClearStack(
+                  BlocProvider(create: (_) => LoginCubit(), child: const LoginView()),
+                );
+              }
+            } finally {
+              _isRefreshing = false;
+            }
+          }
+
+          return handler.next(err);
+        },
+      ),
+    );
     if (!kReleaseMode) dio!.interceptors.add(ChuckerDioInterceptor());
   }
 

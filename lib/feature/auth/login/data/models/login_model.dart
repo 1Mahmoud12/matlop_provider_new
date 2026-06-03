@@ -48,8 +48,8 @@ class LoginModel {
 
 class LoginResponseData {
   final Profile? profile;
-  final String? accessToken;
-  final String? refreshToken;
+  String? accessToken;
+  String? refreshToken;
   final List<dynamic>? navigation;
 
   // Backward compatible fields used in other parts of the app.

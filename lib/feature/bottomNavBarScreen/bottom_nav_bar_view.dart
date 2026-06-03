@@ -29,7 +29,7 @@ class _BottomNavBarViewState extends State<BottomNavBarView> {
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) {
         userCache?.put(languageKey, context.locale.languageCode == 'ar');
-        checkVersion(context);
+        // checkVersion(context);
       },
     );
     super.initState();

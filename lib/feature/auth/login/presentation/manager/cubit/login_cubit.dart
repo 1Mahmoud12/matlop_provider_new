@@ -43,6 +43,7 @@ class LoginCubit extends Cubit<LoginState> {
             // );
             userCacheValue = r;
             Constants.token = r.data?.accessToken ?? '';
+            Constants.refreshToken = r.data?.refreshToken ?? '';
             selectTokens();
             context.navigateToPage(
               const BottomNavBarView(),
@@ -70,6 +71,7 @@ class LoginCubit extends Cubit<LoginState> {
 
             userCacheValue = r;
             Constants.token = r.data?.accessToken ?? '';
+            Constants.refreshToken = r.data?.refreshToken ?? '';
             selectTokens();
             context.navigateToPage(
               const BottomNavBarView(),

@@ -13,6 +13,7 @@ class EndPoints {
   static const verifyOtp = '/Authentication/VerfiyOtp';
   static const setFirebaseToken = '/auth/firebase-token';
   static const logout = '/auth/logout';
+  static const refreshToken = '/auth/refresh-token';
 
   // Forget   Password
   static const forgetPassword = '/auth/forgot-password';
@@ -82,7 +83,7 @@ class EndPoints {
   static String aboutUs = '/AboutUs/GetAll';
   static String postComplaint = '/Complaint/Create';
   static String getAllComplaints = '/Complaint/GetByClinetId';
-  static String deleteAccount = '/Client/Delete?userId=';
+  static const deleteAccount = '/auth/my-account';
   static const getContracts = '/ContractType/GetByServiceId';
   static const getPackagesByContractId = '/Package/GetPackageByContractId';
   static const GetCountry = '/countries';

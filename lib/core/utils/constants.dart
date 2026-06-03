@@ -14,6 +14,7 @@ class Constants {
   // static LatLng cairoLatLng = const LatLng(30.033333, 31.233334);
   static String locationCache = '';
   static String token = '';
+  static String refreshToken = '';
   static bool tablet = false;
   static String unKnownValue = 'Un Known Value'.tr();
   static String notificationChannelKey = 'channel_id3';

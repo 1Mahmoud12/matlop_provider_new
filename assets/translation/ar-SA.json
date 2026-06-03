@@ -379,5 +379,6 @@
   "Select services": "اختر الخدمات",
   "Dont worry This happens Please enter your phone number linked to your account": "لا تقلق! هذا يحدث. برجاء إدخال رقم هاتفك المرتبط بحسابك",
   "Passwords do not match": "كلمات المرور غير متطابقة",
-  "Please enter complete OTP code": "برجاء إدخال كود التحقق كاملاً"
+  "Please enter complete OTP code": "برجاء إدخال كود التحقق كاملاً",
+  "account_deleted_successfully": "تم حذف حسابك بنجاح"
 }

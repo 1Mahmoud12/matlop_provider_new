@@ -7,6 +7,7 @@ import 'package:matlop_provider/core/utils/navigate.dart';
 import 'package:matlop_provider/feature/menu/presentation/widgets/menu_item.dart';
 import 'package:matlop_provider/feature/menu/views/myCities/manager/cities_cubit.dart';
 import 'package:matlop_provider/feature/menu/views/myCities/presentation/my_cities_view.dart';
+import 'package:matlop_provider/feature/menu/views/settings/presentation/manager/deleteAccount/cubit/delete_account_cubit.dart';
 import 'package:matlop_provider/feature/menu/views/settings/presentation/widgets/delete_account_bottom_sheet.dart';
 import 'package:matlop_provider/feature/menu/views/settings/presentation/widgets/selected_language_dialog.dart';
 
@@ -77,7 +78,10 @@ class _SettingsViewState extends State<SettingsView> {
                 showModalBottomSheet(
                   context: context,
                   builder: (context) {
-                    return const DeleteAccountDialog();
+                    return BlocProvider(
+                      create: (context) => DeleteAccountCubit(),
+                      child: const DeleteAccountDialog(),
+                    );
                   },
                 );
               },

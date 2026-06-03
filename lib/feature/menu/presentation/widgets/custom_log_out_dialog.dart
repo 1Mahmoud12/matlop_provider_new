@@ -21,9 +21,10 @@ class CustomLogoutDialog extends StatelessWidget {
     animationDialogLoading(context);
 
     try {
+      final String tokenToSend = await Constants.messaging.getToken() ?? Constants.fcmToken;
       await DioHelper.postData(
         endPoint: EndPoints.logout,
-        data: {'token': Constants.fcmToken},
+        data: {'token': tokenToSend},
       );
     } catch (_) {
       // Ignore errors — always log out locally
@@ -35,6 +36,7 @@ class CustomLogoutDialog extends StatelessWidget {
       userCache?.put(userCacheKey, '{}');
       userCache?.put(profileCacheKey, '{}');
       Constants.token = '';
+      Constants.refreshToken = '';
       Constants.fcmToken = '';
 
       if (context.mounted) {

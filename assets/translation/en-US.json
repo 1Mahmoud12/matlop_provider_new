@@ -314,5 +314,6 @@
   "Dont worry This happens Please enter your phone number linked to your account": "Don't worry! This happens. Please enter your phone number linked to your account",
   "Passwords do not match": "Passwords do not match",
   "Select services": "Select services",
-  "Please enter complete OTP code": "Please enter complete OTP code"
+  "Please enter complete OTP code": "Please enter complete OTP code",
+  "account_deleted_successfully": "Your account has been deleted successfully"
 }

@@ -1,7 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:matlop_provider/core/component/buttons/custom_text_button.dart';
 import 'package:matlop_provider/core/themes/colors.dart';
+
+import '../manager/deleteAccount/cubit/delete_account_cubit.dart';
 
 class DeleteAccountDialog extends StatelessWidget {
   const DeleteAccountDialog({
@@ -11,7 +14,7 @@ class DeleteAccountDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Access the DeleteAccountCubit using BlocProvider
-    //final deleteAccountCubit = BlocProvider.of<DeleteAccountCubit>(context);
+    final deleteAccountCubit = BlocProvider.of<DeleteAccountCubit>(context);
 
     return Container(
       padding: const EdgeInsets.only(left: 16, right: 16, top: 20),
@@ -70,9 +73,9 @@ class DeleteAccountDialog extends StatelessWidget {
                     'Yes, Delete'.tr(),
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: AppColors.primaryColor),
                   ),
-                  onPress: () {
-                   // deleteAccountCubit.deleteAccount(context);
-                  },
+                   onPress: () {
+                    deleteAccountCubit.deleteAccount(context);
+                   },
                 ),
               ),
             ],

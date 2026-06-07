@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:matlop_provider/core/component/custom_app_bar.dart';
 import 'package:matlop_provider/core/component/loading_widget.dart';
+import 'package:matlop_provider/core/network/local/cache.dart';
 import 'package:matlop_provider/core/themes/colors.dart';
 import 'package:matlop_provider/core/utils/app_icons.dart';
 import 'package:matlop_provider/core/utils/constant_model.dart';
@@ -13,6 +14,7 @@ import 'package:matlop_provider/feature/order/presentation/manager/specialrderCu
 import 'package:matlop_provider/feature/order/presentation/widgets/empty_orders.dart';
 import 'package:matlop_provider/feature/order/presentation/widgets/filer_order_dialog.dart';
 import 'package:matlop_provider/feature/order/presentation/widgets/filter_special_order_dialog.dart';
+import 'package:matlop_provider/feature/order/presentation/widgets/all_offers_header.dart';
 import 'package:matlop_provider/feature/order/presentation/widgets/order_list.dart';
 
 class OrderView extends StatefulWidget {
@@ -96,67 +98,78 @@ class _OrderViewState extends State<OrderView> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isCooperate = userCacheValue?.data?.profile?.roleId == 9;
+
     return Scaffold(
       appBar: CustomAppBar(
         title: 'orders'.tr(),
         showArrow: false,
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          children: [
-            const SizedBox(height: 20),
-            Row(
+      body: isCooperate
+          ? const Column(
               children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: _openFilterDialog,
-                    child: Container(
-                      padding: const EdgeInsets.all(10),
-                      height: 50,
-                      width: 50,
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.grey.withOpacity(0.2),
+                SizedBox(height: 10),
+                AllOffersHeader(),
+                SizedBox(height: 10),
+                Expanded(child: OffersOrderList()),
+              ],
+            )
+          : Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                children: [
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: _openFilterDialog,
+                          child: Container(
+                            padding: const EdgeInsets.all(10),
+                            height: 50,
+                            width: 50,
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.grey.withOpacity(0.2),
+                                ),
+                                shape: BoxShape.circle),
+                            child: SvgPicture.asset(AppIcons.filer),
                           ),
-                          shape: BoxShape.circle),
-                      child: SvgPicture.asset(AppIcons.filer),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 5,
+                        child: CustomSwitcherTwo(
+                          selectedIndex: _selectedIndex,
+                          pageOffset: _pageOffset,
+                          onSwitcherTapped: _onSwitcherTapped,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Expanded(
+                    child: PageView.builder(
+                      controller: _pageController,
+                      onPageChanged: (index) {
+                        setState(() {
+                          _selectedIndex = index;
+                        });
+                      },
+                      itemCount: 2,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: pagesList[index],
+                        );
+                      },
                     ),
                   ),
-                ),
-                Expanded(
-                  flex: 5,
-                  child: CustomSwitcherTwo(
-                    selectedIndex: _selectedIndex,
-                    pageOffset: _pageOffset,
-                    onSwitcherTapped: _onSwitcherTapped,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Expanded(
-              child: PageView.builder(
-                controller: _pageController,
-                onPageChanged: (index) {
-                  setState(() {
-                    _selectedIndex = index;
-                  });
-                },
-                itemCount: 2,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: pagesList[index],
-                  );
-                },
+                ],
               ),
             ),
-          ],
-        ),
-      ),
     );
   }
 }

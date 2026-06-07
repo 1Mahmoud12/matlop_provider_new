@@ -55,6 +55,7 @@ class UpdateProfileParams {
         'mobileNumber': mobileNumber,
         'genderId': genderId,
         'workerTypeId': workerTypeId,
+        'technicalSpecialistId': profileCacheValue?.data?.technicalSpecialistId ?? 0,
         'imgSrc': imgSrcValue,
       };
     } catch (e) {

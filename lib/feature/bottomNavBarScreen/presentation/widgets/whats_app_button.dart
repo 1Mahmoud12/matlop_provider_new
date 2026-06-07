@@ -13,7 +13,7 @@ class WhatsAppButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        MenuCubit.of(context).whatsapp();
+        MenuCubit.of(context).whatsapp(context);
       },
       child: Container(
         padding: const EdgeInsets.all(13),

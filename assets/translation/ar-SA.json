@@ -380,5 +380,14 @@
   "Dont worry This happens Please enter your phone number linked to your account": "لا تقلق! هذا يحدث. برجاء إدخال رقم هاتفك المرتبط بحسابك",
   "Passwords do not match": "كلمات المرور غير متطابقة",
   "Please enter complete OTP code": "برجاء إدخال كود التحقق كاملاً",
-  "account_deleted_successfully": "تم حذف حسابك بنجاح"
+  "account_deleted_successfully": "تم حذف حسابك بنجاح",
+  "vpn_title": "تم اكتشاف اتصال VPN",
+  "root_title": "تم اكتشاف جهاز بصلاحيات روت",
+  "vpn_message": "يجب عليك قطع اتصال VPN للاستمرار في استخدام التطبيق بأمان.",
+  "root_message": "يبدو أن جهازك يحتوي على صلاحيات روت (Root) أو كسر حماية (Jailbreak)، وهو ما يخالف سياسة الأمان الخاصة بنا.",
+  "vpn_note": "خدماتنا تتطلب اتصالاً مباشراً.",
+  "root_note": "لأسباب أمنية، الأجهزة التي تحتوي على روت غير مدعومة.",
+  "vpn_header": "تنبيه أمني",
+  "root_header": "تنبيه أمني",
+  "security_footer": "محمي بواسطة نظام الأمان"
 }

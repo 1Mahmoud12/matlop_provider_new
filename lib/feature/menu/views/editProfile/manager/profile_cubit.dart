@@ -118,6 +118,11 @@ class UpdateProfileCubit extends Cubit<UpdateProfileState> {
   }
 
   void updateProfile({required BuildContext context}) {
+    if (!hasChanges()) {
+      Utils.showToast(title: 'No changes detected'.tr(), state: UtilState.warning);
+      return;
+    }
+
     emit(UpdateProfileLoading());
     animationDialogLoading(context);
     if (gender == Gender.female.index) AppImages.avatar = AppImages.avatarFemale;
@@ -135,27 +140,24 @@ class UpdateProfileCubit extends Cubit<UpdateProfileState> {
     )
         .then(
       (value) async {
-        await getProfile(context: context, reset: false);
-        closeDialog(context);
         value.fold(
           (l) {
-            //   Utils.showToast(title: l.errMessage, state: UtilState.error);
+            closeDialog(context);
             emit(UpdateProfileError(e: l.errMessage));
           },
           (r) async {
+            // First fetch the fresh profile from server — this sets profileCacheValue
+            // with the correct new imgSrc returned by the backend.
+            await getProfile(context: context, reset: false);
+            closeDialog(context);
+
             Utils.showToast(title: 'Profile updated successfully'.tr(), state: UtilState.success);
 
-            profileCacheValue = r;
-
-            profileCacheValue?.data?.email = emailController.text;
-            profileCacheValue?.data?.fullName = fullNameController.text;
-            profileCacheValue?.data?.username = usernameController.text;
-            profileCacheValue?.data?.gender = gender;
-            profileCacheValue?.data?.dateOfBirth = dateOfBirthController.text;
-            // Sync changes to the global userCacheValue so Home headers and other screens pick them up immediately
-            // Convert to JSON map because LoginModel fields are immutable final properties
+            // Now profileCacheValue has the fresh data (including new imgSrc).
+            // Sync it into userCacheValue so MenuHeader and other widgets update.
             if (userCacheValue != null) {
-              // Evict old image from CachedNetworkImage cache so new image loads fresh
+              // Evict old image from CachedNetworkImage in-memory cache so the
+              // new URL is fetched fresh from the network.
               final oldImgSrc = userCacheValue?.data?.imgSrc ?? '';
               if (oldImgSrc.isNotEmpty && oldImgSrc != Constants.unKnownValue) {
                 CachedNetworkImage.evictFromCache(oldImgSrc);
@@ -163,19 +165,15 @@ class UpdateProfileCubit extends Cubit<UpdateProfileState> {
 
               final userMap = userCacheValue!.toJson();
               if (userMap['data'] != null && userMap['data']['profile'] != null) {
-                userMap['data']['profile']['fullName'] = fullNameController.text;
-                // Store relative path since LoginResponseData.imgSrc getter prepends the domain
-                final fullImg = profileCacheValue?.data?.imgSrc ?? '';
-                final relativeImg = fullImg.startsWith(EndPoints.domain)
-                    ? fullImg.substring(EndPoints.domain.length)
-                    : fullImg;
-                userMap['data']['profile']['imgSrc'] = relativeImg;
+                userMap['data']['profile']['fullName'] = profileCacheValue?.data?.fullName ?? fullNameController.text;
+                userMap['data']['profile']['imgSrc'] = profileCacheValue?.data?.imgSrc ?? '';
               }
               userCacheValue = LoginModel.fromJson(userMap);
               userCache?.put(userCacheKey, jsonEncode(userCacheValue?.toJson()));
             }
 
-            userCache?.put(profileCacheKey, jsonEncode(profileCacheValue?.toJson()));
+            // Clear the picked file so hasChanges() resets correctly.
+            imageFile = null;
 
             emit(UpdateProfileSuccess());
           },

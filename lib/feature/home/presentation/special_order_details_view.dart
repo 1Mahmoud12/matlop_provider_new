@@ -23,6 +23,7 @@ import 'package:matlop_provider/feature/home/presentation/widgets/special_order_
 import 'package:matlop_provider/feature/order/presentation/manager/detailsSpecialrderCubit/details_special_order_cubit.dart';
 import 'package:matlop_provider/feature/order/presentation/manager/offersCubit/offers_order_cubit.dart';
 import 'package:matlop_provider/feature/order/presentation/widgets/custom_stepper_widget.dart';
+import 'package:matlop_provider/feature/home/presentation/widgets/special_order_action_btn.dart';
 import 'package:matlop_provider/feature/order/presentation/widgets/order_details_view.dart';
 
 class SpecialOrderDetailsView extends StatefulWidget {
@@ -59,42 +60,21 @@ class _OrderDetailsViewState extends State<SpecialOrderDetailsView> {
       },
       backgroundColor: AppColors.scaffoldBackGround,
       color: AppColors.primaryColor,
-      child: Scaffold(
+      child: BlocProvider.value(
+        value: detailsSpecialOrderCubit,
+        child: Scaffold(
         persistentFooterButtons: [
-          if (widget.offersOrderCubit != null && userCacheValue?.data?.profile?.roleId == 9)
-            CustomTextButton(
-              width: MediaQuery.sizeOf(context).width,
-              borderRadius: 16,
-              onPress: () {
-                widget.offersOrderCubit!.amountController.clear();
-                widget.offersOrderCubit!.amountController.text = '${widget.offerAmount ?? ''}';
-                showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  backgroundColor: AppColors.scaffoldBackGround,
-                  builder: (context) => Padding(
-                    padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom, // Adjust for keyboard
-                    ),
-                    child: AddOfferView(
-                      cubit: widget.offersOrderCubit!,
-                      idSpecialOrder: widget.idSpecialOrder,
-                    ),
-                  ),
-                );
-              },
-              child: Text(
-                (widget.submitted ?? false) ? 'Update Offer'.tr() : 'Add Offer'.tr(),
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white),
-              ),
-            ),
+          SpecialOrderActionBtn(
+            offersOrderCubit: widget.offersOrderCubit,
+            offerAmount: widget.offerAmount,
+            submitted: widget.submitted,
+            idSpecialOrder: widget.idSpecialOrder,
+          )
         ],
         appBar: CustomAppBar(
           title: 'Order Details'.tr(),
         ),
-        body: BlocProvider.value(
-          value: detailsSpecialOrderCubit,
-          child: BlocBuilder<DetailsSpecialOrderCubit, DetailsSpecialOrderState>(
+        body: BlocBuilder<DetailsSpecialOrderCubit, DetailsSpecialOrderState>(
             builder: (context, state) => ConstantModel.detailsSpecialOrderModel != null && ConstantModel.detailsSpecialOrderModel!.data != null
                 ? Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -104,10 +84,22 @@ class _OrderDetailsViewState extends State<SpecialOrderDetailsView> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const SizedBox(height: 20),
-                          if (ConstantModel.detailsSpecialOrderModel!.data!.specialOrderStatus!.toInt() < 7)
-                            CustomStepper(selectedStatus: ConstantModel.detailsSpecialOrderModel!.data!.specialOrderStatus!.toInt()),
+                          BlocConsumer<DetailsSpecialOrderCubit, DetailsSpecialOrderState>(
+                            listener: (context, state) {
+                              if (state is ChangeSpecialStatusSuccess) {
+                                ConstantModel.detailsSpecialOrderModel!.data!.specialOrderStatus = state.newStatus;
+                              }
+                            },
+                            builder: (context, state) {
+                              return state is ChangeSpecialStatusSuccess
+                                  ? CustomStepper(selectedStatus: state.newStatus)
+                                  : ConstantModel.detailsSpecialOrderModel!.data!.specialOrderStatus!.toInt() < 7
+                                      ? CustomStepper(selectedStatus: ConstantModel.detailsSpecialOrderModel!.data!.specialOrderStatus!.toInt())
+                                      : const SizedBox();
+                            },
+                          ),
                           const SizedBox(height: 20),
-                          const SpecialOrderImageWidget(),
+                          SpecialOrderImageWidget(),
                           Text(
                             'Plan Details'.tr(),
                             style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 16.sp),
@@ -143,40 +135,12 @@ class _OrderDetailsViewState extends State<SpecialOrderDetailsView> {
                   )
                 : const SizedBox(),
           ),
-        ),
-        // persistentFooterButtons: [
-        //   BlocBuilder<DetailsSpecialOrderCubit, DetailsSpecialOrderState>(
-        //     builder: (context, state) => ConstantModel.orderDetailsModel != null &&
-        //         ConstantModel.detailsSpecialOrderModel!.data != null &&
-        //         ConstantModel.detailsSpecialOrderModel!.data!.specialOrderEnum! >= 2 &&
-        //         ConstantModel.detailsSpecialOrderModel!.data!.specialOrderEnum! < 5
-        //         ? CustomTextButton(
-        //       width: MediaQuery.sizeOf(context).width,
-        //       borderRadius: 16,
-        //       onPress: () {
-        //         if (ConstantModel.orderDetailsModel!.data!.orderStatusEnum == 2) {
-        //           SpecialOrderCubit.of(context).changeStatus(context, status: 3, orderId: widget.orderData);
-        //         } else if (ConstantModel.orderDetailsModel!.data!.orderStatusEnum == 3) {
-        //           SpecialOrderCubit.of(context).changeStatus(context, status: 4, orderId: widget.orderData);
-        //         } else if (ConstantModel.orderDetailsModel!.data!.orderStatusEnum == 4) {
-        //           SpecialOrderCubit.of(context).changeStatus(context, status: 5, orderId: widget.orderData);
-        //         } // context.navigateToPage(const ConfirmPaymentView());
-        //       },
-        //       child: Text(
-        //         OrderStatusEnum.values[ConstantModel.orderDetailsModel!.data!.orderStatusEnum ?? 0].name.tr(),
-        //         style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white),
-        //       ),
-        //     )
-        //         : const SizedBox(),
-        //   )
-        // ],
+        // Old commented out footer buttons removed to clean up code
         floatingActionButton: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            BlocProvider.value(
-              value: detailsSpecialOrderCubit,
-              child: BlocBuilder<DetailsSpecialOrderCubit, DetailsSpecialOrderState>(
-                builder: (context, state) => ConstantModel.detailsSpecialOrderModel != null && ConstantModel.detailsSpecialOrderModel!.data != null
+            BlocBuilder<DetailsSpecialOrderCubit, DetailsSpecialOrderState>(
+              builder: (context, state) => ConstantModel.detailsSpecialOrderModel != null && ConstantModel.detailsSpecialOrderModel!.data != null
                     ? FloatingActionButton(
                         onPressed: () {
                           final lat = ConstantModel.detailsSpecialOrderModel?.data?.latitude;
@@ -205,7 +169,6 @@ class _OrderDetailsViewState extends State<SpecialOrderDetailsView> {
                       )
                     : const SizedBox(),
               ),
-            ),
             const SizedBox(
               height: 12,
             ),
@@ -225,6 +188,7 @@ class _OrderDetailsViewState extends State<SpecialOrderDetailsView> {
                 ),
               ),
           ],
+        ),
         ),
       ),
     );

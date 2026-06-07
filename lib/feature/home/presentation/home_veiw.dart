@@ -4,6 +4,7 @@ import 'package:matlop_provider/core/component/custom_switcher.dart';
 import 'package:matlop_provider/core/network/local/cache.dart';
 import 'package:matlop_provider/feature/home/presentation/widgets/home_view_header.dart';
 import 'package:matlop_provider/feature/order/presentation/order_view.dart';
+import 'package:matlop_provider/feature/order/presentation/widgets/all_offers_header.dart';
 import 'package:matlop_provider/feature/order/presentation/widgets/order_list.dart';
 
 class HomeView extends StatefulWidget {
@@ -65,25 +66,7 @@ class _HomeViewState extends State<HomeView> {
               onSwitcherTapped: _onSwitcherTapped,
             )
           else
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 14),
-              //32
-              padding: const EdgeInsets.all(10),
-              //20
-              alignment: AlignmentDirectional.center,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(40),
-                border: Border.all(
-                  color: Colors.grey.withOpacity(0.2),
-                ),
-              ),
-              child: Text(
-                'All available offers'.tr(),
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Colors.grey,
-                    ),
-              ),
-            ),
+            const AllOffersHeader(),
           if (userCacheValue?.data?.profile?.roleId != 9)
             Expanded(
               child: PageView.builder(

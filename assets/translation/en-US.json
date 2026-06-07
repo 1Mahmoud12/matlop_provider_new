@@ -315,5 +315,14 @@
   "Passwords do not match": "Passwords do not match",
   "Select services": "Select services",
   "Please enter complete OTP code": "Please enter complete OTP code",
-  "account_deleted_successfully": "Your account has been deleted successfully"
+  "account_deleted_successfully": "Your account has been deleted successfully",
+  "vpn_title": "VPN Detected",
+  "root_title": "Device is Rooted",
+  "vpn_message": "You must disconnect from your VPN to continue using the app securely.",
+  "root_message": "Your device appears to be rooted or jailbroken, which violates our security policy.",
+  "vpn_note": "Our services require a direct connection.",
+  "root_note": "For security reasons, rooted devices are not supported.",
+  "vpn_header": "Security Alert",
+  "root_header": "Security Alert",
+  "security_footer": "Protected by App Security"
 }

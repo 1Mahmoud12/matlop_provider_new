@@ -1,7 +1,6 @@
 // ignore_for_file: type_annotate_public_apis
 import 'dart:convert';
 
-import 'package:chucker_flutter/chucker_flutter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -136,7 +135,6 @@ class DioHelper {
         },
       ),
     );
-    if (!kReleaseMode) dio!.interceptors.add(ChuckerDioInterceptor());
   }
 
   // get data ====>>>

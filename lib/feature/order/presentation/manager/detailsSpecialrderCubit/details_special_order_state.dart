@@ -17,3 +17,14 @@ final class DetailsSpecialOrderError extends DetailsSpecialOrderState {
   const DetailsSpecialOrderError({required this.e});
 }
 
+final class ChangeSpecialStatusLoading extends DetailsSpecialOrderState {}
+
+final class ChangeSpecialStatusSuccess extends DetailsSpecialOrderState {
+  final int newStatus;
+  const ChangeSpecialStatusSuccess({required this.newStatus});
+}
+
+final class ChangeSpecialStatusError extends DetailsSpecialOrderState {
+  final String e;
+  const ChangeSpecialStatusError({required this.e});
+}

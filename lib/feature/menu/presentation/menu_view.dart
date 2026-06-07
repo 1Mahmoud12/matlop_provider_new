@@ -52,13 +52,13 @@ class _MenuViewState extends State<MenuView> {
                   thickness: 0.5,
                   color: AppColors.primaryColor.withOpacity(0.2),
                 ),
-                MenuItem(
-                  icon: AppIcons.wallet,
-                  text: 'My Wallet'.tr(),
-                  onTap: () {
-                    context.navigateToPage(const WalletView());
-                  },
-                ),
+                // MenuItem(
+                //   icon: AppIcons.wallet,
+                //   text: 'My Wallet'.tr(),
+                //   onTap: () {
+                //     context.navigateToPage(const WalletView());
+                //   },
+                // ),
                 MenuItem(
                   icon: AppIcons.global,
                   text: 'My Services'.tr(),
@@ -147,7 +147,7 @@ class _MenuViewState extends State<MenuView> {
                 MenuItem(
                   icon: AppIcons.contactUs,
                   text: 'Contact Us'.tr(),
-                  onTap: MenuCubit.of(context).whatsapp,
+                  onTap: () => MenuCubit.of(context).whatsapp(context),
                 ),
                 MenuItem(
                   color: Colors.red.withOpacity(0.15),

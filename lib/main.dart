@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:chucker_flutter/chucker_flutter.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -36,6 +35,9 @@ import 'core/themes/light.dart';
 import 'core/utils/bloc_observe.dart';
 import 'feature/auth/login/data/models/login_model.dart';
 import 'feature/menu/views/editProfile/data/models/profile_model.dart';
+import 'package:safe_device/safe_device.dart';
+import 'package:vpn_connection_detector/vpn_connection_detector.dart';
+import 'package:matlop_provider/core/component/security_block_screen.dart';
 
 Widget appStartScreen = const SplashScreenOne();
 final navigatorKey = GlobalKey<NavigatorState>();
@@ -89,6 +91,7 @@ void main() async {
   } catch (error) {
     log('$error');
   }
+
   // selectTokens is called from LoginCubit after successful login
   // Constants.jsonServerKey = await loadJsonFile();
   runApp(
@@ -116,8 +119,60 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   int currentIndex = 0;
+  bool isBlocked = false;
+  BlockReason? blockReason;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _checkSecurity();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _checkSecurity();
+    }
+  }
+
+  Future<void> _checkSecurity() async {
+    bool isJailBroken = false;
+    bool isVpnActive = false;
+    try {
+      isJailBroken = await SafeDevice.isJailBroken;
+      isVpnActive = await VpnConnectionDetector.isVpnActive();
+    } catch (e) {
+      logger.e('Error checking security: $e');
+    }
+
+    if (isVpnActive) {
+      setState(() {
+        isBlocked = true;
+        blockReason = BlockReason.vpn;
+      });
+    } else if (isJailBroken) {
+      setState(() {
+        isBlocked = true;
+        blockReason = BlockReason.root;
+      });
+    } else {
+      if (isBlocked) {
+        setState(() {
+          isBlocked = false;
+          blockReason = null;
+        });
+      }
+    }
+  }
 
   @override
   void didChangeDependencies() async {
@@ -192,12 +247,16 @@ class _MyAppState extends State<MyApp> {
           supportedLocales: context.supportedLocales,
           locale: context.locale,
           navigatorKey: navigatorKey,
-          navigatorObservers: [if (!kReleaseMode) ChuckerFlutter.navigatorObserver],
 
-          //locale: DevicePreview.locale(context),
           //builder: DevicePreview.appBuilder,
+          builder: (context, child) {
+            if (isBlocked && blockReason != null) {
+              return SecurityBlockBody(reason: blockReason!);
+            }
+            return child ?? const SizedBox();
+          },
           theme: light,
-          home: const SplashScreenOne(),
+          home: appStartScreen,
         ),
       ),
     );

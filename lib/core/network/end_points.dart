@@ -160,4 +160,6 @@ class EndPoints {
   static const getNotification = '/notifications';
 
   static const markNotification = '/Notification/seenNotification';
+
+  static const getSettings = '/settings';
 }

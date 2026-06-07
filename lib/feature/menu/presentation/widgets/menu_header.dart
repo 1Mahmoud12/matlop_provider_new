@@ -8,26 +8,38 @@ import 'package:matlop_provider/core/utils/app_icons.dart';
 import 'package:matlop_provider/core/utils/navigate.dart';
 import 'package:matlop_provider/feature/menu/views/editProfile/presentation/edit_profile_view.dart';
 
-class MenuHeader extends StatelessWidget {
+class MenuHeader extends StatefulWidget {
   const MenuHeader({
     super.key,
   });
 
   @override
+  State<MenuHeader> createState() => _MenuHeaderState();
+}
+
+class _MenuHeaderState extends State<MenuHeader> {
+  @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        context.navigateToPage(const EditProfileView());
+      onTap: () async {
+        await context.navigateToPage(const EditProfileView());
+        if (mounted) setState(() {});
       },
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-           CacheImage(
-            imageUrl:userCacheValue?.data?.imgSrc??'',
-            width: 35,
-            height: 35,
-            circle: true,
-          ),
+          Builder(builder: (context) {
+            final imgUrl = profileCacheValue?.data?.imgSrc?.trim() ?? '';
+            return CacheImage(
+              key: ValueKey(imgUrl),
+              imageUrl: imgUrl,
+              width: 35,
+              height: 35,
+              circle: true,
+              profileImage: true,
+              previewImage: false,
+            );
+          }),
           const SizedBox(width: 10),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,8 +56,9 @@ class MenuHeader extends StatelessWidget {
           ),
           const Spacer(),
           GestureDetector(
-            onTap: () {
-              context.navigateToPage(const EditProfileView());
+            onTap: () async {
+              await context.navigateToPage(const EditProfileView());
+              if (mounted) setState(() {});
             },
             child: SvgPicture.asset(AppIcons.editIcon),
           ),

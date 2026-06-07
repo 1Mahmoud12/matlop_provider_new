@@ -16,6 +16,7 @@ void checkVersion(BuildContext context) async {
   try {
     // Get current app version
     final currentVersion = await AppVersionDataSource.getCurrentAppVersion();
+    logger.d('Current app version: $currentVersion');
     // Constants.versionApp = currentVersion; // removed
     // Fetch version info from API
     final result = await AppVersionDataSource.getAppVersion();

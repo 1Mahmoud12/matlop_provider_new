@@ -37,4 +37,33 @@ class SpecialOrderDataSource {
       return left(ServerFailure(e.toString()));
     }
   }
+
+  static Future<Either<Failure, String>> changeStatus({required int status, required int orderId}) async {
+    try {
+      final response = await DioHelper.putData(
+          endPoint: '${EndPoints.getSpecialOrderDetails}/$orderId/status',
+          query: {
+            'specialOrderStatusEnum': status,
+          },
+          data: {},
+          formDataIsEnabled: true);
+
+      if (response.data != null && response.data is Map<String, dynamic>) {
+        if (response.data['isSuccess'] == false) {
+          final errorMsg = response.data['error']?.toString() ?? response.data['message']?.toString() ?? 'Error changing status';
+          return left(ServerFailure(errorMsg));
+        } else {
+          final msg = response.data['message']?.toString() ?? '';
+          return right(msg.isNotEmpty ? msg : 'Successfully changed status');
+        }
+      }
+
+      return right('Successfully changed status');
+    } catch (e) {
+      if (e is DioException) {
+        return left(ServerFailure.fromDioException(e));
+      }
+      return left(ServerFailure(e.toString()));
+    }
+  }
 }

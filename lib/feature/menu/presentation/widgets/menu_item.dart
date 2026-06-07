@@ -11,6 +11,7 @@ class MenuItem extends StatelessWidget {
     this.color,
     required this.onTap,
     this.suffixWidget,
+    this.paddingValue = 10,
   });
 
   final String icon;
@@ -18,6 +19,7 @@ class MenuItem extends StatelessWidget {
   final Color? color;
   final VoidCallback onTap;
   final Widget? suffixWidget;
+  final double paddingValue ;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,7 @@ class MenuItem extends StatelessWidget {
           height: 70,
           width: double.infinity, // Use the full width of the screen
           padding: EdgeInsets.only(
-            bottom: 10,
+            bottom: paddingValue,
             right: context.locale.languageCode == 'ar' ? 0 : 10,
             left: context.locale.languageCode == 'ar' ? 10 : 0,
           ),

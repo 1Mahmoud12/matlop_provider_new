@@ -31,9 +31,12 @@ class _SettingsViewState extends State<SettingsView> {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           children: [
-
+            SizedBox(
+              height: 20,
+            ),
             MenuItem(
               icon: AppIcons.wallet,
+              paddingValue: 0,
               text: 'Language'.tr(),
               onTap: () {
                 showModalBottomSheet(
@@ -47,29 +50,29 @@ class _SettingsViewState extends State<SettingsView> {
                 );
               },
             ),
-            MenuItem(
-              icon: AppIcons.wallet,
-              text: 'Notification'.tr(),
-              onTap: () {
-                setState(() {
-                  isSwitched = !isSwitched;
-                });
-              },
-              suffixWidget: Center(
-                child: Switch(
-                  value: isSwitched,
-                  onChanged: (value) {
-                    setState(() {
-                      isSwitched = value;
-                    });
-                  },
-                  activeTrackColor: Colors.teal.withOpacity(0.7),
-                  activeColor: Colors.white,
-                  inactiveThumbColor: Colors.white,
-                  inactiveTrackColor: Colors.grey.withOpacity(0.2),
-                ),
-              ),
-            ),
+            // MenuItem(
+            //   icon: AppIcons.wallet,
+            //   text: 'Notification'.tr(),
+            //   onTap: () {
+            //     setState(() {
+            //       isSwitched = !isSwitched;
+            //     });
+            //   },
+            //   suffixWidget: Center(
+            //     child: Switch(
+            //       value: isSwitched,
+            //       onChanged: (value) {
+            //         setState(() {
+            //           isSwitched = value;
+            //         });
+            //       },
+            //       activeTrackColor: Colors.teal.withOpacity(0.7),
+            //       activeColor: Colors.white,
+            //       inactiveThumbColor: Colors.white,
+            //       inactiveTrackColor: Colors.grey.withOpacity(0.2),
+            //     ),
+            //   ),
+            // ),
             MenuItem(
               color: Colors.red.withOpacity(0.15),
               icon: AppIcons.logoutIcon,

@@ -7,6 +7,7 @@ import 'package:matlop_provider/core/utils/utils.dart';
 import 'package:matlop_provider/feature/order/data/dataSource/special_order_data_source.dart';
 import 'package:matlop_provider/main.dart';
 
+
 part 'details_special_order_state.dart';
 
 class DetailsSpecialOrderCubit extends Cubit<DetailsSpecialOrderState> {
@@ -19,16 +20,30 @@ class DetailsSpecialOrderCubit extends Cubit<DetailsSpecialOrderState> {
 
     await SpecialOrderDataSource.getSpecialOrderDetails(context: context, orderId: orderId).then(
       (value) {
+        if (context.mounted) closeDialog(context);
         value.fold((l) {
           Utils.showToast(title: l.errMessage, state: UtilState.error);
-          closeDialog(context);
-
           emit(DetailsSpecialOrderError(e: l.errMessage));
         }, (r) {
-          // logger.i(r.toJson());
           ConstantModel.detailsSpecialOrderModel = r;
-          closeDialog(context);
           emit(DetailsSpecialOrderSuccess());
+        });
+      },
+    );
+  }
+
+  void changeStatus(BuildContext context, {required int orderId, required int status}) async {
+    animationDialogLoading(context);
+    emit(ChangeSpecialStatusLoading());
+    await SpecialOrderDataSource.changeStatus(status: status, orderId: orderId).then(
+      (value) async {
+        if (context.mounted) closeDialog(context);
+        value.fold((l) {
+          Utils.showToast(title: l.errMessage, state: UtilState.error);
+          emit(ChangeSpecialStatusError(e: l.errMessage));
+        }, (r) {
+          Utils.showToast(title: r, state: UtilState.success);
+          emit(ChangeSpecialStatusSuccess(newStatus: status));
         });
       },
     );

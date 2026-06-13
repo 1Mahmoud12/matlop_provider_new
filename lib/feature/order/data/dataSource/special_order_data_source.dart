@@ -43,7 +43,7 @@ class SpecialOrderDataSource {
       final response = await DioHelper.putData(
           endPoint: '${EndPoints.getSpecialOrderDetails}/$orderId/status',
           query: {
-            'specialOrderStatusEnum': status,
+            'specialOrderStatus': status,
           },
           data: {},
           formDataIsEnabled: true);

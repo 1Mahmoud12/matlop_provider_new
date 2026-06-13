@@ -71,7 +71,7 @@ class PriceAndOrderDescription extends StatelessWidget {
           height: 5,
         ),
         Text(
-          itemSpecialOrder.notes ?? Constants.unKnownValue,
+          (itemSpecialOrder.notes == null || itemSpecialOrder.notes!.trim().isEmpty) ? 'No notes added'.tr() : itemSpecialOrder.notes!,
           style: Theme.of(context).textTheme.bodySmall!.copyWith(
                 color: AppColors.textColor,
               ),

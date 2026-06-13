@@ -8,6 +8,7 @@ import 'package:matlop_provider/feature/order/presentation/widgets/order_card_st
 
 class OrderList extends StatefulWidget {
   final int? status;
+
   const OrderList({super.key, this.status});
 
   @override
@@ -30,11 +31,9 @@ class _OrderListState extends State<OrderList> {
       builder: (context, state) {
         if (state is OrderLoading) {
           return const Center(child: LoadingWidget());
-        }
-        else if (state is OrderError) {
+        } else if (state is OrderError) {
           return const EmptyOrders();
-        }
-        else if (state is OrderSuccess) {
+        } else if (state is OrderSuccess) {
           if (ConstantModel.orderModel != null && ConstantModel.orderModel!.data!.isEmpty) {
             return const EmptyOrders();
           }
@@ -50,8 +49,5 @@ class _OrderListState extends State<OrderList> {
         return const SizedBox();
       },
     );
- 
- 
- 
   }
 }

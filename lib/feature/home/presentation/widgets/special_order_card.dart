@@ -78,7 +78,7 @@ class SpecialOrderCard extends StatelessWidget {
                         ),
                       )
                     : CacheImage(
-                        imageUrl: '${itemSpecialOrder.media![index].src}',
+                        imageUrl: itemSpecialOrder.media![index].src,
                         width: 60,
                         height: 60,
                       );

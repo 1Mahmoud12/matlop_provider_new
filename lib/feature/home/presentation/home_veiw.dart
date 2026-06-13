@@ -6,6 +6,8 @@ import 'package:matlop_provider/feature/home/presentation/widgets/home_view_head
 import 'package:matlop_provider/feature/order/presentation/order_view.dart';
 import 'package:matlop_provider/feature/order/presentation/widgets/all_offers_header.dart';
 import 'package:matlop_provider/feature/order/presentation/widgets/order_list.dart';
+import 'package:matlop_provider/feature/order/presentation/widgets/special_order_list.dart';
+import 'package:matlop_provider/feature/order/presentation/widgets/offers_order_list.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -18,6 +20,15 @@ class _HomeViewState extends State<HomeView> {
   double _pageOffset = 0.0; // Page offset for animation
   late PageController _pageController;
   int _selectedIndex = 0;
+
+  final List<Widget> _pagesList = const [
+    OrderList(
+      status: 0,
+    ),
+    SpecialOrderList(
+      status: 1,
+    ),
+  ];
 
   @override
   void initState() {
@@ -86,7 +97,7 @@ class _HomeViewState extends State<HomeView> {
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: pagesList[index],
+                    child: _pagesList[index],
                   );
                 },
               ),
@@ -103,11 +114,4 @@ class _HomeViewState extends State<HomeView> {
   }
 }
 
-List<Widget> pagesList = [
-  const OrderList(
-    status: 0,
-  ),
-  const SpecialOrderList(
-    status: 1,
-  ),
-];
+

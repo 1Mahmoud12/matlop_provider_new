@@ -29,7 +29,9 @@ class _MenuHeaderState extends State<MenuHeader> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Builder(builder: (context) {
-            final imgUrl = profileCacheValue?.data?.imgSrc?.trim() ?? '';
+            final profileImg = profileCacheValue?.data?.imgSrc?.trim();
+            final userImg = userCacheValue?.data?.profile?.imgSrc?.trim();
+            final imgUrl = (profileImg != null && profileImg.isNotEmpty) ? profileImg : (userImg ?? '');
             return CacheImage(
               key: ValueKey(imgUrl),
               imageUrl: imgUrl,

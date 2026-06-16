@@ -80,16 +80,27 @@ class _OrderCardWithStatusState extends State<OrderCardWithStatus> {
           children: [
             Row(
               children: [
-                Text(
-                  '${widget.orderData.package?.price} ${Utils.getLocalizedCurrencyLabel()} ',
-                  // '200 ${'SAR'.tr()} ',
-                  style: Theme.of(context).textTheme.titleMedium,
+                Expanded(
+                  child: Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                          text: '${widget.orderData.package?.price}',
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 14),
+                        ),
+                        TextSpan(
+                          text: ' ${Utils.getLocalizedCurrencyLabel()} ',
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 10),
+                        ),
+                        TextSpan(
+                          text: 'Including Tax'.tr(),
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.primaryColor,fontSize: 12),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-                Text(
-                  'Including Tax'.tr(),
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.primaryColor),
-                ),
-                const Spacer(),
+                const SizedBox(width: 8),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                   decoration: BoxDecoration(
@@ -115,7 +126,9 @@ class _OrderCardWithStatusState extends State<OrderCardWithStatus> {
               height: 10,
             ),
             Text(
-              '${widget.orderData.packageName}',
+              context.locale.languageCode == 'ar'
+                  ? (widget.orderData.package?.nameAr ?? widget.orderData.packageName ?? '')
+                  : (widget.orderData.package?.nameEn ?? widget.orderData.packageName ?? ''),
               style: Theme.of(context).textTheme.bodyLarge,
             ),
             const SizedBox(

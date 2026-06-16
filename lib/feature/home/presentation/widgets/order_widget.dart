@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:matlop_provider/core/component/custom_divider_widget.dart';
 import 'package:matlop_provider/core/themes/colors.dart';
@@ -56,13 +57,11 @@ class _OrderWidgetState extends State<OrderWidget> {
             const SizedBox(height: 8),
             Row(
               children: [
-                _buildChip("${widget.orderData.packageName}", context),
-                const SizedBox(
-                  width: 5,
-                ),
-                _buildChip("${widget.orderData.package?.nameEn}", context),
-                const SizedBox(
-                  width: 5,
+                _buildChip(
+                  context.locale.languageCode == 'ar'
+                      ? (widget.orderData.package?.nameAr ?? widget.orderData.packageName ?? '')
+                      : (widget.orderData.package?.nameEn ?? widget.orderData.packageName ?? ''),
+                  context,
                 ),
                 _buildChip("${widget.orderData.package?.visitNumber}", context),
                 const SizedBox(

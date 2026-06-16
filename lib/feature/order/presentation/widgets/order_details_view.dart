@@ -173,6 +173,7 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
             BlocBuilder<OrderCubit, OrderState>(
               builder: (context, state) => ConstantModel.orderDetailsModel != null && ConstantModel.orderDetailsModel!.data != null
                   ? FloatingActionButton(
+                      heroTag: 'order_details_location_fab',
                       onPressed: () {
                         if (ConstantModel.orderDetailsModel?.data?.latitude == null || ConstantModel.orderDetailsModel?.data?.longitude == null)
                           return;
@@ -193,6 +194,7 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
               height: 12,
             ),
             FloatingActionButton(
+              heroTag: 'order_details_chat_fab',
               onPressed: () {
                 context.navigateToPage(MessagesScreen(
                   userId: '${ConstantModel.orderDetailsModel?.data?.clientId ?? 0}',
